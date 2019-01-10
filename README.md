@@ -46,8 +46,9 @@ WebUI.setEncryptedText(findTestObject('Object Repository/Page_CURA Healthcare Se
 ...
 
 ```
-He would not like to repeat invoking Custom Keyword which puts highlight on HTML element on the page.
-He want all the HTML element targeted by `WebUI.click()`, `WebUI.setText()` and `WebUI.setEncryptedText()` to be highlighted automatically.
+Probablly he would not like invoking Custom Keyword which puts highlight on HTML element on the page for each indivisual HTML elements. It's boring, cumbersome, untidy.
+
+Possiblly he would want all of the HTML element targeted by `WebUI.click()`, `WebUI.setText()` and `WebUI.setEncryptedText()` are highlighted automatically, silently.
 
 ## Solution
 
@@ -68,6 +69,10 @@ so that each keywords automaticall calls `on(TestObject to)` before its method b
 run `Test Suites/TS1`. Then you will see the demo running.
 
 see the following movie:
+<video width="800" height="600" controls>
+  <source src="docs/test_1.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
 ### How the code implemented
 
