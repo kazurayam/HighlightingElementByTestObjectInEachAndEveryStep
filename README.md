@@ -68,11 +68,7 @@ so that each keywords automaticall calls `on(TestObject to)` before its method b
 
 run `Test Suites/TS1`. Then you will see the demo running.
 
-see the following movie:
-<video width="800" height="600" controls>
-  <source src="docs/test_1.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+Or click [this link to see the movie](https://kazurayam.github.io/HighlightingElementByTestObjectInEachAndEveryStep/)
 
 ### How the code implemented
 
