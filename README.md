@@ -77,4 +77,5 @@ Or click [this link to see the movie](https://kazurayam.github.io/HighlightingEl
 
 I would not talk much about the code. It uses magical Grovy [ExpandoMetaClass](http://docs.groovy-lang.org/latest/html/documentation/core-metaprogramming.html#metaprogramming_emc).
 
+A warning: if you read [`Keywords/com.kazurayam.ksbackyard/HighlightElement.groovy`](Keywords/com/kazurayam/ksbackyard/HighlightElement.groovy), you will see the `pandemic()` method can be very lengthy. It's is not as easy as you would expect.
 
