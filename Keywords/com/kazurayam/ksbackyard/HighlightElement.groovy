@@ -41,25 +41,25 @@ public class HighlightElement {
 	 */
 	@Keyword
 	public static void pandemic() {
-		
+
 		// click()
 		WebUiBuiltInKeywords.metaClass.static.click = { TestObject to ->
 			HighlightElement.on(to)
 			KeywordExecutor.executeKeywordForPlatform(KeywordExecutor.PLATFORM_WEB, "click", to)
 		}
-		
+
 		// selectOptionByValue()
 		WebUiBuiltInKeywords.metaClass.static.selectOptionByValue = { TestObject to, String value, boolean isRegex ->
 			HighlightElement.on(to)
 			KeywordExecutor.executeKeywordForPlatform(KeywordExecutor.PLATFORM_WEB, "selectOptionByValue", to, value, isRegex)
 		}
-		
+
 		// setEncryptedText()
 		WebUiBuiltInKeywords.metaClass.static.setEncryptedText = { TestObject to, String encryptedText ->
 			HighlightElement.on(to)
 			KeywordExecutor.executeKeywordForPlatform(KeywordExecutor.PLATFORM_WEB, "setEncryptedText", to, encryptedText)
 		}
-		
+
 		// setText()
 		WebUiBuiltInKeywords.metaClass.static.setText = { TestObject to, String text ->
 			HighlightElement.on(to)
