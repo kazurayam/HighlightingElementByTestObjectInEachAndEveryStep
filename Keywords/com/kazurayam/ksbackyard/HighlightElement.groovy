@@ -9,21 +9,10 @@ import com.kms.katalon.core.testobject.TestObject
 import com.kms.katalon.core.webui.common.WebUiCommonHelper
 import com.kms.katalon.core.webui.driver.DriverFactory
 
-import com.kms.katalon.core.webui.keyword.builtin.SetTextKeyword
+import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords
+import com.kms.katalon.core.keyword.internal.KeywordExecutor
 
 public class HighlightElement {
-	
-	@Keyword
-	public static void onAny() {
-		SetTextKeyword.metaClass.'static'.invokeMethod = { Object object, String name, Object[] args ->
-			println "${name} invoked"
-			if (name =~ /setText/) {
-				TestObject testObject = (TestObject)args[0]
-				HighlightElement.on(testObject)
-			}
-			return super.invokeMethod(object, name, args)
-		}
-	}
 
 	@Keyword
 	public static void on(TestObject testObject) {
@@ -45,4 +34,18 @@ public class HighlightElement {
 			e.printStackTrace()
 		}
 	}
+	
+	/**
+	 * overwride methods of WebUiBuiltInKeywords so that they call HighlightElement.on(testObject).
+	 * http://docs.groovy-lang.org/latest/html/documentation/core-metaprogramming.html#metaprogramming_emc
+	 */
+	@Keyword
+	public static void pandemic() {
+		// setText()
+		WebUiBuiltInKeywords.metaClass.static.setText = { TestObject to, String text -> 
+			HighlightElement.on(to)
+			KeywordExecutor.executeKeywordForPlatform(KeywordExecutor.PLATFORM_WEB, "setText", to,text)
+		}
+    }
+
 }

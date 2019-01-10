@@ -14,6 +14,8 @@ import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords as WebUI
 import internal.GlobalVariable as GlobalVariable
 import org.openqa.selenium.Keys as Keys
 
+CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.pandemic'()
+
 WebUI.openBrowser('')
 
 WebUI.navigateToUrl('https://katalon-demo-cura.herokuapp.com/')
@@ -23,8 +25,6 @@ WebUI.delay(1)
 CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.on'(findTestObject('Object Repository/Page_CURA Healthcare Service/h1_CURA Healthcare Service'))
 
 WebUI.delay(1)
-
-CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.onAny'()
 
 WebUI.click(findTestObject('Object Repository/Page_CURA Healthcare Service/a_Make Appointment'))
 
