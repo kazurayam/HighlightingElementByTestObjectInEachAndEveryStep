@@ -6,8 +6,12 @@
 import com.kms.katalon.core.testobject.TestObject
 
 
-def static "HighlightElement.on"(
+def static "com.kazurayam.ksbackyard.HighlightElement.onAny"() {
+    (new com.kazurayam.ksbackyard.HighlightElement()).onAny()
+}
+
+def static "com.kazurayam.ksbackyard.HighlightElement.on"(
     	TestObject testObject	) {
-    (new HighlightElement()).on(
+    (new com.kazurayam.ksbackyard.HighlightElement()).on(
         	testObject)
 }
