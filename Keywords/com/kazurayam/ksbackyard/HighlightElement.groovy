@@ -1,16 +1,19 @@
 package com.kazurayam.ksbackyard
 
+import java.text.MessageFormat
+
 import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 
 import com.kms.katalon.core.annotation.Keyword
+import com.kms.katalon.core.exception.StepFailedException
+import com.kms.katalon.core.keyword.internal.IKeyword
+import com.kms.katalon.core.keyword.internal.KeywordExecutor
 import com.kms.katalon.core.testobject.TestObject
 import com.kms.katalon.core.webui.common.WebUiCommonHelper
+import com.kms.katalon.core.webui.constants.StringConstants
 import com.kms.katalon.core.webui.driver.DriverFactory
-
-import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords
-import com.kms.katalon.core.keyword.internal.KeywordExecutor
 
 public class HighlightElement {
 
@@ -41,29 +44,23 @@ public class HighlightElement {
 	 */
 	@Keyword
 	public static void pandemic() {
-
-		// click()
-		WebUiBuiltInKeywords.metaClass.static.click = { TestObject to ->
-			HighlightElement.on(to)
-			KeywordExecutor.executeKeywordForPlatform(KeywordExecutor.PLATFORM_WEB, "click", to)
-		}
-
-		// selectOptionByValue()
-		WebUiBuiltInKeywords.metaClass.static.selectOptionByValue = { TestObject to, String value, boolean isRegex ->
-			HighlightElement.on(to)
-			KeywordExecutor.executeKeywordForPlatform(KeywordExecutor.PLATFORM_WEB, "selectOptionByValue", to, value, isRegex)
-		}
-
-		// setEncryptedText()
-		WebUiBuiltInKeywords.metaClass.static.setEncryptedText = { TestObject to, String encryptedText ->
-			HighlightElement.on(to)
-			KeywordExecutor.executeKeywordForPlatform(KeywordExecutor.PLATFORM_WEB, "setEncryptedText", to, encryptedText)
-		}
-
-		// setText()
-		WebUiBuiltInKeywords.metaClass.static.setText = { TestObject to, String text ->
-			HighlightElement.on(to)
-			KeywordExecutor.executeKeywordForPlatform(KeywordExecutor.PLATFORM_WEB, "setText", to,text)
+		def influencedKeywords = [
+			'click',
+			'setEncriptedText',
+			'selectOptionByValue'
+			]
+		KeywordExecutor.metaClass.static.executeKeywordForPlatform = { String platform, String keyword, Object ...params ->
+			if (keyword in influencedKeywords) {
+				HighlightElement.on((TestObject)params[0])	
+				println "keyword=${keyword} is influeced"
+			} else {
+				println "keyword=${keyword} is not influenced"
+			}
+			IKeyword[] actions = getActions(keyword, getSuitablePackage(platform))
+			if (actions.length != 1) {
+				throw new StepFailedException(MessageFormat.format(StringConstants.KEYWORD_X_DOES_NOT_EXIST_ON_PLATFORM_Y, [keyword, platform] as Object[]))
+			}
+			return actions[0].execute(params)
 		}
 	}
 
