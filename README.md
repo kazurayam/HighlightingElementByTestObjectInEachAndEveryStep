@@ -4,12 +4,12 @@ Highlighting Element by TestObject in each and every step
 ## What is this?
 
 This is a [Katalon Studio](https://www.katalon.com/) project for demonstration purpose.
-You can download the ZIP from [Releases](https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/releases) page, 
+You can download the ZIP from [Releases](https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/releases) page,
 unzip it and open with your Katalon Studio.
 
 This project was developed with Katalon Studio version 5.10.1
 
-This project proposes a solution to the issue discussed in the Katalon Forum: 
+This project proposes a solution to the issue discussed in the Katalon Forum:
 [How to highlight test object in each and every step](https://forum.katalon.com/t/how-to-highlight-test-object-in-each-and-every-step/17408)
 The originator asked:
 >I have created a keyword to highlight testobject. Please tell me how to call this keyword globally in such a way that it should highlight testobject of each step during test case execution
@@ -52,14 +52,14 @@ Possiblly he would want all of the HTML element targeted by `WebUI.click()`, `We
 
 ## Solution
 
-I have developed a custom keyword class `com.kazurayam.ksbackyard.HighlightElement`. 
+I have developed a custom keyword class `com.kazurayam.ksbackyard.HighlightElement`.
 This class implements 2 methods:
 1. `on(TestObject to)`
 2. `pandemic()`
 
 The `on(TestObject to)` method puts highlight on the specified HTML element.
 
-The `pandemic()` method internally overrides `WebUI.click(TestObject to)`, `WebUI.setText(TestObject to)` and `WebUI.setEncryptedText(TestObject to)`
+The `pandemic()` method internally overrides `WebUI.click(TestObject to)` and other methods
 so that each keywords automaticall calls `on(TestObject to)` before its method body.
 
 ## Description
@@ -79,3 +79,12 @@ I would not talk much about the code. It uses magical Grovy [ExpandoMetaClass](h
 
 A warning: if you read [`Keywords/com.kazurayam.ksbackyard/HighlightElement.groovy`](Keywords/com/kazurayam/ksbackyard/HighlightElement.groovy), you will see the `pandemic()` method can be very lengthy. It's is not as easy as you would expect.
 
+## Built-in Keywords that are influenced
+
+In the version 0.3, the `pandemic()` method influences the following Katalon built-in keywords:
+- [`click`](https://docs.katalon.com/katalon-studio/docs/webui-click.html)
+- [`selectOptionByIndex`](https://docs.katalon.com/katalon-studio/docs/webui-select-option-by-index.html)
+- [`selectOptionByLabel`](https://docs.katalon.com/katalon-studio/docs/webui-select-option-by-label.html)
+- [`selectOptionByValue`](https://docs.katalon.com/katalon-studio/docs/webui-select-option-by-value.html)
+- [`setEncryptedText()`](https://docs.katalon.com/katalon-studio/docs/webui-set-encrypted-text.html)
+- [`setText`](https://docs.katalon.com/katalon-studio/docs/webui-set-text.html)
