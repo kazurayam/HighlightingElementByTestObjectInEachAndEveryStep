@@ -42,9 +42,17 @@ WebUI.delay(1)
 WebUI.click(findTestObject('Page_CURA Healthcare Service_login/button_Login'))
 WebUI.delay(1)
 
-WebUI.selectOptionByValue(findTestObject('Page_CURA Healthcare Service_appointment/select_Facility'), 
-    'Hongkong CURA Healthcare Center', true)
+//WebUI.selectOptionByValue(findTestObject('Page_CURA Healthcare Service_appointment/select_Facility'), 
+//    'Hongkong CURA Healthcare Center', false)
+//WebUI.delay(1)
+
+//WebUI.selectOptionByLabel(findTestObject('Page_CURA Healthcare Service_appointment/select_Facility'),
+//	'Seoul CURA Healthcare Center', false)
+//WebUI.delay(1)
+
+WebUI.selectOptionByIndex(findTestObject('Page_CURA Healthcare Service_appointment/select_Facility'), 0)
 WebUI.delay(1)
+
 
 WebUI.click(findTestObject('Page_CURA Healthcare Service_appointment/input_Apply for hospital readm'))
 WebUI.delay(1)
