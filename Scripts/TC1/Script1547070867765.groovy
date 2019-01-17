@@ -16,12 +16,13 @@ import org.openqa.selenium.Keys as Keys
 
 // open browser and navigate to the AUT
 WebUI.openBrowser('')
+WebUI.setViewPortSize(1024, 768)
 WebUI.navigateToUrl('https://katalon-demo-cura.herokuapp.com/')
 WebUI.delay(1)
 
 // highlight a specific element
 CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.on'(
-	findTestObject('Object Repository/Page_CURA Healthcare Service/h1_CURA Healthcare Service'))
+	findTestObject('Page_CURA Healthcare Service_top/h1_CURA Healthcare Service'))
 WebUI.delay(2)
 
 // modify WebUI.* keywords which take TestObject as arg0 
@@ -29,38 +30,46 @@ WebUI.delay(2)
 CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.pandemic'()
 
 
-WebUI.click(findTestObject('Object Repository/Page_CURA Healthcare Service/a_Make Appointment'))
+WebUI.click(findTestObject('Page_CURA Healthcare Service_top/a_Make Appointment'))
 WebUI.delay(1)
 
-WebUI.setText(findTestObject('Object Repository/Page_CURA Healthcare Service/input_Username_username'), 'John Doe')
+WebUI.setText(findTestObject('Page_CURA Healthcare Service_login/input_Username_username'), 'John Doe')
 WebUI.delay(1)
 
-WebUI.setEncryptedText(findTestObject('Object Repository/Page_CURA Healthcare Service/input_Password_password'), 'g3/DOGG74jC3Flrr3yH+3D/yKbOqqUNM')
+WebUI.setEncryptedText(findTestObject('Page_CURA Healthcare Service_login/input_Password_password'), 'g3/DOGG74jC3Flrr3yH+3D/yKbOqqUNM')
 WebUI.delay(1)
 
-WebUI.click(findTestObject('Object Repository/Page_CURA Healthcare Service/button_Login'))
+WebUI.click(findTestObject('Page_CURA Healthcare Service_login/button_Login'))
 WebUI.delay(1)
 
-WebUI.selectOptionByValue(findTestObject('Object Repository/Page_CURA Healthcare Service/select_Tokyo CURA Healthcare C'), 
-    'Hongkong CURA Healthcare Center', true)
+//WebUI.selectOptionByValue(findTestObject('Page_CURA Healthcare Service_appointment/select_Facility'), 
+//    'Hongkong CURA Healthcare Center', false)
+//WebUI.delay(1)
+
+//WebUI.selectOptionByLabel(findTestObject('Page_CURA Healthcare Service_appointment/select_Facility'),
+//	'Seoul CURA Healthcare Center', false)
+//WebUI.delay(1)
+
+WebUI.selectOptionByIndex(findTestObject('Page_CURA Healthcare Service_appointment/select_Facility'), 0)
 WebUI.delay(1)
 
-WebUI.click(findTestObject('Object Repository/Page_CURA Healthcare Service/input_Apply for hospital readm'))
+
+WebUI.click(findTestObject('Page_CURA Healthcare Service_appointment/input_Apply for hospital readm'))
 WebUI.delay(1)
 
-WebUI.click(findTestObject('Object Repository/Page_CURA Healthcare Service/input_Medicaid_programs'))
+WebUI.click(findTestObject('Page_CURA Healthcare Service_appointment/input_Medicaid_programs'))
 WebUI.delay(1)
 
-WebUI.setText(findTestObject('Object Repository/Page_CURA Healthcare Service/input_Visit Date (Required)_vi'), '01/12/34')
+WebUI.setText(findTestObject('Page_CURA Healthcare Service_appointment/input_Visit Date (Required)_vi'), '01/12/34')
 WebUI.delay(1)
 
-WebUI.setText(findTestObject('Object Repository/Page_CURA Healthcare Service/textarea_Comment_comment'), 'This is a comment')
+WebUI.setText(findTestObject('Page_CURA Healthcare Service_appointment/textarea_Comment_comment'), 'This is a comment')
 WebUI.delay(1)
 
-WebUI.click(findTestObject('Object Repository/Page_CURA Healthcare Service/button_Book Appointment'))
+WebUI.click(findTestObject('Page_CURA Healthcare Service_appointment/button_Book Appointment'))
 WebUI.delay(1)
 
-WebUI.click(findTestObject('Object Repository/Page_CURA Healthcare Service/a_Go to Homepage'))
+WebUI.click(findTestObject('Page_CURA Healthcare Service_summary/a_Go to Homepage'))
 WebUI.delay(1)
 
 WebUI.closeBrowser()
