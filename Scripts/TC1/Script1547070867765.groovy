@@ -30,16 +30,16 @@ WebUI.delay(2)
 CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.pandemic'()
 
 
-WebUI.click(findTestObject('Page_CURA Healthcare Service_top/a_Make Appointment'))
+WebUI.click(findTestObject('Page_CURA Healthcare Service_top/a_Make Appointment'), FailureHandling.CONTINUE_ON_FAILURE)
 WebUI.delay(1)
 
-WebUI.setText(findTestObject('Page_CURA Healthcare Service_login/input_Username_username'), 'John Doe')
+WebUI.setText(findTestObject('Page_CURA Healthcare Service_login/input_Username_username'), 'John Doe', FailureHandling.CONTINUE_ON_FAILURE)
 WebUI.delay(1)
 
-WebUI.setEncryptedText(findTestObject('Page_CURA Healthcare Service_login/input_Password_password'), 'g3/DOGG74jC3Flrr3yH+3D/yKbOqqUNM')
+WebUI.setEncryptedText(findTestObject('Page_CURA Healthcare Service_login/input_Password_password'), 'g3/DOGG74jC3Flrr3yH+3D/yKbOqqUNM', FailureHandling.CONTINUE_ON_FAILURE)
 WebUI.delay(1)
 
-WebUI.click(findTestObject('Page_CURA Healthcare Service_login/button_Login'))
+WebUI.click(findTestObject('Page_CURA Healthcare Service_login/button_Login'), FailureHandling.CONTINUE_ON_FAILURE)
 WebUI.delay(1)
 
 //WebUI.selectOptionByValue(findTestObject('Page_CURA Healthcare Service_appointment/select_Facility'), 
@@ -50,26 +50,26 @@ WebUI.delay(1)
 //	'Seoul CURA Healthcare Center', false)
 //WebUI.delay(1)
 
-WebUI.selectOptionByIndex(findTestObject('Page_CURA Healthcare Service_appointment/select_Facility'), 0)
+WebUI.selectOptionByIndex(findTestObject('Page_CURA Healthcare Service_appointment/select_Facility'), 0, FailureHandling.CONTINUE_ON_FAILURE)
 WebUI.delay(1)
 
 
-WebUI.click(findTestObject('Page_CURA Healthcare Service_appointment/input_Apply for hospital readm'))
+WebUI.click(findTestObject('Page_CURA Healthcare Service_appointment/input_Apply for hospital readm'), FailureHandling.CONTINUE_ON_FAILURE)
 WebUI.delay(1)
 
-WebUI.click(findTestObject('Page_CURA Healthcare Service_appointment/input_Medicaid_programs'))
+WebUI.click(findTestObject('Page_CURA Healthcare Service_appointment/input_Medicaid_programs'), FailureHandling.CONTINUE_ON_FAILURE)
 WebUI.delay(1)
 
-WebUI.setText(findTestObject('Page_CURA Healthcare Service_appointment/input_Visit Date (Required)_vi'), '01/12/34')
+WebUI.setText(findTestObject('Page_CURA Healthcare Service_appointment/input_Visit Date (Required)_vi'), '01/12/34', FailureHandling.CONTINUE_ON_FAILURE)
 WebUI.delay(1)
 
-WebUI.setText(findTestObject('Page_CURA Healthcare Service_appointment/textarea_Comment_comment'), 'This is a comment')
+WebUI.setText(findTestObject('Page_CURA Healthcare Service_appointment/textarea_Comment_comment'), 'This is a comment', FailureHandling.CONTINUE_ON_FAILURE)
 WebUI.delay(1)
 
-WebUI.click(findTestObject('Page_CURA Healthcare Service_appointment/button_Book Appointment'))
+WebUI.click(findTestObject('Page_CURA Healthcare Service_appointment/button_Book Appointment'), FailureHandling.CONTINUE_ON_FAILURE)
 WebUI.delay(1)
 
-WebUI.click(findTestObject('Page_CURA Healthcare Service_summary/a_Go to Homepage'))
+WebUI.click(findTestObject('Page_CURA Healthcare Service_summary/a_Go to Homepage'), FailureHandling.CONTINUE_ON_FAILURE)
 WebUI.delay(1)
 
 WebUI.closeBrowser()
