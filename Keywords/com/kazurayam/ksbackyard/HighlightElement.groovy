@@ -35,20 +35,23 @@ public class HighlightElement {
 		}
 	}
 
+	private static List<String> influencedKeywords = [
+		'click',
+		'selectOptionByIndex',
+		'selectOptionByLabel',
+		'selectOptionByValue',
+		'setEncryptedText',
+		'setText'
+	]
+	
 	/**
-	 * override methods of WebUiBuiltInKeywords so that they call HighlightElement.on(testObject).
-	 * http://docs.groovy-lang.org/latest/html/documentation/core-metaprogramming.html#metaprogramming_emc
+	 * change some of methods of WebUiBuiltInKeywords so that they call HighlightElement.on(testObject)
+	 * before invoking their original method body.
+	 * 
+	 * http://docs.groovy-lang.org/latest/html/documentation/core-metaprogramming.html#metaprogramming
 	 */
 	@Keyword
 	public static void pandemic() {
-		List<String> influencedKeywords = [
-			'click',
-			'selectOptionByIndex',
-			'selectOptionByLabel',
-			'selectOptionByValue',
-			'setEncryptedText',
-			'setText'
-		]
 		WebUiBuiltInKeywords.metaClass.'static'.invokeMethod = { String name, args ->
 			if (name in influencedKeywords) {
 				TestObject to = (TestObject)args[0]
@@ -63,7 +66,7 @@ public class HighlightElement {
 			return result
 		}
 	}
-	
+
 	// previous implementation
 	/*
 	 @Keyword
