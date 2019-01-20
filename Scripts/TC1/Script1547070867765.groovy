@@ -1,18 +1,7 @@
-import static com.kms.katalon.core.checkpoint.CheckpointFactory.findCheckpoint
-import static com.kms.katalon.core.testcase.TestCaseFactory.findTestCase
-import static com.kms.katalon.core.testdata.TestDataFactory.findTestData
 import static com.kms.katalon.core.testobject.ObjectRepository.findTestObject
-import com.kms.katalon.core.checkpoint.Checkpoint as Checkpoint
-import com.kms.katalon.core.cucumber.keyword.CucumberBuiltinKeywords as CucumberKW
-import com.kms.katalon.core.mobile.keyword.MobileBuiltInKeywords as Mobile
+
 import com.kms.katalon.core.model.FailureHandling as FailureHandling
-import com.kms.katalon.core.testcase.TestCase as TestCase
-import com.kms.katalon.core.testdata.TestData as TestData
-import com.kms.katalon.core.testobject.TestObject as TestObject
-import com.kms.katalon.core.webservice.keyword.WSBuiltInKeywords as WS
 import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords as WebUI
-import internal.GlobalVariable as GlobalVariable
-import org.openqa.selenium.Keys as Keys
 
 // open browser and navigate to the AUT
 WebUI.openBrowser('')
@@ -25,10 +14,11 @@ CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.on'(
 	findTestObject('Page_CURA Healthcare Service_top/h1_CURA Healthcare Service'))
 WebUI.delay(2)
 
+
+
 // modify WebUI.* keywords which take TestObject as arg0 
 // so that they call Highlight.on() automatically  
 CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.pandemic'()
-
 
 WebUI.click(findTestObject('Page_CURA Healthcare Service_top/a_Make Appointment'))
 WebUI.delay(1)
