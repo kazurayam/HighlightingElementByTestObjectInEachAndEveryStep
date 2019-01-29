@@ -11,27 +11,63 @@ import com.kms.katalon.core.testobject.TestObject
 import com.kms.katalon.core.webui.common.WebUiCommonHelper
 import com.kms.katalon.core.webui.driver.DriverFactory
 import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords
+import com.kms.katalon.core.util.KeywordUtil
 
 public class HighlightElement {
 
+	private static enum AccessStatus {
+		CURRENT('orange'),
+		SUCCESS('lime'),
+		EXCEPTION('red');
+		
+		String color;
+		AccessStatus(String color) {
+			this.color = color
+		}
+	}
+	
+	/*
 	@Keyword
 	public static void on(TestObject testObject) {
 		influence(testObject)
 	}
+	 */
+	
+	@Keyword
+	public static current(TestObject testObject) {
+		return influence(testObject, AccessStatus.CURRENT)
+	}
+	
+	@Keyword
+	public static success(TestObject testObject) {
+		return influence(testObject, AccessStatus.SUCCESS)
+	}
+	
+	@Keyword
+	public static exception(TestObject testObject) {
+		return influence(testObject, AccessStatus.EXCEPTION)
+	}
 
-	private static void influence(TestObject testObject) {
+	/*
+	 * marks all Web elements that match the given test object,
+	 * depending on their access status, 
+	 * either orage (current), green (successful), or red (faulty).
+	 */
+	private static influence(TestObject testObject, AccessStatus accessStatus) {
+		List<WebElement> elements
 		try {
 			WebDriver driver = DriverFactory.getWebDriver()
-			List<WebElement> elements = WebUiCommonHelper.findWebElements(testObject, 20);
+			elements = WebUiCommonHelper.findWebElements(testObject, 5)
 			for (WebElement element : elements) {
-				JavascriptExecutor js = (JavascriptExecutor) driver;
+				JavascriptExecutor js = (JavascriptExecutor) driver
 				js.executeScript(
-						"arguments[0].setAttribute('style','outline: dashed red;');",
-						element);
+						"arguments[0].setAttribute('style','outline: dashed ${accessStatus.color};');",
+						element)
 			}
 		} catch (Exception e) {
-			// TODO use Katalon Logging
-			e.printStackTrace()
+			KeywordUtil.markFailed(e.getMessage())
+		} finally {
+			return elements
 		}
 	}
 
@@ -43,10 +79,12 @@ public class HighlightElement {
 		'setEncryptedText',
 		'setText'
 	]
-	
+
 	/**
-	 * change some of methods of WebUiBuiltInKeywords so that they call HighlightElement.on(testObject)
-	 * before invoking their original method body.
+	 * change some of methods of WebUiBuiltInKeywords so that they call 
+	 * HighlightElement.on(testObject) before invoking their original method body;
+	 * call HighlightElement.success(testObject) when passing,
+	 * call HighlightElement.exception(testObject) when an error occurs.
 	 * 
 	 * http://docs.groovy-lang.org/latest/html/documentation/core-metaprogramming.html#metaprogramming
 	 */
