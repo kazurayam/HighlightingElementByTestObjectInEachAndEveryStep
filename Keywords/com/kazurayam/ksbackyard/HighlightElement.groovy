@@ -13,38 +13,50 @@ import com.kms.katalon.core.webui.driver.DriverFactory
 import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords
 import com.kms.katalon.core.util.KeywordUtil
 
-public class HighlightElement {
+import internal.GlobalVariable
 
-	private static enum AccessStatus {
+/**
+ * A custom keyword for Katalon Studio.
+ * You can put highlight on web elements you targeted on your web page using
+ * WebUI.* elements ().
+ * 
+ * [usage]
+ * in your test case of Katalon Studio, just write one line:
+ * 
+ * <pre>
+ * CustomKeywords.'com.karurayam.ksbackyard.HighlightElement.pandemic'()
+ * </pre>
+ * 
+ * 
+ * 
+ * 
+ * @author kazurayam
+ * @author drundanibel
+ */
+public final class HighlightElement {
+
+	private final static enum AccessStatus {
 		CURRENT('orange'),
 		SUCCESS('lime'),
 		EXCEPTION('red');
-		
 		String color;
 		AccessStatus(String color) {
 			this.color = color
 		}
 	}
-	
-	/*
+
 	@Keyword
-	public static void on(TestObject testObject) {
-		influence(testObject)
-	}
-	 */
-	
-	@Keyword
-	public static current(TestObject testObject) {
+	public final static List<WebElement> current(TestObject testObject) {
 		return influence(testObject, AccessStatus.CURRENT)
 	}
-	
+
 	@Keyword
-	public static success(TestObject testObject) {
+	public final static List<WebElement> success(TestObject testObject) {
 		return influence(testObject, AccessStatus.SUCCESS)
 	}
-	
+
 	@Keyword
-	public static exception(TestObject testObject) {
+	public final static List<WebElement> exception(TestObject testObject) {
 		return influence(testObject, AccessStatus.EXCEPTION)
 	}
 
@@ -53,7 +65,7 @@ public class HighlightElement {
 	 * depending on their access status, 
 	 * either orage (current), green (successful), or red (faulty).
 	 */
-	private static influence(TestObject testObject, AccessStatus accessStatus) {
+	private final static List<WebElement> influence(TestObject testObject, AccessStatus accessStatus) {
 		List<WebElement> elements
 		try {
 			WebDriver driver = DriverFactory.getWebDriver()
@@ -61,7 +73,7 @@ public class HighlightElement {
 			for (WebElement element : elements) {
 				JavascriptExecutor js = (JavascriptExecutor) driver
 				js.executeScript(
-						"arguments[0].setAttribute('style','outline: dashed ${accessStatus.color};');",
+						"arguments[0].setAttribute('style', 'outline: dashed ${accessStatus.color};');",
 						element)
 			}
 		} catch (Exception e) {
@@ -71,7 +83,7 @@ public class HighlightElement {
 		}
 	}
 
-	private static List<String> influencedKeywords = [
+	static final List<String> influencedKeywords = [
 		'click',
 		'selectOptionByIndex',
 		'selectOptionByLabel',
@@ -81,18 +93,45 @@ public class HighlightElement {
 	]
 
 	/**
-	 * change some of methods of WebUiBuiltInKeywords so that they call 
-	 * HighlightElement.on(testObject) before invoking their original method body;
-	 * call HighlightElement.success(testObject) when passing,
-	 * call HighlightElement.exception(testObject) when an error occurs.
-	 * 
-	 * http://docs.groovy-lang.org/latest/html/documentation/core-metaprogramming.html#metaprogramming
+	 * adds GlobalVariable dynamically at script runtime
 	 */
 	@Keyword
-	public static void pandemic() {
+	static final void addGlobalVariable(String name, def value) {
+		GroovyShell sh = new GroovyShell()
+		MetaClass mc = sh.evaluate("internal.GlobalVariable").metaClass
+		String getterName = 'get' + name.capitalize()
+		mc.'static'."${getterName}" = {-> return value }
+		mc.'static'."${name}" = value
+	}
+
+	/**
+	 * The name of GlobalVariable which records the relevant information of
+	 * the patient (a test case)
+	 */
+	static final String GVNAME_KARTE = 'tcExceptionEvents'
+
+	/**
+	 * Manipulates all keyword methods contained in the list influencedKeywords
+	 * when called in the respective test case in order to mark the affected
+	 * web elements before and after each access with different colors and
+	 * in case of an error to temporarily store all relevant information about
+	 * its circumstances, e.e. keywordName, testObject, testObjectString,
+	 * inputParams, webElements, exceptions (with type and message) and
+	 * even the lastWebElements that were recognized in the immediately
+	 * preceding test step, in the dynamically generated variable of type Map.
+	 */
+	@Keyword
+	static final void pandemic() {
+		Karte karte = new Karte()
 		WebUiBuiltInKeywords.metaClass.'static'.invokeMethod = { String name, args ->
 			if (name in influencedKeywords) {
 				TestObject to = (TestObject)args[0]
+				
+				karte.record(name, to, args)
+				List<WebElement> currentWebElements = HighlightElement.current(to)
+				
+				
+				
 				HighlightElement.on(to)
 			}
 			def result
@@ -104,71 +143,47 @@ public class HighlightElement {
 			return result
 		}
 	}
-
-	// previous implementation
-	/*
-	 @Keyword
-	 public static void pandemic() {
-	 // click() with FailuraHandling
-	 WebUiBuiltInKeywords.metaClass.static.click = { TestObject to, FailureHandling flowControl ->
-	 HighlightElement.on(to)
-	 KeywordExecutor.executeKeywordForPlatform(KeywordExecutor.PLATFORM_WEB, "click", to, flowControl)
-	 }
-	 // click() without FailuraHandling
-	 WebUiBuiltInKeywords.metaClass.static.click = { TestObject to ->
-	 HighlightElement.on(to)
-	 KeywordExecutor.executeKeywordForPlatform(KeywordExecutor.PLATFORM_WEB, "click", to)
-	 }
-	 // selectOptionByIndex() with FailureHandling
-	 WebUiBuiltInKeywords.metaClass.static.selectOptionByIndex = { TestObject to, Object range, FailureHandling flowControl ->
-	 HighlightElement.on(to)
-	 KeywordExecutor.executeKeywordForPlatform(KeywordExecutor.PLATFORM_WEB, "selectOptionByIndex", to, range, flowControl)
-	 }
-	 // selectOptionByIndex() without FailureHandling
-	 WebUiBuiltInKeywords.metaClass.static.selectOptionByIndex = { TestObject to, Object range ->
-	 HighlightElement.on(to)
-	 KeywordExecutor.executeKeywordForPlatform(KeywordExecutor.PLATFORM_WEB, "selectOptionByIndex", to, range)
-	 }
-	 // selectOptionByLabel() with FailureHandling
-	 WebUiBuiltInKeywords.metaClass.static.selectOptionByLabel = { TestObject to, String value, boolean isRegex, FailureHandling flowControl ->
-	 HighlightElement.on(to)
-	 KeywordExecutor.executeKeywordForPlatform(KeywordExecutor.PLATFORM_WEB, "selectOptionByLabel", to, value, isRegex, flowControl)
-	 }
-	 // selectOptionByLabel() without FailureHandling
-	 WebUiBuiltInKeywords.metaClass.static.selectOptionByLabel = { TestObject to, String value, boolean isRegex ->
-	 HighlightElement.on(to)
-	 KeywordExecutor.executeKeywordForPlatform(KeywordExecutor.PLATFORM_WEB, "selectOptionByLabel", to, value, isRegex)
-	 }
-	 // selectOptionByValue() with FailureHandling
-	 WebUiBuiltInKeywords.metaClass.static.selectOptionByValue = { TestObject to, String value, boolean isRegex, FailureHandling flowControl ->
-	 HighlightElement.on(to)
-	 KeywordExecutor.executeKeywordForPlatform(KeywordExecutor.PLATFORM_WEB, "selectOptionByValue", to, value, isRegex, flowControl)
-	 }
-	 // selectOptionByValue() without FailureHandling
-	 WebUiBuiltInKeywords.metaClass.static.selectOptionByValue = { TestObject to, String value, boolean isRegex ->
-	 HighlightElement.on(to)
-	 KeywordExecutor.executeKeywordForPlatform(KeywordExecutor.PLATFORM_WEB, "selectOptionByValue", to, value, isRegex)
-	 }
-	 // setEncryptedText() with FailureHandling
-	 WebUiBuiltInKeywords.metaClass.static.setEncryptedText = { TestObject to, String encryptedText, FailureHandling flowControl ->
-	 HighlightElement.on(to)
-	 KeywordExecutor.executeKeywordForPlatform(KeywordExecutor.PLATFORM_WEB, "setEncryptedText", to, encryptedText, flowControl)
-	 }
-	 // setEncryptedText() without FailureHandling
-	 WebUiBuiltInKeywords.metaClass.static.setEncryptedText = { TestObject to, String encryptedText ->
-	 HighlightElement.on(to)
-	 KeywordExecutor.executeKeywordForPlatform(KeywordExecutor.PLATFORM_WEB, "setEncryptedText", to, encryptedText)
-	 }
-	 // setText() with FailureHandling
-	 WebUiBuiltInKeywords.metaClass.static.setText = { TestObject to, String text, FailureHandling flowControl ->
-	 HighlightElement.on(to)
-	 KeywordExecutor.executeKeywordForPlatform(KeywordExecutor.PLATFORM_WEB, "setText", to, text, flowControl)
-	 }
-	 // setText() without FailureHandling
-	 WebUiBuiltInKeywords.metaClass.static.setText = { TestObject to, String text ->
-	 HighlightElement.on(to)
-	 KeywordExecutor.executeKeywordForPlatform(KeywordExecutor.PLATFORM_WEB, "setText", to, text)
-	 }
-	 }
+	
+	/**
+	 * Medical record of the test execution
 	 */
+	private static final class Karte {
+		Karte() {		
+			if (GlobalVariable.metaClass.hasProperty(GlobalVariable, GVNAME_KARTE)) {
+				GlobalVariable[GVNAME_KARTE]['lastWebElements'] =
+					GlobalVariable[GVNAME_KARTE]['currentTestStep']['webElements']
+			}
+			else {
+				addGlobalVariable(GVNAME_KARTE, [
+					'exceptions' : [
+						'Failure'  : [],
+						'Error'    : [],
+						'General'  : []
+						],
+					'currentTestStep' : [
+						'webElements': null
+						],
+					'lastWebElements': null
+					])
+			}
+		}
+		def record(String name, to, args) {
+			String toStr = args[0].toString().replaceFirst(/^TestObject - '(.*?)'$/, '$1')
+			
+			// what are you doing here?
+			List<String> inputParams = args.collect{it}.withIndex().findResults{ it, id -> (id > 0) ? it: null }
+			
+			// I should make an inner class 'Karte'
+			Map currentTestStep = [
+				'keywordName': name,
+				'testObject': to,
+				
+				]
+			
+		}
+		
+
+	}
 }
+
+
