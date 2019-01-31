@@ -5,6 +5,8 @@ import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 
 import com.kms.katalon.core.annotation.Keyword
+import com.kms.katalon.core.exception.StepFailedException
+import com.kms.katalon.core.exception.StepErrorException
 import com.kms.katalon.core.keyword.internal.KeywordExecutor
 import com.kms.katalon.core.model.FailureHandling
 import com.kms.katalon.core.testobject.TestObject
@@ -28,14 +30,13 @@ import internal.GlobalVariable
  * </pre>
  * 
  * 
- * 
- * 
  * @author kazurayam
  * @author drundanibel
  */
 public final class HighlightElement {
 
 	private final static enum AccessStatus {
+		TOUCHED('#9966cc'),
 		CURRENT('orange'),
 		SUCCESS('lime'),
 		EXCEPTION('red');
@@ -45,6 +46,11 @@ public final class HighlightElement {
 		}
 	}
 
+	@Keyword
+	public final static List<WebElement> on(TestObject testObject) {
+		return influence(testObject, AccessStatus.TOUCHED)	
+	}
+	
 	@Keyword
 	public final static List<WebElement> current(TestObject testObject) {
 		return influence(testObject, AccessStatus.CURRENT)
@@ -92,6 +98,16 @@ public final class HighlightElement {
 		'setText'
 	]
 
+	private static final boolean isInfluenced(String name, args) {
+		return (name in influencedKeywords)
+	}
+	
+	private static final boolean isToBeMonitored(String name, args) {
+		return (args[0] instanceof TestObject)
+	}
+	
+	private static final String GVNAME = 'tcExceptionEvents'
+	
 	/**
 	 * Manipulates all keyword methods contained in the list influencedKeywords
 	 * when called in the respective test case in order to mark the affected
@@ -105,8 +121,10 @@ public final class HighlightElement {
 	@Keyword
 	static final void pandemic() {
 		Karte karte = new Karte()
+		
+		/*
 		WebUiBuiltInKeywords.metaClass.'static'.invokeMethod = { String name, args ->
-			if (name in influencedKeywords) {
+			if (influenced(name, args)) {
 				TestObject to = (TestObject)args[0]
 
 				karte.record(name, to, args)
@@ -124,13 +142,52 @@ public final class HighlightElement {
 			}
 			return result
 		}
+		*/
+		WebUiBuiltinKeywords.metaClass.'static'.invokeMethod = { String name, args ->
+		}
+		
+		//
+		def highlightingCurrentElementClosure = { String name, args ->
+			if (isInfluenced(name, args)) {
+				TestObject to = (TestObject)args[0]
+				HighlightElement.current(to)
+			}
+			return delegate.metaClass.getMetaMethod(name, args).invoke(delegate, args)
+		}
+		
+		//
+		def monitoringClosure = { String name, args ->
+			def result
+			if (isToBeMonitored(name, args)) {
+				TestObject to = (TestObject)args[0]
+				try {
+					result = delegate.metaClass.getMetaMethod(name, args).invoke(delegate, args)
+					HighlightElement.success(to)
+				} catch (StepFailedException e) {
+					HighlightElement.exception(to)
+					karte.logFailure(e)
+					throw e	
+				} catch (StepErrorException e) {
+					HighlightElement.exception(to)
+					karte.logError(e)
+					throw e
+				} catch (Exception e) {
+					HighlightElement.exception(to)
+					karte.logGeneral(e)
+					throw e
+				}
+			} else {
+				result = delegate.metaClass.getMetaMethod(name, args).invoke(delegate, args)
+			}
+			return result
+		}
 	}
+
 
 	/**
 	 * Medical record of the test execution
 	 */
 	private static final class Karte {
-		private String GVNAME = 'tcExceptionEvents'
 		Karte() {
 			if (GlobalVariable.metaClass.hasProperty(GlobalVariable, GVNAME)) {
 				GlobalVariable[GVNAME]['lastWebElements'] =
@@ -162,26 +219,33 @@ public final class HighlightElement {
 		/**
 		 * 
 		 */
-		def record(String name, to, args) {
-			String toStr = args[0].toString().replaceFirst(/^TestObject - '(.*?)'$/, '$1')
+		def logFailure(String name, args) {
+			if (!(args[0] instanceof TestObject)) {
+				throw new RuntimeException("args[0] is supposed be an instance of TestObject")
+			}
+			TestObject to = (TestObject)args[0]
+			String toStr = to.toString().replaceFirst(/^TestObject - '(.*?)'$/, '$1')
 
 			// what are you doing here?
-			List<String> inputParams = args.collect{it}.withIndex().findResults{ it, id -> (id > 0) ? it: null }
+			List<String> inputParams = args.collect{it}.withIndex().
+										findResults{ it, id -> (id > 0) ? it: null }
 
-			// I should make an inner class 'Karte'
 			Map currentTestStep = [
 				'keywordName': name,
 				'testObject': to,
 				'testObjectString': toStr,
 				'inputParams': inputParams,
-				'webElements': currentWebElements]
-
-			]
-
+				'webElements': currentWebElements
+				]
 		}
-
-
+		def logError(String name, args) {
+			throw new UnsupportedOperationException("TODO")
+		}
+		def logGeneral(String name, args) {
+			throw new UnsupportedOperationException("TODO")
+		}
 	}
+	
 }
 
 
