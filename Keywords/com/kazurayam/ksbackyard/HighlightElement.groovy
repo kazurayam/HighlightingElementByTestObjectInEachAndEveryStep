@@ -93,24 +93,6 @@ public final class HighlightElement {
 	]
 
 	/**
-	 * adds GlobalVariable dynamically at script runtime
-	 */
-	@Keyword
-	static final void addGlobalVariable(String name, def value) {
-		GroovyShell sh = new GroovyShell()
-		MetaClass mc = sh.evaluate("internal.GlobalVariable").metaClass
-		String getterName = 'get' + name.capitalize()
-		mc.'static'."${getterName}" = {-> return value }
-		mc.'static'."${name}" = value
-	}
-
-	/**
-	 * The name of GlobalVariable which records the relevant information of
-	 * the patient (a test case)
-	 */
-	static final String GVNAME_KARTE = 'tcExceptionEvents'
-
-	/**
 	 * Manipulates all keyword methods contained in the list influencedKeywords
 	 * when called in the respective test case in order to mark the affected
 	 * web elements before and after each access with different colors and
@@ -126,12 +108,12 @@ public final class HighlightElement {
 		WebUiBuiltInKeywords.metaClass.'static'.invokeMethod = { String name, args ->
 			if (name in influencedKeywords) {
 				TestObject to = (TestObject)args[0]
-				
+
 				karte.record(name, to, args)
 				List<WebElement> currentWebElements = HighlightElement.current(to)
-				
-				
-				
+
+
+
 				HighlightElement.on(to)
 			}
 			def result
@@ -143,45 +125,61 @@ public final class HighlightElement {
 			return result
 		}
 	}
-	
+
 	/**
 	 * Medical record of the test execution
 	 */
 	private static final class Karte {
-		Karte() {		
-			if (GlobalVariable.metaClass.hasProperty(GlobalVariable, GVNAME_KARTE)) {
-				GlobalVariable[GVNAME_KARTE]['lastWebElements'] =
-					GlobalVariable[GVNAME_KARTE]['currentTestStep']['webElements']
+		private String GVNAME = 'tcExceptionEvents'
+		Karte() {
+			if (GlobalVariable.metaClass.hasProperty(GlobalVariable, GVNAME)) {
+				GlobalVariable[GVNAME]['lastWebElements'] =
+						GlobalVariable[GVNAME]['currentTestStep']['webElements']
 			}
 			else {
-				addGlobalVariable(GVNAME_KARTE, [
+				addGlobalVariable(GVNAME, [
 					'exceptions' : [
 						'Failure'  : [],
 						'Error'    : [],
-						'General'  : []
-						],
+						'General'  : []],
 					'currentTestStep' : [
 						'webElements': null
-						],
+					],
 					'lastWebElements': null
-					])
+				])
 			}
 		}
+		/**
+		 * adds GlobalVariable dynamically at script runtime
+		 */
+		void addGlobalVariable(String name, def value) {
+			GroovyShell sh = new GroovyShell()
+			MetaClass mc = sh.evaluate("internal.GlobalVariable").metaClass
+			String getterName = 'get' + name.capitalize()
+			mc.'static'."${getterName}" = {-> return value }
+			mc.'static'."${name}" = value
+		}
+		/**
+		 * 
+		 */
 		def record(String name, to, args) {
 			String toStr = args[0].toString().replaceFirst(/^TestObject - '(.*?)'$/, '$1')
-			
+
 			// what are you doing here?
 			List<String> inputParams = args.collect{it}.withIndex().findResults{ it, id -> (id > 0) ? it: null }
-			
+
 			// I should make an inner class 'Karte'
 			Map currentTestStep = [
 				'keywordName': name,
 				'testObject': to,
-				
-				]
-			
+				'testObjectString': toStr,
+				'inputParams': inputParams,
+				'webElements': currentWebElements]
+
+			]
+
 		}
-		
+
 
 	}
 }
