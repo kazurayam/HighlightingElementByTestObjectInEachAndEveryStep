@@ -14,6 +14,6 @@
       <guid>8ad65bd7-b4bf-4e6f-8219-a89f05659de9</guid>
       <isReuseDriver>false</isReuseDriver>
       <isRun>true</isRun>
-      <testCaseId>Test Cases/TC1</testCaseId>
+      <testCaseId>Test Cases/main/TC1</testCaseId>
    </testCaseLink>
 </TestSuiteEntity>

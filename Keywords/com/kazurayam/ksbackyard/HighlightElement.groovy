@@ -48,9 +48,9 @@ public final class HighlightElement {
 
 	@Keyword
 	public final static List<WebElement> on(TestObject testObject) {
-		return influence(testObject, AccessStatus.TOUCHED)	
+		return influence(testObject, AccessStatus.TOUCHED)
 	}
-	
+
 	@Keyword
 	public final static List<WebElement> current(TestObject testObject) {
 		return influence(testObject, AccessStatus.CURRENT)
@@ -101,13 +101,13 @@ public final class HighlightElement {
 	private static final boolean isInfluenced(String name, args) {
 		return (name in influencedKeywords)
 	}
-	
+
 	private static final boolean isToBeMonitored(String name, args) {
 		return (args[0] instanceof TestObject)
 	}
-	
+
 	private static final String GVNAME = 'tcExceptionEvents'
-	
+
 	/**
 	 * Manipulates all keyword methods contained in the list influencedKeywords
 	 * when called in the respective test case in order to mark the affected
@@ -121,31 +121,27 @@ public final class HighlightElement {
 	@Keyword
 	static final void pandemic() {
 		Karte karte = new Karte()
-		
+
 		/*
-		WebUiBuiltInKeywords.metaClass.'static'.invokeMethod = { String name, args ->
-			if (influenced(name, args)) {
-				TestObject to = (TestObject)args[0]
-
-				karte.record(name, to, args)
-				List<WebElement> currentWebElements = HighlightElement.current(to)
-
-
-
-				HighlightElement.on(to)
-			}
-			def result
-			try {
-				result = delegate.metaClass.getMetaMethod(name, args).invoke(delegate, args)
-			} catch(Exception e) {
-				System.out.println("Handling exception for method $name")
-			}
-			return result
-		}
-		*/
+		 WebUiBuiltInKeywords.metaClass.'static'.invokeMethod = { String name, args ->
+		 if (influenced(name, args)) {
+		 TestObject to = (TestObject)args[0]
+		 karte.record(name, to, args)
+		 List<WebElement> currentWebElements = HighlightElement.current(to)
+		 HighlightElement.on(to)
+		 }
+		 def result
+		 try {
+		 result = delegate.metaClass.getMetaMethod(name, args).invoke(delegate, args)
+		 } catch(Exception e) {
+		 System.out.println("Handling exception for method $name")
+		 }
+		 return result
+		 }
+		 */
 		WebUiBuiltinKeywords.metaClass.'static'.invokeMethod = { String name, args ->
 		}
-		
+
 		//
 		def highlightingCurrentElementClosure = { String name, args ->
 			if (isInfluenced(name, args)) {
@@ -154,7 +150,7 @@ public final class HighlightElement {
 			}
 			return delegate.metaClass.getMetaMethod(name, args).invoke(delegate, args)
 		}
-		
+
 		//
 		def monitoringClosure = { String name, args ->
 			def result
@@ -166,7 +162,7 @@ public final class HighlightElement {
 				} catch (StepFailedException e) {
 					HighlightElement.exception(to)
 					karte.logFailure(e)
-					throw e	
+					throw e
 				} catch (StepErrorException e) {
 					HighlightElement.exception(to)
 					karte.logError(e)
@@ -228,7 +224,7 @@ public final class HighlightElement {
 
 			// what are you doing here?
 			List<String> inputParams = args.collect{it}.withIndex().
-										findResults{ it, id -> (id > 0) ? it: null }
+			findResults{ it, id -> (id > 0) ? it: null }
 
 			Map currentTestStep = [
 				'keywordName': name,
@@ -236,7 +232,7 @@ public final class HighlightElement {
 				'testObjectString': toStr,
 				'inputParams': inputParams,
 				'webElements': currentWebElements
-				]
+			]
 		}
 		def logError(String name, args) {
 			throw new UnsupportedOperationException("TODO")
@@ -245,7 +241,7 @@ public final class HighlightElement {
 			throw new UnsupportedOperationException("TODO")
 		}
 	}
-	
+
 }
 
 
