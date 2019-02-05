@@ -35,7 +35,7 @@ import internal.GlobalVariable
  */
 public final class HighlightElement {
 
-	private final static enum AccessStatus {
+	private static final enum AccessStatus {
 		TOUCHED('#9966cc'),
 		CURRENT('orange'),
 		SUCCESS('lime'),
@@ -47,28 +47,25 @@ public final class HighlightElement {
 	}
 
 	@Keyword
-	public final static List<WebElement> on(TestObject testObject) {
+	public static final List<WebElement> on(TestObject testObject) {
 		return influence(testObject, AccessStatus.TOUCHED)
 	}
 
-	@Keyword
-	public final static List<WebElement> current(TestObject testObject) {
+	private static final List<WebElement> current(TestObject testObject) {
 		return influence(testObject, AccessStatus.CURRENT)
 	}
 
-	@Keyword
-	public final static List<WebElement> success(TestObject testObject) {
+	private static final List<WebElement> success(TestObject testObject) {
 		return influence(testObject, AccessStatus.SUCCESS)
 	}
 
-	@Keyword
-	public final static List<WebElement> exception(TestObject testObject) {
+	private static final List<WebElement> exception(TestObject testObject) {
 		return influence(testObject, AccessStatus.EXCEPTION)
 	}
 
 	/*
 	 * marks all Web elements that match the given test object,
-	 * depending on their access status, 
+	 * depending on their access status: 
 	 * either orage (current), green (successful), or red (faulty).
 	 */
 	private final static List<WebElement> influence(TestObject testObject, AccessStatus accessStatus) {
@@ -89,7 +86,7 @@ public final class HighlightElement {
 		}
 	}
 
-	static final List<String> influencedKeywords = [
+	public static final List<String> influencedKeywords = [
 		'click',
 		'selectOptionByIndex',
 		'selectOptionByLabel',
@@ -98,15 +95,29 @@ public final class HighlightElement {
 		'setText'
 	]
 
+	/**
+	 * Check if the keyword is influenced or not
+	 * 
+	 * @param name a String as name of keyword
+	 * @param args arguments to the keyword when called, not checked
+	 * @return true if the name is found in the influencedKeywords; otherwise false
+	 */
 	private static final boolean isInfluenced(String name, args) {
 		return (name in influencedKeywords)
 	}
 
+	/**
+	 * Check if the keyword is to be monitored or not.
+	 * If the keyword is given with args[0] which is instance of TestObject, 
+	 * then it should be monitored
+	 * 
+	 * @param name a String as name of keyword, not checked
+	 * @param args arguments to the keyword when called
+	 * @return true if the args[0] is instance of TestObject; otherwise false
+	 */
 	private static final boolean isToBeMonitored(String name, args) {
 		return (args[0] instanceof TestObject)
 	}
-
-	private static final String GVNAME = 'tcExceptionEvents'
 
 	/**
 	 * Manipulates all keyword methods contained in the list influencedKeywords
@@ -120,39 +131,19 @@ public final class HighlightElement {
 	 */
 	@Keyword
 	static final void pandemic() {
+		
 		Karte karte = new Karte()
-
-		/*
-		 WebUiBuiltInKeywords.metaClass.'static'.invokeMethod = { String name, args ->
-		 if (influenced(name, args)) {
-		 TestObject to = (TestObject)args[0]
-		 karte.record(name, to, args)
-		 List<WebElement> currentWebElements = HighlightElement.current(to)
-		 HighlightElement.on(to)
-		 }
-		 def result
-		 try {
-		 result = delegate.metaClass.getMetaMethod(name, args).invoke(delegate, args)
-		 } catch(Exception e) {
-		 System.out.println("Handling exception for method $name")
-		 }
-		 return result
-		 }
-		 */
-		WebUiBuiltinKeywords.metaClass.'static'.invokeMethod = { String name, args ->
-		}
-
-		//
-		def highlightingCurrentElementClosure = { String name, args ->
+		karte.shiftRecord()
+		
+		Closure highlightingCurrentElementClosure = { String name, args ->
 			if (isInfluenced(name, args)) {
 				TestObject to = (TestObject)args[0]
 				HighlightElement.current(to)
 			}
 			return delegate.metaClass.getMetaMethod(name, args).invoke(delegate, args)
 		}
-
-		//
-		def monitoringClosure = { String name, args ->
+	
+		Closure monitoringClosure = { String name, args ->
 			def result
 			if (isToBeMonitored(name, args)) {
 				TestObject to = (TestObject)args[0]
@@ -177,41 +168,86 @@ public final class HighlightElement {
 			}
 			return result
 		}
+	
+		/*
+		 WebUiBuiltInKeywords.metaClass.'static'.invokeMethod = { String name, args ->
+		 if (influenced(name, args)) {
+		 TestObject to = (TestObject)args[0]
+		 karte.record(name, to, args)
+		 List<WebElement> currentWebElements = HighlightElement.current(to)
+		 HighlightElement.on(to)
+		 }
+		 def result
+		 try {
+		 result = delegate.metaClass.getMetaMethod(name, args).invoke(delegate, args)
+		 } catch(Exception e) {
+		 System.out.println("Handling exception for method $name")
+		 }
+		 return result
+		 }
+		 */
+		//WebUiBuiltinKeywords.metaClass.'static'.invokeMethod = { String name, args ->
+		//}
+
 	}
 
+	/**
+	 * The name of GlobalVariable of type Map.
+	 * We record the detail information to trace the activity of keywords which were
+	 * invoked just before a StepFailureException was thrown.
+	 */
+	public static final String GVNAME = 'tcExceptionEvents'
 
 	/**
-	 * Medical record of the test execution
+	 * Karte (Medical record). 
+	 * This class encapsulates the information about test execution and
+	 * provides access methods to it.
 	 */
-	private static final class Karte {
-		Karte() {
+	static final class Karte {
+		
+		Karte() {}
+		
+		/*
+		 * 
+		 */
+		void shiftRecord() {
 			if (GlobalVariable.metaClass.hasProperty(GlobalVariable, GVNAME)) {
 				GlobalVariable[GVNAME]['lastWebElements'] =
 						GlobalVariable[GVNAME]['currentTestStep']['webElements']
 			}
 			else {
-				addGlobalVariable(GVNAME, [
-					'exceptions' : [
-						'Failure'  : [],
-						'Error'    : [],
-						'General'  : []],
-					'currentTestStep' : [
-						'webElements': null
-					],
-					'lastWebElements': null
-				])
+				addGlobalVariable(GVNAME, initValue())
 			}
 		}
+
 		/**
-		 * adds GlobalVariable dynamically at script runtime
+		 * Dynamically adds a GlobalVariable named as 'name' with value of 'value'
+		 * at script runtime
 		 */
-		void addGlobalVariable(String name, def value) {
+		static void addGlobalVariable(String name, def value) {
 			GroovyShell sh = new GroovyShell()
 			MetaClass mc = sh.evaluate("internal.GlobalVariable").metaClass
-			String getterName = 'get' + name.capitalize()
+			String getterName = 'get' + (CharSequence)name.capitalize()
 			mc.'static'."${getterName}" = {-> return value }
-			mc.'static'."${name}" = value
+			mc.'static'."${name}"       = value
 		}
+
+		/**
+		 * 
+		 * @return
+		 */
+		static Map initValue() {
+			return ['exceptions' : [
+					'Failure'  : [],
+					'Error'    : [],
+					'General'  : []],
+				'currentTestStep' : [
+					'webElements': null
+				],
+				'lastWebElements': null
+			]
+		}
+
 		/**
 		 * 
 		 */
@@ -234,9 +270,11 @@ public final class HighlightElement {
 				'webElements': currentWebElements
 			]
 		}
+
 		def logError(String name, args) {
 			throw new UnsupportedOperationException("TODO")
 		}
+
 		def logGeneral(String name, args) {
 			throw new UnsupportedOperationException("TODO")
 		}
