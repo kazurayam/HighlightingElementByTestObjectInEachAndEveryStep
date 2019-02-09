@@ -1,4 +1,4 @@
-package com.kazurayam.ksbackyard.junit
+package com.kazurayam.junit4ks
 
 import java.text.MessageFormat
 
@@ -38,7 +38,7 @@ public class JUnitCustomKeywords {
 	 * Test Case:
 	 * <PRE>
 	 * import junittutorial.CalculatorTest
-	 * CustomKeywords.'com.kazurayam.ksbackyard.junit.JUnitCustomKeywords.runWithJUnitRunner'(CalculatorTest.class)
+	 * CustomKeywords.'com.kazurayam.junit4ks.JUnitCustomKeywords.runWithJUnitRunner'(CalculatorTest.class)
 	 * </PRE>
 	 *
 	 * The following is a JUnit test (localated at Include/scripts/groovy/junittutorial/CalculatorTest.groovy)

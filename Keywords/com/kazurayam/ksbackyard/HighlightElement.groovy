@@ -131,10 +131,10 @@ public final class HighlightElement {
 	 */
 	@Keyword
 	static final void pandemic() {
-		
+
 		Karte karte = new Karte()
 		karte.shiftRecord()
-		
+
 		Closure highlightingCurrentElementClosure = { String name, args ->
 			if (isInfluenced(name, args)) {
 				TestObject to = (TestObject)args[0]
@@ -142,7 +142,7 @@ public final class HighlightElement {
 			}
 			return delegate.metaClass.getMetaMethod(name, args).invoke(delegate, args)
 		}
-	
+
 		Closure monitoringClosure = { String name, args ->
 			def result
 			if (isToBeMonitored(name, args)) {
@@ -168,7 +168,7 @@ public final class HighlightElement {
 			}
 			return result
 		}
-	
+
 		/*
 		 WebUiBuiltInKeywords.metaClass.'static'.invokeMethod = { String name, args ->
 		 if (influenced(name, args)) {
@@ -192,11 +192,26 @@ public final class HighlightElement {
 	}
 
 	/**
+	 * Dynamically adds a GlobalVariable named as 'name' with value of 'value'
+	 * at script runtime
+	 */
+	@Keyword
+	static void addGlobalVariable(String name, def value) {
+		GroovyShell sh = new GroovyShell()
+		MetaClass mc = sh.evaluate("internal.GlobalVariable").metaClass
+		String getterName = 'get' + (CharSequence)name.capitalize()
+		mc.'static'."${getterName}" = {-> return value }
+		mc.'static'."${name}"       = value
+	}
+
+	/**
 	 * The name of GlobalVariable of type Map.
 	 * We record the detail information to trace the activity of keywords which were
 	 * invoked just before a StepFailureException was thrown.
 	 */
 	public static final String GVNAME = 'tcExceptionEvents'
+
+
 
 	/**
 	 * Karte (Medical record). 
@@ -204,9 +219,9 @@ public final class HighlightElement {
 	 * provides access methods to it.
 	 */
 	static final class Karte {
-		
+
 		Karte() {}
-		
+
 		/*
 		 * 
 		 */
@@ -220,17 +235,6 @@ public final class HighlightElement {
 			}
 		}
 
-		/**
-		 * Dynamically adds a GlobalVariable named as 'name' with value of 'value'
-		 * at script runtime
-		 */
-		static void addGlobalVariable(String name, def value) {
-			GroovyShell sh = new GroovyShell()
-			MetaClass mc = sh.evaluate("internal.GlobalVariable").metaClass
-			String getterName = 'get' + (CharSequence)name.capitalize()
-			mc.'static'."${getterName}" = {-> return value }
-			mc.'static'."${name}"       = value
-		}
 
 		/**
 		 * 

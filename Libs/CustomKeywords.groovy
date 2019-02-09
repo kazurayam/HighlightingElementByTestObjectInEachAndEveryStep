@@ -5,6 +5,8 @@
 
 import com.kms.katalon.core.testobject.TestObject
 
+import java.lang.String
+
 import java.lang.Class
 
 import com.kms.katalon.core.model.FailureHandling
@@ -20,16 +22,24 @@ def static "com.kazurayam.ksbackyard.HighlightElement.pandemic"() {
     (new com.kazurayam.ksbackyard.HighlightElement()).pandemic()
 }
 
-def static "com.kazurayam.ksbackyard.junit.JUnitCustomKeywords.runWithJUnitRunner"(
+def static "com.kazurayam.ksbackyard.HighlightElement.addGlobalVariable"(
+    	String name	
+     , 	Object value	) {
+    (new com.kazurayam.ksbackyard.HighlightElement()).addGlobalVariable(
+        	name
+         , 	value)
+}
+
+def static "com.kazurayam.junit4ks.JUnitCustomKeywords.runWithJUnitRunner"(
     	Class junitRunnerClass	
      , 	FailureHandling flowControl	) {
-    (new com.kazurayam.ksbackyard.junit.JUnitCustomKeywords()).runWithJUnitRunner(
+    (new com.kazurayam.junit4ks.JUnitCustomKeywords()).runWithJUnitRunner(
         	junitRunnerClass
          , 	flowControl)
 }
 
-def static "com.kazurayam.ksbackyard.junit.JUnitCustomKeywords.runWithJUnitRunner"(
+def static "com.kazurayam.junit4ks.JUnitCustomKeywords.runWithJUnitRunner"(
     	Class junitRunnerClass	) {
-    (new com.kazurayam.ksbackyard.junit.JUnitCustomKeywords()).runWithJUnitRunner(
+    (new com.kazurayam.junit4ks.JUnitCustomKeywords()).runWithJUnitRunner(
         	junitRunnerClass)
 }
