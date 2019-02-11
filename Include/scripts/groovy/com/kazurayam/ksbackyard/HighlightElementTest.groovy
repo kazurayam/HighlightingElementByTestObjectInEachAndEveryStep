@@ -4,6 +4,7 @@ import static com.kms.katalon.core.testobject.ObjectRepository.findTestObject
 import static org.hamcrest.CoreMatchers.*
 import static org.junit.Assert.*
 
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -21,28 +22,28 @@ public class HighlightElementTest {
 
 	@Test
 	void test_AccessStatus_CURRENT() {
-		WebUI.comment("test_AccessStatus_CURRENT")
+		WebUI.comment("+ test_AccessStatus_CURRENT")
 		assertEquals("color of CURRENT is to be ",
 				HighlightElement.AccessStatus.CURRENT.outline, 'dashed orange')
 	}
 
 	@Test
 	void test_AccessStatus_SUCCESS() {
-		WebUI.comment("test_AccessStatus_SUCCESS")
+		WebUI.comment("+ test_AccessStatus_SUCCESS")
 		assertEquals("color of SUCCESS is to be ",
 				HighlightElement.AccessStatus.SUCCESS.outline, 'dashed lime')
 	}
 
 	@Test
 	void test_AccessStatus_EXCEPTION() {
-		WebUI.comment("test_AccessStatus_EXCEPTION")
+		WebUI.comment("+ test_AccessStatus_EXCEPTION")
 		assertEquals("color of EXCEPTION is to be ",
 				HighlightElement.AccessStatus.EXCEPTION.outline, 'dashed red')
 	}
 
 	@Test
 	void test_contents_vaccinatedKeywords() {
-		WebUI.comment("test_vaccinatedKeywords")
+		WebUI.comment("+ test_vaccinatedKeywords")
 		List<String> k = HighlightElement.vaccinatedKeywords
 		assertTrue(k.contains('click'))
 		assertTrue(k.contains('selectOptionByIndex'))
@@ -54,7 +55,7 @@ public class HighlightElementTest {
 
 	@Test
 	void test_isVaccinated() {
-		WebUI.comment("test_isVaccinated")
+		WebUI.comment("+ test_isVaccinated")
 		assertTrue(HighlightElement.isVaccinated('click', null))
 		assertTrue(HighlightElement.isVaccinated('selectOptionByIndex', null))
 		assertTrue(HighlightElement.isVaccinated('selectOptionByLabel', null))
@@ -66,7 +67,7 @@ public class HighlightElementTest {
 	
 	@Test
 	void test_isToBeTraced() {
-		WebUI.comment("test_isToBeTraced")
+		WebUI.comment("+ test_isToBeTraced")
 		assertTrue(HighlightElement.isToBeTraced("click", [new TestObject()]))
 		assertTrue(HighlightElement.isToBeTraced("selectOptionByIndex", [new TestObject()]))
 		assertTrue(HighlightElement.isToBeTraced("selectOptionByLabel", [new TestObject()]))
@@ -94,7 +95,7 @@ public class HighlightElementTest {
 	 */
 	@Test
 	void test_Karte_initValue() {
-		WebUI.comment("test_Karte_initValue")
+		WebUI.comment("+ test_Karte_initValue")
 		Map v = HighlightElement.Karte.initValue()
 		//println v
 		assertTrue("Key exception is not contained", v.containsKey('exceptions'))
@@ -117,27 +118,71 @@ public class HighlightElementTest {
 
 	@Test
 	void test_addGlobalVariable() {
-		WebUI.comment("test_addGlobalVariable")
+		WebUI.comment("+ test_addGlobalVariable")
 		HighlightElement.addGlobalVariable("foo", HighlightElement.Karte.initValue())
 		// println JsonOutput.prettyPrint(JsonOutput.toJson(GlobalVariable.foo))
 		assertNotNull(GlobalVariable.foo)
 		assertTrue(GlobalVariable.foo instanceof Map)
 	}
 	
+	@Ignore
 	@Test
-	void test_examine() {
-		WebUI.comment("test_examine")
+	void test_examine_TOUCHED() {
+		WebUI.comment("+ test_examine_TOUCHED")
 		TestObject to = findTestObject('Object Repository/Page_CURA Healthcare Service_top/a_Make Appointment')
 		WebUI.openBrowser('http://demoaut.katalon.com')
 		WebUI.verifyElementPresent(to, 10)
 		WebDriver driver = DriverFactory.getWebDriver()
 		List<WebElement> list = HighlightElement.examine(driver, to, HighlightElement.AccessStatus.TOUCHED)
-		WebUI.delay(3)
+		WebUI.delay(1)
 		WebUI.closeBrowser()
 		assertNotNull("HighlightElement.examine returned null", list)
 		assertEquals("HighlightElement.examine", 1, list.size()) 
 	}
 	
+	@Ignore
+	@Test
+	void test_examine_CURRENT() {
+		WebUI.comment("+ test_examine_CURRENT")
+		TestObject to = findTestObject('Object Repository/Page_CURA Healthcare Service_top/a_Make Appointment')
+		WebUI.openBrowser('http://demoaut.katalon.com')
+		WebUI.verifyElementPresent(to, 10)
+		WebDriver driver = DriverFactory.getWebDriver()
+		List<WebElement> list = HighlightElement.examine(driver, to, HighlightElement.AccessStatus.CURRENT)
+		WebUI.delay(1)
+		WebUI.closeBrowser()
+		assertNotNull("HighlightElement.examine returned null", list)
+		assertEquals("HighlightElement.examine", 1, list.size())
+	}
 	
+	@Ignore
+	@Test
+	void test_examine_SUCCESS() {
+		WebUI.comment("+ test_examine_SUCCESS")
+		TestObject to = findTestObject('Object Repository/Page_CURA Healthcare Service_top/a_Make Appointment')
+		WebUI.openBrowser('http://demoaut.katalon.com')
+		WebUI.verifyElementPresent(to, 10)
+		WebDriver driver = DriverFactory.getWebDriver()
+		List<WebElement> list = HighlightElement.examine(driver, to, HighlightElement.AccessStatus.SUCCESS)
+		WebUI.delay(1)
+		WebUI.closeBrowser()
+		assertNotNull("HighlightElement.examine returned null", list)
+		assertEquals("HighlightElement.examine", 1, list.size())
+	}
+	
+	@Ignore
+	@Test
+	void test_examine_EXCEPTION() {
+		WebUI.comment("+ test_examine_EXCEPTION")
+		TestObject to = findTestObject('Object Repository/Page_CURA Healthcare Service_top/a_Make Appointment')
+		WebUI.openBrowser('http://demoaut.katalon.com')
+		WebUI.verifyElementPresent(to, 10)
+		WebDriver driver = DriverFactory.getWebDriver()
+		List<WebElement> list = HighlightElement.examine(driver, to, HighlightElement.AccessStatus.EXCEPTION)
+		WebUI.delay(1)
+		WebUI.closeBrowser()
+		assertNotNull("HighlightElement.examine returned null", list)
+		assertEquals("HighlightElement.examine", 1, list.size())
+	}
 	
 }
