@@ -35,14 +35,15 @@ import internal.GlobalVariable
  */
 public final class HighlightElement {
 
+	// style of outline which highlights web element
 	private static final enum AccessStatus {
-		TOUCHED('#9966cc'),
-		CURRENT('orange'),
-		SUCCESS('lime'),
-		EXCEPTION('red');
-		String color;
-		AccessStatus(String color) {
-			this.color = color
+		TOUCHED('dashed #9966cc'),
+		CURRENT('dashed orange'),
+		SUCCESS('dashed lime'),
+		EXCEPTION('dashed red');
+		String outline;
+		AccessStatus(String outline) {
+			this.outline = outline
 		}
 	}
 
@@ -76,7 +77,7 @@ public final class HighlightElement {
 			for (WebElement element : elements) {
 				JavascriptExecutor js = (JavascriptExecutor) driver
 				js.executeScript(
-						"arguments[0].setAttribute('style', 'outline: dashed ${accessStatus.color};');",
+						"arguments[0].setAttribute('style', 'outline: ${accessStatus.outline};');",
 						element)
 			}
 		} catch (Exception e) {
@@ -86,6 +87,11 @@ public final class HighlightElement {
 		}
 	}
 
+	/**
+	 * List of built-in keyword names that can be highlighted.
+	 * The args[0] to the keyword call must be a TestObject.
+	 * Built-in keywords only. Custom keywords made by users are not covered by HighlightELement.
+	 */
 	public static final List<String> influencedKeywords = [
 		'click',
 		'selectOptionByIndex',
@@ -107,23 +113,25 @@ public final class HighlightElement {
 	}
 
 	/**
-	 * Check if the keyword is to be monitored or not.
-	 * If the keyword is given with args[0] which is instance of TestObject, 
-	 * then it should be monitored
+	 * Check if the keyword is to be traced or not.
+	 * If the args[0] is an instance of TestObject, 
+	 * then its internal detail info will be recorded in a GlobalVarialbe for tracing
 	 * 
 	 * @param name a String as name of keyword, not checked
 	 * @param args arguments to the keyword when called
 	 * @return true if the args[0] is instance of TestObject; otherwise false
 	 */
-	private static final boolean isToBeMonitored(String name, args) {
+	private static final boolean isToBeTraced(String name, args) {
 		return (args[0] instanceof TestObject)
 	}
 
 	/**
-	 * Manipulates all keyword methods contained in the list influencedKeywords
-	 * when called in the respective test case in order to mark the affected
-	 * web elements before and after each access with different colors and
-	 * in case of an error to temporarily store all relevant information about
+	 * Call to pandemic() will modifies the Katalon-built-in keywords
+	 * listed in the influecedKeywords.
+	 * When invoked, the influenced keywords will mark the affected web elements 
+	 * before and after each access with different styles: CURRENT, SUCCESS, EXCEPTION.
+	 * 
+	 * In case of an error, all relevant information about
 	 * its circumstances, e.e. keywordName, testObject, testObjectString,
 	 * inputParams, webElements, exceptions (with type and message) and
 	 * even the lastWebElements that were recognized in the immediately
@@ -135,7 +143,7 @@ public final class HighlightElement {
 		Karte karte = new Karte()
 		karte.shiftRecord()
 
-		Closure highlightingCurrentElementClosure = { String name, args ->
+		Closure highlightingClosure = { String name, args ->
 			if (isInfluenced(name, args)) {
 				TestObject to = (TestObject)args[0]
 				HighlightElement.current(to)
@@ -143,31 +151,35 @@ public final class HighlightElement {
 			return delegate.metaClass.getMetaMethod(name, args).invoke(delegate, args)
 		}
 
-		Closure monitoringClosure = { String name, args ->
+		Closure tracingClosure = { String keywordName, args ->
 			def result
-			if (isToBeMonitored(name, args)) {
+			if (isToBeTraced(keywordName, args)) {
 				TestObject to = (TestObject)args[0]
+				List<WebElement> target
 				try {
-					result = delegate.metaClass.getMetaMethod(name, args).invoke(delegate, args)
-					HighlightElement.success(to)
+					result = delegate.metaClass.getMetaMethod(keywordName, args).invoke(delegate, args)
+					target = HighlightElement.success(to)
 				} catch (StepFailedException e) {
-					HighlightElement.exception(to)
-					karte.logFailure(e)
+					target = HighlightElement.exception(to)
+					karte.logFailure(target, keywordName, args)
 					throw e
 				} catch (StepErrorException e) {
-					HighlightElement.exception(to)
-					karte.logError(e)
+					target = HighlightElement.exception(to)
+					karte.logError(target, keywordName, args)
 					throw e
 				} catch (Exception e) {
-					HighlightElement.exception(to)
-					karte.logGeneral(e)
+					target = HighlightElement.exception(to)
+					karte.logGeneral(target, keywordName, args)
 					throw e
 				}
 			} else {
-				result = delegate.metaClass.getMetaMethod(name, args).invoke(delegate, args)
+				// 
+				result = delegate.metaClass.getMetaMethod(keywordName, args).invoke(delegate, args)
 			}
 			return result
 		}
+
+		// So, let's give influence to the built-in methods listed to be influenced
 
 		/*
 		 WebUiBuiltInKeywords.metaClass.'static'.invokeMethod = { String name, args ->
@@ -189,41 +201,70 @@ public final class HighlightElement {
 		//WebUiBuiltinKeywords.metaClass.'static'.invokeMethod = { String name, args ->
 		//}
 
+		
 	}
 
 	/**
-	 * Dynamically adds a GlobalVariable named as 'name' with value of 'value'
-	 * at script runtime
+	 * Adds a GlobalVariable named as 'name' with value of 'value'
+	 * dynamically at runtime
+	 * 
+	 * @param name name of GlobalVariable to be created on the fly
+	 * @param value 
 	 */
 	@Keyword
 	static void addGlobalVariable(String name, def value) {
 		GroovyShell sh = new GroovyShell()
 		MetaClass mc = sh.evaluate("internal.GlobalVariable").metaClass
-		String getterName = 'get' + (CharSequence)name.capitalize()
+		String getterName = 'get' + ((CharSequence)name).capitalize()
 		mc.'static'."${getterName}" = {-> return value }
 		mc.'static'."${name}"       = value
 	}
 
 	/**
-	 * The name of GlobalVariable of type Map.
-	 * We record the detail information to trace the activity of keywords which were
-	 * invoked just before a StepFailureException was thrown.
+	 * The name of GlobalVariable which pandemic() creates.
+	 * The GlobalVariable will have type of java.util.Map.
+	 * The influenced built-in keywords will record the detail information of how each
+	 * keyword acted. You can trace back what was carried on before a StepFailureException was thrown.
+	 * 
+	 * You can print the content of the GlobalVariable by the following Groovy code as test script.
+	 * 
+	 * <PRE>
+	 * import internal.GlobalVariable
+	 * import groovy.json.JsonOutput
+	 * import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords as WebUI
+	 * 
+	 * def traceInfo = JsonOutput.toJson(GlobalVariable.tcExceptionEvements)
+	 * println JsonOutput.prettyPrint(traceInfo)
+	 * </PRE>
 	 */
 	public static final String GVNAME = 'tcExceptionEvents'
 
 
 
 	/**
-	 * Karte (Medical record). 
-	 * This class encapsulates the information about test execution and
-	 * provides access methods to it.
+	 * <p>Karte (Medical record) of a call for the influenced keyword.
+	 * This class encapsulates data about influenced built-in keywords execution,
+	 * which includes:
+	 * </p>
+	 * <p><ol>
+	 * <li>which web element was targeted by the last call</li>
+	 * <li>which web element was targeted by the current call</li>
+	 * <li>Exception thrown by the current call</li
+	 * </ol></p>
+	 * 
+	 * <p>This class implements  methods to operate the contained data.</p>
 	 */
 	static final class Karte {
 
 		Karte() {}
 
-		/*
-		 * 
+		/**
+		 * <p>
+		 * When any of influenced keywords has been called before, shift the trace
+		 * from the current slot to the previous slot.</p>
+		 * <p>
+		 * When none of influenced keywords have been called before (the very 1st call
+		 * to those), then create the GlobalVariable.${GVNAME}.</p>
 		 */
 		void shiftRecord() {
 			if (GlobalVariable.metaClass.hasProperty(GlobalVariable, GVNAME)) {
@@ -231,16 +272,14 @@ public final class HighlightElement {
 						GlobalVariable[GVNAME]['currentTestStep']['webElements']
 			}
 			else {
-				addGlobalVariable(GVNAME, initValue())
+				HighlightElement.addGlobalVariable(GVNAME, initValue())
 			}
 		}
 
-
 		/**
-		 * 
-		 * @return
+		 * @return a Map object as the initial value for the GlobalVariable.${GVNAME} 
 		 */
-		static Map initValue() {
+		private static final Map initValue() {
 			return ['exceptions' : [
 					'Failure'  : [],
 					'Error'    : [],
@@ -253,37 +292,52 @@ public final class HighlightElement {
 		}
 
 		/**
-		 * 
+		 * @param name
+		 * @param args
 		 */
-		def logFailure(String name, args) {
+		def logFailure(List<WebElement> currentTarget, String keywordName, args) {
 			if (!(args[0] instanceof TestObject)) {
 				throw new RuntimeException("args[0] is supposed be an instance of TestObject")
 			}
-			TestObject to = (TestObject)args[0]
-			String toStr = to.toString().replaceFirst(/^TestObject - '(.*?)'$/, '$1')
-
-			// what are you doing here?
-			List<String> inputParams = args.collect{it}.withIndex().
-			findResults{ it, id -> (id > 0) ? it: null }
+			TestObject testObject = (TestObject)args[0]
+			List<String> inputParams = args.collect{it}.withIndex().findResults{ it, id -> (id > 0) ? it: null }
 
 			Map currentTestStep = [
-				'keywordName': name,
-				'testObject': to,
-				'testObjectString': toStr,
-				'inputParams': inputParams,
-				'webElements': currentWebElements
+				'webElements': currentTarget,
+				'keywordName': keywordName,
+				'testObject': testObject,
+				'testObjectString': simplifyStringOfTestObject(testObject),
+				'inputParams': inputParams
 			]
 		}
 
-		def logError(String name, args) {
+		/**
+		 * 
+		 * @param name
+		 * @param args
+		 * @return
+		 */
+		def logError(List<WebElement> currentTarget, String keywordName, args) {
 			throw new UnsupportedOperationException("TODO")
 		}
 
-		def logGeneral(String name, args) {
+		/**
+		 * @param name
+		 * @param args
+		 */
+		def logGeneral(List<WebElement> currentTarget, String keywordName, args) {
 			throw new UnsupportedOperationException("TODO")
+		}
+		
+		/**
+		 * 
+		 * @param testObject
+		 * @return
+		 */
+		String simplifyStringOfTestObject(TestObject testObject) {
+			return testObject.toString().replaceFirst("^TestObject - (.*?)'\$/", '$1')
 		}
 	}
-
 }
 
 
