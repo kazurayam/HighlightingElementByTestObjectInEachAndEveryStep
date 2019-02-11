@@ -49,19 +49,19 @@ public final class HighlightElement {
 
 	@Keyword
 	public static final List<WebElement> on(TestObject testObject) {
-		return influence(testObject, AccessStatus.TOUCHED)
+		return vaccinate(testObject, AccessStatus.TOUCHED)
 	}
 
 	private static final List<WebElement> current(TestObject testObject) {
-		return influence(testObject, AccessStatus.CURRENT)
+		return vaccinate(testObject, AccessStatus.CURRENT)
 	}
 
 	private static final List<WebElement> success(TestObject testObject) {
-		return influence(testObject, AccessStatus.SUCCESS)
+		return vaccinate(testObject, AccessStatus.SUCCESS)
 	}
 
 	private static final List<WebElement> exception(TestObject testObject) {
-		return influence(testObject, AccessStatus.EXCEPTION)
+		return vaccinate(testObject, AccessStatus.EXCEPTION)
 	}
 
 	/*
@@ -69,7 +69,7 @@ public final class HighlightElement {
 	 * depending on their access status: 
 	 * either orage (current), green (successful), or red (faulty).
 	 */
-	private final static List<WebElement> influence(TestObject testObject, AccessStatus accessStatus) {
+	private final static List<WebElement> vaccinate(TestObject testObject, AccessStatus accessStatus) {
 		List<WebElement> elements
 		try {
 			WebDriver driver = DriverFactory.getWebDriver()
@@ -88,11 +88,12 @@ public final class HighlightElement {
 	}
 
 	/**
-	 * List of built-in keyword names that can be highlighted.
-	 * The args[0] to the keyword call must be a TestObject.
-	 * Built-in keywords only. Custom keywords made by users are not covered by HighlightELement.
+	 * <p>List of built-in keyword names that can be highlighted.
+	 * The args[0] to the keyword call must be a TestObject.</p>
+	 * <p>Built-in keywords only. 
+	 * Custom keywords made by users are not covered by HighlightELement.</p>
 	 */
-	public static final List<String> influencedKeywords = [
+	public static final List<String> vaccinatedKeywords = [
 		'click',
 		'selectOptionByIndex',
 		'selectOptionByLabel',
@@ -102,14 +103,14 @@ public final class HighlightElement {
 	]
 
 	/**
-	 * Check if the keyword is influenced or not
+	 * Check if the keyword is to be vaccinated or not
 	 * 
 	 * @param name a String as name of keyword
 	 * @param args arguments to the keyword when called, not checked
-	 * @return true if the name is found in the influencedKeywords; otherwise false
+	 * @return true if the name is found in the vaccinatedKeywords, otherwise false
 	 */
-	private static final boolean isInfluenced(String name, args) {
-		return (name in influencedKeywords)
+	private static final boolean isVaccinated(String name, args) {
+		return (name in vaccinatedKeywords)
 	}
 
 	/**
@@ -128,7 +129,7 @@ public final class HighlightElement {
 	/**
 	 * Call to pandemic() will modifies the Katalon-built-in keywords
 	 * listed in the influecedKeywords.
-	 * When invoked, the influenced keywords will mark the affected web elements 
+	 * When invoked, the vaccinated keywords will mark the affected web elements 
 	 * before and after each access with different styles: CURRENT, SUCCESS, EXCEPTION.
 	 * 
 	 * In case of an error, all relevant information about
@@ -139,12 +140,12 @@ public final class HighlightElement {
 	 */
 	@Keyword
 	static final void pandemic() {
-
+		
 		Karte karte = new Karte()
 		karte.shiftRecord()
 
 		Closure highlightingClosure = { String name, args ->
-			if (isInfluenced(name, args)) {
+			if (isVaccinated(name, args)) {
 				TestObject to = (TestObject)args[0]
 				HighlightElement.current(to)
 			}
@@ -179,7 +180,7 @@ public final class HighlightElement {
 			return result
 		}
 
-		// So, let's give influence to the built-in methods listed to be influenced
+		// So, let's make built-in keywords vaccinated
 
 		/*
 		 WebUiBuiltInKeywords.metaClass.'static'.invokeMethod = { String name, args ->
@@ -223,7 +224,7 @@ public final class HighlightElement {
 	/**
 	 * The name of GlobalVariable which pandemic() creates.
 	 * The GlobalVariable will have type of java.util.Map.
-	 * The influenced built-in keywords will record the detail information of how each
+	 * The vaccinated built-in keywords will record the detail information of how each
 	 * keyword acted. You can trace back what was carried on before a StepFailureException was thrown.
 	 * 
 	 * You can print the content of the GlobalVariable by the following Groovy code as test script.
@@ -306,7 +307,7 @@ public final class HighlightElement {
 				'webElements': currentTarget,
 				'keywordName': keywordName,
 				'testObject': testObject,
-				'testObjectString': simplifyStringOfTestObject(testObject),
+				'testObjectString': simpleTestObjectString(testObject),
 				'inputParams': inputParams
 			]
 		}
@@ -334,8 +335,8 @@ public final class HighlightElement {
 		 * @param testObject
 		 * @return
 		 */
-		String simplifyStringOfTestObject(TestObject testObject) {
-			return testObject.toString().replaceFirst("^TestObject - (.*?)'\$/", '$1')
+		String simpleTestObjectString(TestObject testObject) {
+			return testObject.toString().replaceFirst("^TestObject - (.*?)\$", '$1')
 		}
 	}
 }
