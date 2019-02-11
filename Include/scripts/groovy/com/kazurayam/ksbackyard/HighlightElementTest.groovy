@@ -13,24 +13,24 @@ public class HighlightElementTest {
 	@Test
 	void test_AccessStatus_CURRENT() {
 		assertEquals("color of CURRENT is to be ",
-				HighlightElement.AccessStatus.CURRENT.color, 'orange')
+				HighlightElement.AccessStatus.CURRENT.outline, 'dashed orange')
 	}
 
 	@Test
 	void test_AccessStatus_SUCCESS() {
 		assertEquals("color of SUCCESS is to be ",
-				HighlightElement.AccessStatus.SUCCESS.color, 'lime')
+				HighlightElement.AccessStatus.SUCCESS.outline, 'dashed lime')
 	}
 
 	@Test
 	void test_AccessStatus_EXCEPTION() {
 		assertEquals("color of EXCEPTION is to be ",
-				HighlightElement.AccessStatus.EXCEPTION.color, 'red')
+				HighlightElement.AccessStatus.EXCEPTION.outline, 'dashed red')
 	}
 
 	@Test
-	void test_contents_influencedKeywords() {
-		List<String> k = HighlightElement.influencedKeywords
+	void test_contents_vaccinatedKeywords() {
+		List<String> k = HighlightElement.vaccinatedKeywords
 		assertTrue(k.contains('click'))
 		assertTrue(k.contains('selectOptionByIndex'))
 		assertTrue(k.contains('selectOptionByLabel'))

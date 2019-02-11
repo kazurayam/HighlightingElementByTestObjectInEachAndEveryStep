@@ -140,7 +140,7 @@ public final class HighlightElement {
 	 */
 	@Keyword
 	static final void pandemic() {
-		
+
 		Karte karte = new Karte()
 		karte.shiftRecord()
 
@@ -174,7 +174,7 @@ public final class HighlightElement {
 					throw e
 				}
 			} else {
-				// 
+				//
 				result = delegate.metaClass.getMetaMethod(keywordName, args).invoke(delegate, args)
 			}
 			return result
@@ -202,7 +202,7 @@ public final class HighlightElement {
 		//WebUiBuiltinKeywords.metaClass.'static'.invokeMethod = { String name, args ->
 		//}
 
-		
+
 	}
 
 	/**
@@ -307,7 +307,7 @@ public final class HighlightElement {
 				'webElements': currentTarget,
 				'keywordName': keywordName,
 				'testObject': testObject,
-				'testObjectString': simpleTestObjectString(testObject),
+				'testObjectString': simplifyTestObjectString(testObject),
 				'inputParams': inputParams
 			]
 		}
@@ -329,14 +329,14 @@ public final class HighlightElement {
 		def logGeneral(List<WebElement> currentTarget, String keywordName, args) {
 			throw new UnsupportedOperationException("TODO")
 		}
-		
+
 		/**
 		 * 
 		 * @param testObject
 		 * @return
 		 */
-		String simpleTestObjectString(TestObject testObject) {
-			return testObject.toString().replaceFirst("^TestObject - (.*?)\$", '$1')
+		static String simplifyTestObjectString(TestObject testObject) {
+			return testObject.toString().replaceFirst("^TestObject - \\'(.*?)\\'\$", '$1')
 		}
 	}
 }
