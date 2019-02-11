@@ -36,6 +36,10 @@ def static "com.kazurayam.ksbackyard.HighlightElement.pandemic"() {
     (new com.kazurayam.ksbackyard.HighlightElement()).pandemic()
 }
 
+def static "com.kazurayam.ksbackyard.HighlightElement.quarantine"() {
+    (new com.kazurayam.ksbackyard.HighlightElement()).quarantine()
+}
+
 def static "com.kazurayam.ksbackyard.HighlightElement.addGlobalVariable"(
     	String name	
      , 	Object value	) {

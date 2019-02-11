@@ -5,15 +5,12 @@ import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 
 import com.kms.katalon.core.annotation.Keyword
-import com.kms.katalon.core.exception.StepFailedException
 import com.kms.katalon.core.exception.StepErrorException
-import com.kms.katalon.core.keyword.internal.KeywordExecutor
-import com.kms.katalon.core.model.FailureHandling
+import com.kms.katalon.core.exception.StepFailedException
 import com.kms.katalon.core.testobject.TestObject
+import com.kms.katalon.core.util.KeywordUtil
 import com.kms.katalon.core.webui.common.WebUiCommonHelper
 import com.kms.katalon.core.webui.driver.DriverFactory
-import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords
-import com.kms.katalon.core.util.KeywordUtil
 
 import internal.GlobalVariable
 
@@ -49,44 +46,22 @@ public final class HighlightElement {
 
 	@Keyword
 	public static final List<WebElement> on(TestObject testObject) {
-		return vaccinate(testObject, AccessStatus.TOUCHED)
+		return examine(testObject, AccessStatus.TOUCHED)
 	}
 
 	private static final List<WebElement> current(TestObject testObject) {
-		return vaccinate(testObject, AccessStatus.CURRENT)
+		return examine(testObject, AccessStatus.CURRENT)
 	}
 
 	private static final List<WebElement> success(TestObject testObject) {
-		return vaccinate(testObject, AccessStatus.SUCCESS)
+		return examine(testObject, AccessStatus.SUCCESS)
 	}
 
 	private static final List<WebElement> exception(TestObject testObject) {
-		return vaccinate(testObject, AccessStatus.EXCEPTION)
+		return examine(testObject, AccessStatus.EXCEPTION)
 	}
 
-	/*
-	 * marks all Web elements that match the given test object,
-	 * depending on their access status: 
-	 * either orage (current), green (successful), or red (faulty).
-	 */
-	private final static List<WebElement> vaccinate(TestObject testObject, AccessStatus accessStatus) {
-		List<WebElement> elements
-		try {
-			WebDriver driver = DriverFactory.getWebDriver()
-			elements = WebUiCommonHelper.findWebElements(testObject, 5)
-			for (WebElement element : elements) {
-				JavascriptExecutor js = (JavascriptExecutor) driver
-				js.executeScript(
-						"arguments[0].setAttribute('style', 'outline: ${accessStatus.outline};');",
-						element)
-			}
-		} catch (Exception e) {
-			KeywordUtil.markFailed(e.getMessage())
-		} finally {
-			return elements
-		}
-	}
-
+	
 	/**
 	 * <p>List of built-in keyword names that can be highlighted.
 	 * The args[0] to the keyword call must be a TestObject.</p>
@@ -123,11 +98,46 @@ public final class HighlightElement {
 	 * @return true if the args[0] is instance of TestObject; otherwise false
 	 */
 	private static final boolean isToBeTraced(String name, args) {
-		return (args[0] instanceof TestObject)
+		if (args instanceof List) {
+			return (args[0] instanceof TestObject)
+		} else
+			throw new IllegalArgumentException("args must be an instance of java.util.List")
+	}
+	
+	/**
+	 * marks all Web elements that match the given test object,
+	 * depending on their access status:
+	 * either orange (current), green (successful), or red (faulty).
+	 */
+	private final static List<WebElement> examine(WebDriver driver, TestObject testObject, AccessStatus accessStatus) {
+		List<WebElement> elements
+		try {
+			elements = WebUiCommonHelper.findWebElements(testObject, 5)
+			for (WebElement element : elements) {
+				JavascriptExecutor js = (JavascriptExecutor) driver
+				js.executeScript(
+						"arguments[0].setAttribute('style', 'outline: ${accessStatus.outline};');",
+						element)
+			}
+		} catch (Exception e) {
+			KeywordUtil.markFailed(e.getMessage())
+		} finally {
+			return elements
+		}
 	}
 
 	/**
-	 * Call to pandemic() will modifies the Katalon-built-in keywords
+	 * pandemic() is aliased to quarantine() for backward compatibility
+	 *
+	 * @deprecated use quarantine() instead
+	 */
+	@Keyword
+	static final void pandemic() {
+		quarantine()
+	}
+	
+	/**
+	 * Call to quarantine() modifies the Katalon-built-in keywords
 	 * listed in the influecedKeywords.
 	 * When invoked, the vaccinated keywords will mark the affected web elements 
 	 * before and after each access with different styles: CURRENT, SUCCESS, EXCEPTION.
@@ -139,11 +149,9 @@ public final class HighlightElement {
 	 * preceding test step, in the dynamically generated variable of type Map.
 	 */
 	@Keyword
-	static final void pandemic() {
-
+	static final void quarantine() {
 		Karte karte = new Karte()
 		karte.shiftRecord()
-
 		Closure highlightingClosure = { String name, args ->
 			if (isVaccinated(name, args)) {
 				TestObject to = (TestObject)args[0]
@@ -201,16 +209,15 @@ public final class HighlightElement {
 		 */
 		//WebUiBuiltinKeywords.metaClass.'static'.invokeMethod = { String name, args ->
 		//}
-
-
 	}
-
+	
+	
 	/**
 	 * Adds a GlobalVariable named as 'name' with value of 'value'
 	 * dynamically at runtime
-	 * 
+	 *
 	 * @param name name of GlobalVariable to be created on the fly
-	 * @param value 
+	 * @param value
 	 */
 	@Keyword
 	static void addGlobalVariable(String name, def value) {
@@ -240,8 +247,6 @@ public final class HighlightElement {
 	 */
 	public static final String GVNAME = 'tcExceptionEvents'
 
-
-
 	/**
 	 * <p>Karte (Medical record) of a call for the influenced keyword.
 	 * This class encapsulates data about influenced built-in keywords execution,
@@ -257,7 +262,11 @@ public final class HighlightElement {
 	 */
 	static final class Karte {
 
-		Karte() {}
+		Karte() {
+			if (GlobalVariable.metaClass.hasProperty(GlobalVariable, GVNAME)) {	
+				HighlightElement.addGlobalVariable(GVNAME, initValue())
+			}
+		}
 
 		/**
 		 * <p>
@@ -272,9 +281,8 @@ public final class HighlightElement {
 				GlobalVariable[GVNAME]['lastWebElements'] =
 						GlobalVariable[GVNAME]['currentTestStep']['webElements']
 			}
-			else {
-				HighlightElement.addGlobalVariable(GVNAME, initValue())
-			}
+			else
+				throw new IllegalStateException("GlobalVariable.${GVNAME} not present")	
 		}
 
 		/**
@@ -302,7 +310,6 @@ public final class HighlightElement {
 			}
 			TestObject testObject = (TestObject)args[0]
 			List<String> inputParams = args.collect{it}.withIndex().findResults{ it, id -> (id > 0) ? it: null }
-
 			Map currentTestStep = [
 				'webElements': currentTarget,
 				'keywordName': keywordName,
@@ -340,5 +347,3 @@ public final class HighlightElement {
 		}
 	}
 }
-
-
