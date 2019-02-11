@@ -1,3 +1,0 @@
-import com.kazurayam.ksbackyard.HighlightElementKarteTest
-
-CustomKeywords.'com.kazurayam.junit4ks.JUnitCustomKeywords.runWithJUnitRunner'(HighlightElementKarteTest.class)

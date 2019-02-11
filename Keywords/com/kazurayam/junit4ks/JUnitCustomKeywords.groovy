@@ -3,24 +3,25 @@ package com.kazurayam.junit4ks
 import java.text.MessageFormat
 
 import org.junit.runner.Computer
+import org.junit.runner.Description
 import org.junit.runner.JUnitCore
 import org.junit.runner.Result
 import org.junit.runner.notification.Failure
+import org.junit.runner.notification.RunListener
 
 import com.kms.katalon.core.annotation.Keyword
 import com.kms.katalon.core.configuration.RunConfiguration
 import com.kms.katalon.core.keyword.internal.KeywordMain
 import com.kms.katalon.core.logging.KeywordLogger
+import com.kms.katalon.core.util.KeywordUtil
 import com.kms.katalon.core.model.FailureHandling
 
 /**
- * A test case can call this Custom Keyword to execute a class annotated with JUnit4's &#64;Test.
- * In other words, you can execute a JUnit-based test within Katalon Studio.
- *
- *
- *
- * I read and learned https://github.com/katalon-studio/katalon-studio-testing-framework/blob/master/Include/scripts/groovy/com/kms/katalon/core/cucumber/keyword/CucumberBuiltinKeywords.groovy
- * This class is almost the same as com.kms.katalon.core.cucumber.keyword.CucumberBuiltingKeywords.
+ * A custom keyword in Katalon Studio. This enables you to run JUnit4 to 
+ * perform test-driven development for your own custom keywords.
+ * 
+ * I read and learned form
+ * https://github.com/katalon-studio/katalon-studio-testing-framework/blob/master/Include/scripts/groovy/com/kms/katalon/core/cucumber/keyword/CucumberBuiltinKeywords.groovy
  *
  * @author kazurayam
  *
@@ -38,7 +39,7 @@ public class JUnitCustomKeywords {
 	 * Test Case:
 	 * <PRE>
 	 * import junittutorial.CalculatorTest
-	 * CustomKeywords.'com.kazurayam.junit4ks.JUnitCustomKeywords.runWithJUnitRunner'(CalculatorTest.class)
+	 * CustomKeywords.'com.kazurayam.ksbackyard.junit.JUnitCustomKeywordsTest.runWithJUnitRunner'(CalculatorTest.class)
 	 * </PRE>
 	 *
 	 * The following is a JUnit test (localated at Include/scripts/groovy/junittutorial/CalculatorTest.groovy)
@@ -130,6 +131,7 @@ public class JUnitCustomKeywords {
 	public static JUnitRunnerResult runWithJUnitRunner(Class junitRunnerClass, FailureHandling flowControl) {
 		return KeywordMain.runKeyword({
 			JUnitCore core = new JUnitCore()
+			core.addListener(new RunListener4KS())
 			Computer computer = new Computer()
 			Result result = core.run(computer, junitRunnerClass)
 			boolean runSuccess = result.wasSuccessful()
@@ -140,7 +142,7 @@ public class JUnitCustomKeywords {
 			} else {
 				List failuresDescriptions = []
 				for (Failure failure: result.getFailures()) {
-					failuresDescriptions.add("\n>>>>\n" + failure.getTrace() + "<<<<\n")
+					failuresDescriptions.add("\n" + indentLines(failure.getTrace(), "\t") + "\t")
 				}
 				KeywordMain.stepFailed(
 						MessageFormat.format("These following reason:\n {0}", failuresDescriptions),
@@ -148,6 +150,28 @@ public class JUnitCustomKeywords {
 			}
 			return junitResult
 		}, flowControl, "Keyword runWithJUnitRunner failed")
+	}
+
+	/**
+	 * 
+	 * @author urayamakazuaki
+	 *
+	 */
+	private static class RunListener4KS extends RunListener {
+		boolean succeeded
+		public void testStarted(Description description) {
+			KeywordUtil.logInfo(description.toString() + " started")
+			succeeded = true
+		}
+		public void testFailure(Failure failure) {
+			KeywordUtil.logInfo("NG")
+			this.succeeded = false
+		}
+		public void testFinished(Description description) {
+			if (succeeded) {
+				KeywordUtil.logInfo('OK')
+			}
+		}
 	}
 
 	/**
@@ -178,6 +202,24 @@ public class JUnitCustomKeywords {
 	}
 
 
+	/**
+	 *
+	 * "aaa\nbbb\nccc" -> "    aaa\n    bbb\n    ccc\n"
+	 *
+	 * @param source
+	 * @return
+	 */
+	static String indentLines(String lines, String indent = '>>  ') {
+		StringWriter sw = new StringWriter()
+		BufferedWriter bw = new BufferedWriter(sw)
+		BufferedReader br = new BufferedReader(new StringReader(lines))
+		String s;
+		while ((s = br.readLine()) != null) {
+			bw.println(indent + s)
+		}
+		bw.flush()
+		return sw.toString()
+	}
 
 
 	/**

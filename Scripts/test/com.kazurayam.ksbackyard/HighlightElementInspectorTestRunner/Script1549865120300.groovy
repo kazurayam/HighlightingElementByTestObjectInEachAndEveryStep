@@ -1,6 +1,3 @@
 import com.kazurayam.ksbackyard.HighlightElementInspectorTest
-import com.kazurayam.ksbackyard.HighlightElementTest
-
 
 CustomKeywords.'com.kazurayam.junit4ks.JUnitCustomKeywords.runWithJUnitRunner'(HighlightElementInspectorTest.class)
-CustomKeywords.'com.kazurayam.junit4ks.JUnitCustomKeywords.runWithJUnitRunner'(HighlightElementTest.class)

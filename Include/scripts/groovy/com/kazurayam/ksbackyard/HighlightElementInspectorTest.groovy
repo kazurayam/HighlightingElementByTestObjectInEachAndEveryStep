@@ -28,14 +28,14 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 
 @RunWith(JUnit4.class)
-public class HighlightElementKarteTest {
+public class HighlightElementInspectorTest {
 
 	@Test
 	void test_simplifyTestObjectString() {
 		TestObject to = findTestObject('Object Repository/Page_CURA Healthcare Service_top/a_Make Appointment')
 		//println to.toString()
 		assertEquals("TestObject - 'Object Repository/Page_CURA Healthcare Service_top/a_Make Appointment'", to.toString())
-		String simplified = HighlightElement.Karte.simplifyTestObjectString(to)
+		String simplified = HighlightElement.Inspector.simplifyTestObjectString(to)
 		assertEquals("Object Repository/Page_CURA Healthcare Service_top/a_Make Appointment", simplified)
 	}
 }
