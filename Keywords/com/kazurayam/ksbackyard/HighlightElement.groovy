@@ -11,6 +11,7 @@ import com.kms.katalon.core.testobject.TestObject
 import com.kms.katalon.core.util.KeywordUtil
 import com.kms.katalon.core.webui.common.WebUiCommonHelper
 import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords
+import com.kms.katalon.core.webui.driver.DriverFactory
 
 import internal.GlobalVariable
 
@@ -34,7 +35,7 @@ public final class HighlightElement {
 
 	// style of outline which highlights web element
 	private static final enum AccessStatus {
-		TOUCHED('dashed #9966cc'),
+		TOUCHED('dashed #9966cc'),  // purple
 		CURRENT('dashed orange'),
 		SUCCESS('dashed lime'),
 		EXCEPTION('dashed red');
@@ -46,19 +47,19 @@ public final class HighlightElement {
 
 	@Keyword
 	public static final List<WebElement> on(TestObject testObject) {
-		return examine(testObject, AccessStatus.TOUCHED)
+		return examine(DriverFactory.getWebDriver(), testObject, AccessStatus.TOUCHED)
 	}
 
 	private static final List<WebElement> current(TestObject testObject) {
-		return examine(testObject, AccessStatus.CURRENT)
+		return examine(DriverFactory.getWebDriver(), testObject, AccessStatus.CURRENT)
 	}
 
 	private static final List<WebElement> success(TestObject testObject) {
-		return examine(testObject, AccessStatus.SUCCESS)
+		return examine(DriverFactory.getWebDriver(), testObject, AccessStatus.SUCCESS)
 	}
 
 	private static final List<WebElement> exception(TestObject testObject) {
-		return examine(testObject, AccessStatus.EXCEPTION)
+		return examine(DriverFactory.getWebDriver(), testObject, AccessStatus.EXCEPTION)
 	}
 
 
@@ -83,7 +84,7 @@ public final class HighlightElement {
 	 * either orange (current), green (successful), or red (faulty).
 	 */
 	private final static List<WebElement> examine(WebDriver driver,
-						TestObject testObject, AccessStatus accessStatus) {
+			TestObject testObject, AccessStatus accessStatus) {
 		List<WebElement> elements
 		try {
 			elements = WebUiCommonHelper.findWebElements(testObject, 5)
@@ -102,9 +103,9 @@ public final class HighlightElement {
 	}
 
 	/**
-	 * pandemic() is aliased to quarantine() for backward compatibility
+	 * pandemic() is aliased to inspect() for backward compatibility
 	 *
-	 * @deprecated use quarantine() instead
+	 * @deprecated use inspect() instead
 	 */
 	@Keyword
 	static final void pandemic() {
@@ -112,10 +113,9 @@ public final class HighlightElement {
 	}
 
 	/**
-	 * <p>Call to inspect() modifies the Katalon-built-in keywords
-	 * listed in the influecedKeywords.</p>
+	 * <p>Call to inspect() modifies the Katalon-built-in keywords.</p>
 	 * <p>
-	 * When invoked, the vaccinated keywords will mark the affected 
+	 * When invoked, the vaccinated keywords will highlight the target 
 	 * web elements before and after each access with different styles:
 	 * CURRENT, SUCCESS, EXCEPTION.</p>
 	 * 
@@ -130,12 +130,13 @@ public final class HighlightElement {
 	@Keyword
 	static final inspect() {
 		Inspector inspector = new Inspector()  // inner class "Inspector"
-		WebUiBuiltInKeywords.metaClass.'static'.invokeMethod = { String keywordName, args ->
+		WebUiBuiltInKeywords.metaClass.'static'.invokeMethod = { String keywordName, Object args ->
 			if (isVaccinated(keywordName, args)) {
 				TestObject to = (TestObject)args[0]
 				HighlightElement.current(to)
 			}
 			def result
+			println "isToBeTraced(${keywordName},${args}) is ${isToBeTraced(keywordName,args)}"
 			if (isToBeTraced(keywordName, args)) {
 				TestObject to = (TestObject)args[0]
 				List<WebElement> target
@@ -152,12 +153,12 @@ public final class HighlightElement {
 				}
 				catch (StepErrorException e) {
 					target = HighlightElement.exception(to)
-					inspector.logError(e, target, keywordName, args, e)
+					inspector.logError(target, keywordName, args, e)
 					throw e
 				}
 				catch (Exception e) {
 					target = HighlightElement.exception(to)
-					inspector.logGeneral(e, target, keywordName, args, e)
+					inspector.logGeneral(target, keywordName, args, e)
 					throw e
 				}
 			} else {
@@ -165,7 +166,7 @@ public final class HighlightElement {
 				result = delegate.metaClass.getMetaMethod(keywordName, args).invoke(delegate, args)
 			}
 			return result
-		}		
+		}
 	}
 
 	/**
@@ -175,8 +176,8 @@ public final class HighlightElement {
 	 * @param args arguments to the keyword when called, not checked
 	 * @return true if the name is found in the vaccinatedKeywords, otherwise false
 	 */
-	private static final boolean isVaccinated(String name, args) {
-		return (name in vaccinatedKeywords)
+	private static final boolean isVaccinated(String keywordName, Object args) {
+		return (keywordName in vaccinatedKeywords)
 	}
 
 	/**
@@ -188,11 +189,9 @@ public final class HighlightElement {
 	 * @param args arguments to the keyword when called
 	 * @return true if the args[0] is instance of TestObject; otherwise false
 	 */
-	private static final boolean isToBeTraced(String name, args) {
-		if (args instanceof List) {
-			return (args[0] instanceof TestObject)
-		} else
-			throw new IllegalArgumentException("args must be an instance of java.util.List")
+	private static final boolean isToBeTraced(String keywordName, Object args) {
+		println "keywordName=${keywordName},args=${args.toString()},args[0] instanceof TestObject=${args[0] instanceof TestObject}"
+		return (args[0] instanceof TestObject)
 	}
 
 	/**
@@ -263,12 +262,12 @@ public final class HighlightElement {
 		 * from the current slot to the previous slot.
 		 * </p>
 		 */
-		void record(List<WebElement> currentTarget, String keywordName, List args) {
+		void record(List<WebElement> currentTarget, String keywordName, Object args) {
 			GlobalVariable[GVNAME]['lastWebElements'] =
-						GlobalVariable[GVNAME]['currentTestStep']['webElements']
+					GlobalVariable[GVNAME]['currentTestStep']['webElements']
 			//
 			GlobalVariable[GVNAME]['currentTestStep'] =
-						testStep(currentTarget, keywordName, args)
+					testStep(currentTarget, keywordName, args)
 		}
 
 		/**
@@ -277,7 +276,7 @@ public final class HighlightElement {
 		 * @param args
 		 * @return
 		 */
-		def logPassed(List<WebElement> currentTarget, String keywordName, List args) {
+		def logPassed(List<WebElement> currentTarget, String keywordName, Object args) {
 			record(currentTarget, keywordName, args)
 			GlobalVariable[GVNAME]['exceptions']['Failure'] = null
 			GlobalVariable[GVNAME]['exceptions']['Error']   = null
@@ -288,7 +287,7 @@ public final class HighlightElement {
 		 * @param name
 		 * @param args
 		 */
-		def logFailure(List<WebElement> currentTarget, String keywordName, List args, Exception e) {
+		def logFailure(List<WebElement> currentTarget, String keywordName, Object args, Exception e) {
 			record(currentTarget, keywordName, args)
 			GlobalVariable[GVNAME]['exceptions']['Failure'] = e
 			GlobalVariable[GVNAME]['exceptions']['Error']   = null
@@ -301,7 +300,7 @@ public final class HighlightElement {
 		 * @param args
 		 * @return
 		 */
-		def logError(List<WebElement> currentTarget, String keywordName, List args, Exception e) {
+		def logError(List<WebElement> currentTarget, String keywordName, Object args, Exception e) {
 			record(currentTarget, keywordName, args)
 			GlobalVariable[GVNAME]['exceptions']['Error']   = null
 			GlobalVariable[GVNAME]['exceptions']['General'] = e
@@ -312,7 +311,7 @@ public final class HighlightElement {
 		 * @param name
 		 * @param args
 		 */
-		def logGeneral(List<WebElement> currentTarget, String keywordName, List args, Exception e) {
+		def logGeneral(List<WebElement> currentTarget, String keywordName, Object args, Exception e) {
 			record(currentTarget, keywordName, args)
 			GlobalVariable[GVNAME]['exceptions']['Failure'] = null
 			GlobalVariable[GVNAME]['exceptions']['Error']   = null
@@ -338,21 +337,20 @@ public final class HighlightElement {
 				'exceptions' : [
 					'Failure'  : [],
 					'Error'    : [],
-					'General'  : []
-				]			
+					'General'  : []]
 			]
 		}
 
 		/**
 		 * 
 		 */
-		private static final Map testStep(List<WebElement> currentTarget, String keywordName, List args) {
+		private static final Map testStep(List<WebElement> currentTarget, String keywordName, Object args) {
 			if (!(args[0] instanceof TestObject)) {
 				throw new RuntimeException(
 				"args[0] is supposed be an instance of TestObject")
 			}
 			TestObject testObject = (TestObject)args[0]
-			
+
 			Map testStep = [
 				'webElements': currentTarget,
 				'keywordName': keywordName,
@@ -379,7 +377,7 @@ public final class HighlightElement {
 		 * @param args
 		 * @return
 		 */
-		static List<String> toListOfString(List<Object> args) {
+		static List<String> toListOfString(Object args) {
 			return args.collect{it}.withIndex().findResults{ it, id -> (id > 0) ? it: null }
 		}
 	}

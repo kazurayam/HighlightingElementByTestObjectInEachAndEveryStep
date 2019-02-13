@@ -62,4 +62,5 @@ WebUI.delay(1)
 WebUI.click(findTestObject('Page_CURA Healthcare Service_summary/a_Go to Homepage'), FailureHandling.CONTINUE_ON_FAILURE)
 WebUI.delay(1)
 
+
 WebUI.closeBrowser()
