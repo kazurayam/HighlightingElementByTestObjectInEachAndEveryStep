@@ -75,7 +75,10 @@ if (!verificationResult) {
 	println(prettyPrint(GlobalVariable.tcExceptionEvents))
 }
 
+WebUI.delay(3)
+
 WebUI.click(findTestObject('Page_CURA Healthcare Service_summary/a_Go to Homepage'))
+
 WebUI.delay(1)
 
 
