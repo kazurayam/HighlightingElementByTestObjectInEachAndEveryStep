@@ -1,6 +1,7 @@
 import static com.kms.katalon.core.testobject.ObjectRepository.findTestObject
 
 import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords as WebUI
+import com.kms.katalon.core.model.FailureHandling
 
 import groovy.json.JsonOutput
 import internal.GlobalVariable
@@ -70,9 +71,11 @@ WebUI.delay(1)
 def verificationResult = WebUI.verifyElementAttributeValue(
 							findTestObject('Page_CURA Healthcare Service_summary/a_Go to Homepage'),
 							'href',
-							'https://katalon-demo-cura.herokuapp.com/')
+							'https://katalon-demo-cura.herokuapp.co.hk',
+							5,
+							FailureHandling.CONTINUE_ON_FAILURE)
 if (!verificationResult) {
-	println(prettyPrint(GlobalVariable.tcExceptionEvents))
+	println ">>> GlobalVariable.tcExceptionEvents: \n" + prettyPrint(GlobalVariable.tcExceptionEvents)
 }
 
 WebUI.delay(3)
