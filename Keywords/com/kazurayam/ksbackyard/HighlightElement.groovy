@@ -132,13 +132,14 @@ public final class HighlightElement {
 	static final void inspect() {
 		Inspector inspector = new Inspector()  // inner class "Inspector"
 		WebUiBuiltInKeywords.metaClass.'static'.invokeMethod = { String keywordName, Object args ->
+			println "isVaccinated(${keywordName},${args}) returned ${isVaccinated(keywordName,args)}"
 			if (isVaccinated(keywordName, args)) {
 				TestObject to = (TestObject)args[0]
 				HighlightElement.current(to)
 			}
 			//
 			def result
-			println "isToBeTraced(${keywordName},${args}) is ${isToBeTraced(keywordName,args)}"
+			println "isToBeTraced(${keywordName},${args}) returned ${isToBeTraced(keywordName,args)}"
 			if (isToBeTraced(keywordName, args)) {
 				TestObject to = (TestObject)args[0]
 				List<WebElement> target
