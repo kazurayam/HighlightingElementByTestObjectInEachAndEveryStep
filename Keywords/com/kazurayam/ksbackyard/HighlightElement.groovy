@@ -75,7 +75,9 @@ public final class HighlightElement {
 		'selectOptionByLabel',
 		'selectOptionByValue',
 		'setEncryptedText',
-		'setText'
+		'setText',
+		'verifyElementAttributeValue',
+		'verifyElementPresent'
 	]
 
 	/**
@@ -252,7 +254,7 @@ public final class HighlightElement {
 	// ------------------------------------------------------------------------
 
 	/**
-	 * <p>Inspector encapsulates data about execution of vaccinated built-in keywords.
+	 * <p>Inspector encapsulates data about execution of any built-in keywords.
 	 * The data includes:
 	 * </p>
 	 * <p><ol>
@@ -276,7 +278,7 @@ public final class HighlightElement {
 
 		/**
 		 * <p>
-		 * When any of influenced keywords has been called before, shift the trace
+		 * When there is any previous trace info, shift the trace
 		 * from the current slot to the previous slot.
 		 * </p>
 		 */
