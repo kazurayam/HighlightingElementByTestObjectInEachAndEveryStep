@@ -103,7 +103,8 @@ public final class HighlightElement {
 	}
 
 	/**
-	 * pandemic() is aliased to inspect() for backward compatibility
+	 * pandemic() is aliased to inspect().
+	 * pandemic() is retained for backward compatibility.
 	 *
 	 * @deprecated use inspect() instead
 	 */
@@ -128,13 +129,14 @@ public final class HighlightElement {
 	 * These info is recorded in GlobalVariable.${GVNAME}.</p>
 	 */
 	@Keyword
-	static final inspect() {
+	static final void inspect() {
 		Inspector inspector = new Inspector()  // inner class "Inspector"
 		WebUiBuiltInKeywords.metaClass.'static'.invokeMethod = { String keywordName, Object args ->
 			if (isVaccinated(keywordName, args)) {
 				TestObject to = (TestObject)args[0]
 				HighlightElement.current(to)
 			}
+			//
 			def result
 			println "isToBeTraced(${keywordName},${args}) is ${isToBeTraced(keywordName,args)}"
 			if (isToBeTraced(keywordName, args)) {
@@ -182,16 +184,29 @@ public final class HighlightElement {
 
 	/**
 	 * Check if the keyword is to be traced or not.
-	 * If the args[0] is an instance of TestObject,
-	 * then its internal detail info will be recorded in a GlobalVarialbe for tracing
+	 * If the args is an array with 1 or more elements, and args[0] is an instance of TestObject,
+	 * then its internal detail info will be recorded in a GlobalVarialbe for tracing.
+	 * 
+	 * Remember, there is some built-in keywords with ZERO arguments; e.g., WeUI.closeBrowser()
 	 *
 	 * @param name a String as name of keyword, not checked
-	 * @param args arguments to the keyword when called
+	 * @param args an array of arguments to the keyword call
 	 * @return true if the args[0] is instance of TestObject; otherwise false
 	 */
 	private static final boolean isToBeTraced(String keywordName, Object args) {
-		println "keywordName=${keywordName},args=${args.toString()},args[0] instanceof TestObject=${args[0] instanceof TestObject}"
-		return (args[0] instanceof TestObject)
+		Class clazz = args.getClass()
+		//println "keywordName:${keywordName},args:${args.toString()}," +
+		//		"args.getClass():${args.getClass()}"
+		if (clazz.isArray()) {
+			Object[] objects = (Object[])args
+			//println "objects.length:${objects.length}"
+			if (objects.length > 0) {
+				//println "args[0] instanceof TestObject:${args[0] instanceof TestObject}"
+				return (args[0] instanceof TestObject)
+			} else
+				return false
+		} else
+			return false
 	}
 
 	/**
@@ -213,10 +228,12 @@ public final class HighlightElement {
 	/**
 	 * The name of GlobalVariable which pandemic() creates.
 	 * The GlobalVariable will have type of java.util.Map.
-	 * The vaccinated built-in keywords will record the detail information of how each
-	 * keyword acted. You can trace back what was carried on before a StepFailureException was thrown.
+	 * The vaccinated built-in keywords will record the detail information 
+	 * of how each keyword acted. You can trace back what was carried on 
+	 * before a StepFailureException was thrown.
 	 * 
-	 * You can print the content of the GlobalVariable by the following Groovy code as test script.
+	 * You can print the content of the GlobalVariable by the following 
+	 * Groovy code as test script.
 	 * 
 	 * <PRE>
 	 * import internal.GlobalVariable
