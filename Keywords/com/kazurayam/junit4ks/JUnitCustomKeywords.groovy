@@ -11,15 +11,17 @@ import org.junit.runner.notification.RunListener
 
 import com.kms.katalon.core.annotation.Keyword
 import com.kms.katalon.core.configuration.RunConfiguration
+import com.kms.katalon.core.constants.StringConstants
 import com.kms.katalon.core.keyword.internal.KeywordMain
+import com.kms.katalon.core.logging.ErrorCollector
 import com.kms.katalon.core.logging.KeywordLogger
-import com.kms.katalon.core.util.KeywordUtil
 import com.kms.katalon.core.model.FailureHandling
+import com.kms.katalon.core.util.internal.ExceptionsUtil
 
 /**
- * A custom keyword in Katalon Studio. This enables you to run JUnit4 to 
+ * A custom keyword in Katalon Studio. This enables you to run JUnit4 to
  * perform test-driven development for your own custom keywords.
- * 
+ *
  * I read and learned form
  * https://github.com/katalon-studio/katalon-studio-testing-framework/blob/master/Include/scripts/groovy/com/kms/katalon/core/cucumber/keyword/CucumberBuiltinKeywords.groovy
  *
@@ -151,26 +153,38 @@ public class JUnitCustomKeywords {
 			return junitResult
 		}, flowControl, "Keyword runWithJUnitRunner failed")
 	}
-
+	
 	/**
-	 * 
+	 *
 	 * @author urayamakazuaki
 	 *
 	 */
 	private static class RunListener4KS extends RunListener {
 		boolean succeeded
 		public void testStarted(Description description) {
-			KeywordUtil.logInfo(description.toString() + " started")
+			logger.startTest(
+					description.getDisplayName(),
+					new HashMap<String, String>(),
+					new Stack<KeywordLogger.KeywordStackElement>())
 			succeeded = true
 		}
 		public void testFailure(Failure failure) {
-			KeywordUtil.logInfo("NG")
-			this.succeeded = false
+			succeeded = false
+			String name =  failure.getDescription().getDisplayName()
+			Throwable t = failure.getException()
+			String stackTraceForThrowable = ExceptionsUtil.getStackTraceForThrowable(t)
+			String message = MessageFormat.format(
+					StringConstants.MAIN_LOG_MSG_FAILED_BECAUSE_OF,
+					name,
+					stackTraceForThrowable)
+			logger.logMessage(ErrorCollector.fromError(t), message, t);
 		}
 		public void testFinished(Description description) {
+			String name =  description.getDisplayName()
 			if (succeeded) {
-				KeywordUtil.logInfo('OK')
+				logger.logPassed(name)
 			}
+			logger.endTest(name, new HashMap<String, String>())
 		}
 	}
 

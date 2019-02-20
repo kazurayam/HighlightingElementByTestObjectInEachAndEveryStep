@@ -11,22 +11,20 @@ String prettyPrint(Object obj) {
 	return JsonOutput.prettyPrint(json)
 }
 
+// modify WebUI.* keywords which take TestObject as args[0]
+// so that they get highlighted automatically
+CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.pandemic'()
+
 // open browser and navigate to the AUT
 WebUI.openBrowser('')
 WebUI.setViewPortSize(1024, 768)
 WebUI.navigateToUrl('https://katalon-demo-cura.herokuapp.com/')
 WebUI.delay(1)
 
-
 // highlight a specific element
 CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.on'(
 	findTestObject('Page_CURA Healthcare Service_top/h1_CURA Healthcare Service'))
 WebUI.delay(1)
-
-
-// modify WebUI.* keywords which take TestObject as args[0] 
-// so that they get highlighted automatically  
-CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.pandemic'()
 
 // now move on 
 WebUI.click(findTestObject('Page_CURA Healthcare Service_top/a_Make Appointment'))

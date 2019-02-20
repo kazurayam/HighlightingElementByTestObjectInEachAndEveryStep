@@ -10,9 +10,10 @@ import com.kms.katalon.core.exception.StepFailedException
 import com.kms.katalon.core.testobject.TestObject
 import com.kms.katalon.core.util.KeywordUtil
 import com.kms.katalon.core.webui.common.WebUiCommonHelper
-import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords
 import com.kms.katalon.core.webui.driver.DriverFactory
+import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords
 
+import groovy.json.JsonOutput
 import internal.GlobalVariable
 
 /**
@@ -134,14 +135,14 @@ public final class HighlightElement {
 	static final void inspect() {
 		Inspector inspector = new Inspector()  // inner class "Inspector"
 		WebUiBuiltInKeywords.metaClass.'static'.invokeMethod = { String keywordName, Object args ->
-			println "isVaccinated(${keywordName},${args}) returned ${isVaccinated(keywordName,args)}"
+			//println("${isVaccinated(keywordName,args)}: isVaccinated(${keywordName},${args})")
 			if (isVaccinated(keywordName, args)) {
 				TestObject to = (TestObject)args[0]
 				HighlightElement.current(to)
 			}
 			//
 			def result
-			println "isToBeTraced(${keywordName},${args}) returned ${isToBeTraced(keywordName,args)}"
+			println("${isToBeTraced(keywordName,args)}: isToBeTraced(${keywordName},${args})")
 			if (isToBeTraced(keywordName, args)) {
 				TestObject to = (TestObject)args[0]
 				List<WebElement> target
@@ -198,13 +199,9 @@ public final class HighlightElement {
 	 */
 	private static final boolean isToBeTraced(String keywordName, Object args) {
 		Class clazz = args.getClass()
-		//println "keywordName:${keywordName},args:${args.toString()}," +
-		//		"args.getClass():${args.getClass()}"
 		if (clazz.isArray()) {
 			Object[] objects = (Object[])args
-			//println "objects.length:${objects.length}"
 			if (objects.length > 0) {
-				//println "args[0] instanceof TestObject:${args[0] instanceof TestObject}"
 				return (args[0] instanceof TestObject)
 			} else
 				return false
@@ -241,10 +238,11 @@ public final class HighlightElement {
 	 * <PRE>
 	 * import internal.GlobalVariable
 	 * import groovy.json.JsonOutput
+	 * import com.kms.katalon.core.util.KeywordUtil
 	 * import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords as WebUI
 	 * 
 	 * def traceInfo = JsonOutput.toJson(GlobalVariable.tcExceptionEvements)
-	 * println JsonOutput.prettyPrint(traceInfo)
+	 * KeywordUtil.logInfo(JsonOutput.prettyPrint(traceInfo))
 	 * </PRE>
 	 */
 	public static final String GVNAME = 'tcExceptionEvents'
@@ -303,6 +301,11 @@ public final class HighlightElement {
 			GlobalVariable[GVNAME]['exceptions']['General'] = null
 		}
 
+		def printTrace() {
+			KeywordUtil.logInfo(">>> GlobalVariable[${}]: \n" +
+				JsonOutput.prettyPrint(GlobalVariable[GVNAME])
+				)
+		}
 		/**
 		 * @param name
 		 * @param args
@@ -312,6 +315,7 @@ public final class HighlightElement {
 			GlobalVariable[GVNAME]['exceptions']['Failure'] = e
 			GlobalVariable[GVNAME]['exceptions']['Error']   = null
 			GlobalVariable[GVNAME]['exceptions']['General'] = null
+			printTrace()
 		}
 
 		/**
@@ -325,6 +329,7 @@ public final class HighlightElement {
 			GlobalVariable[GVNAME]['exceptions']['Error']   = null
 			GlobalVariable[GVNAME]['exceptions']['General'] = e
 			GlobalVariable[GVNAME]['exceptions']['Error']   = null
+			printTrace()
 		}
 
 		/**
@@ -336,10 +341,11 @@ public final class HighlightElement {
 			GlobalVariable[GVNAME]['exceptions']['Failure'] = null
 			GlobalVariable[GVNAME]['exceptions']['Error']   = null
 			GlobalVariable[GVNAME]['exceptions']['General'] = e
+			printTrace()
 		}
 
+		
 		// ------------------------ data models ----------------------
-
 		/**
 		 * @return a Map object as the initial value for 
 		 * the GlobalVariable.${GVNAME}
