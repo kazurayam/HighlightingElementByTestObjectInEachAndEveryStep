@@ -142,7 +142,7 @@ public final class HighlightElement {
 			}
 			//
 			def result
-			println("${isToBeTraced(keywordName,args)}: isToBeTraced(${keywordName},${args})")
+			//println("${isToBeTraced(keywordName,args)}: isToBeTraced(${keywordName},${args})")
 			if (isToBeTraced(keywordName, args)) {
 				TestObject to = (TestObject)args[0]
 				List<WebElement> target
