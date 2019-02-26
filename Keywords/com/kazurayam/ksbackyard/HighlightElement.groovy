@@ -155,13 +155,16 @@ public final class HighlightElement {
 				try {
 					// execute the built-in keyword's method body with tracing
 					result = delegate.metaClass.getMetaMethod(keywordName, args).invoke(delegate, args)
+					println "*2 ${keywordName}"
 					target = HighlightElement.success(to)
+					println "*3 ${keywordName}"
 					inspector.logPassed(target, keywordName, args)
+					println "*4 ${keywordName}"
 				}
 				catch (StepFailedException e) {
 					target = HighlightElement.exception(to)
 					inspector.logFailure(target, keywordName, args, e)
-					throw e
+					throw e    // Should we re-throw the Exception or not? --- I am not very sure.
 				}
 				catch (StepErrorException e) {
 					target = HighlightElement.exception(to)
@@ -174,8 +177,10 @@ public final class HighlightElement {
 					throw e
 				}
 			} else {
+				println "*5 ${keywordName}"
 				// execute the built-in keyword's method body without tracing
 				result = delegate.metaClass.getMetaMethod(keywordName, args).invoke(delegate, args)
+				println "*6 ${keywordName} returned ${result}"
 			}
 			return result
 		}
@@ -286,7 +291,7 @@ public final class HighlightElement {
 		 * from the current slot to the previous slot.
 		 * </p>
 		 */
-		void record(List<WebElement> currentTarget, String keywordName, Object args) {
+		void shiftRecord(List<WebElement> currentTarget, String keywordName, Object args) {
 			GlobalVariable[GVNAME]['lastWebElements'] =
 					GlobalVariable[GVNAME]['currentTestStep']['webElements']
 			//
@@ -301,7 +306,7 @@ public final class HighlightElement {
 		 * @return
 		 */
 		def logPassed(List<WebElement> currentTarget, String keywordName, Object args) {
-			record(currentTarget, keywordName, args)
+			shiftRecord(currentTarget, keywordName, args)
 			GlobalVariable[GVNAME]['exceptions']['Failure'] = null
 			GlobalVariable[GVNAME]['exceptions']['Error']   = null
 			GlobalVariable[GVNAME]['exceptions']['General'] = null
@@ -318,7 +323,7 @@ public final class HighlightElement {
 		 * @param args
 		 */
 		def logFailure(List<WebElement> currentTarget, String keywordName, Object args, Exception e) {
-			record(currentTarget, keywordName, args)
+			shiftRecord(currentTarget, keywordName, args)
 			GlobalVariable[GVNAME]['exceptions']['Failure'] = e
 			GlobalVariable[GVNAME]['exceptions']['Error']   = null
 			GlobalVariable[GVNAME]['exceptions']['General'] = null
@@ -332,10 +337,10 @@ public final class HighlightElement {
 		 * @return
 		 */
 		def logError(List<WebElement> currentTarget, String keywordName, Object args, Exception e) {
-			record(currentTarget, keywordName, args)
-			GlobalVariable[GVNAME]['exceptions']['Error']   = null
-			GlobalVariable[GVNAME]['exceptions']['General'] = e
-			GlobalVariable[GVNAME]['exceptions']['Error']   = null
+			shiftRecord(currentTarget, keywordName, args)
+			GlobalVariable[GVNAME]['exceptions']['Failure'] = null
+			GlobalVariable[GVNAME]['exceptions']['Error']   = e
+			GlobalVariable[GVNAME]['exceptions']['General'] = null
 			printTrace()
 		}
 
@@ -344,7 +349,7 @@ public final class HighlightElement {
 		 * @param args
 		 */
 		def logGeneral(List<WebElement> currentTarget, String keywordName, Object args, Exception e) {
-			record(currentTarget, keywordName, args)
+			shiftRecord(currentTarget, keywordName, args)
 			GlobalVariable[GVNAME]['exceptions']['Failure'] = null
 			GlobalVariable[GVNAME]['exceptions']['Error']   = null
 			GlobalVariable[GVNAME]['exceptions']['General'] = e

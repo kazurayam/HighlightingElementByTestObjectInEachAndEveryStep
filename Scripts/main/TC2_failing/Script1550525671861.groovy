@@ -21,14 +21,9 @@ WebUI.openBrowser('')
 WebUI.setViewPortSize(1024, 768)
 WebUI.navigateToUrl('https://katalon-demo-cura.herokuapp.com/')
 WebUI.verifyElementPresent(findTestObject(
-	'Page_CURA Healthcare Service_top/a_Make Appointment'),
+	'Page_CURA Healthcare Service_top/h1_CURA Healthcare Service'),
 	10,
 	FailureHandling.STOP_ON_FAILURE)
-
-// highlight a specific element
-CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.on'(
-	findTestObject('Page_CURA Healthcare Service_top/h1_CURA Healthcare Service'))
-WebUI.delay(1)
 
 // following verification will fail. This is intentional.
 // just to see what happens when a built-in keyword failed.
