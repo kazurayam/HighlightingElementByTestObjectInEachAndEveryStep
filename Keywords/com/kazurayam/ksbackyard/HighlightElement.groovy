@@ -102,7 +102,10 @@ public final class HighlightElement {
 			; 
 			// here we should not call 
 			//     KeywordUtil.markFailed(e.getMessage()) 
-			// because WebUI.click() will always falls down into here
+			// because WebUI.click() is likely to fall down into here.
+			// When you click a button by which page transition occurs, then the target element
+			// will be missing, therefore WebUiCommonHelper.findWebElements(testObject,1) will
+			// raise an Exception e. We should silently ignore it.
 		} finally {
 			return elements
 		}
