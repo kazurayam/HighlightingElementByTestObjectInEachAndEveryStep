@@ -90,7 +90,7 @@ public final class HighlightElement {
 			TestObject testObject, AccessStatus accessStatus) {
 		List<WebElement> elements
 		try {
-			elements = WebUiCommonHelper.findWebElements(testObject, 5)
+			elements = WebUiCommonHelper.findWebElements(testObject, 1)  // timeout should be minimum
 			for (WebElement element : elements) {
 				JavascriptExecutor js = (JavascriptExecutor) driver
 				js.executeScript(
@@ -99,7 +99,10 @@ public final class HighlightElement {
 						element)
 			}
 		} catch (Exception e) {
-			KeywordUtil.markFailed(e.getMessage())
+			; 
+			// here we should not call 
+			//     KeywordUtil.markFailed(e.getMessage()) 
+			// because WebUI.click() will always falls down into here
 		} finally {
 			return elements
 		}
