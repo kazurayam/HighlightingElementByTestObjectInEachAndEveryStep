@@ -6,12 +6,12 @@
    <elementGuidId>30a9f8b3-3548-4b48-8ba8-33f5344757b7</elementGuidId>
    <selectorCollection>
       <entry>
-         <key>BASIC</key>
-         <value>//button[@id = 'btn-login']</value>
-      </entry>
-      <entry>
          <key>CSS</key>
          <value>#btn-login</value>
+      </entry>
+      <entry>
+         <key>BASIC</key>
+         <value>//button[@id = 'btn-login']</value>
       </entry>
    </selectorCollection>
    <selectorMethod>CSS</selectorMethod>

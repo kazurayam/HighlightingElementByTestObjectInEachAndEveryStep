@@ -36,7 +36,7 @@ public final class HighlightElement {
 
 	// style of outline which highlights web element
 	private static final enum AccessStatus {
-		TOUCHED('dashed #9966cc'),  // purple
+		TOUCHED('dashed aqua'),
 		CURRENT('dashed orange'),
 		SUCCESS('dashed lime'),
 		EXCEPTION('dashed red');
@@ -302,9 +302,10 @@ public final class HighlightElement {
 		}
 
 		def printTrace() {
+			def json = JsonOutput.toJson(GlobalVariable[GVNAME])
 			KeywordUtil.logInfo(">>> GlobalVariable[${}]: \n" +
-				JsonOutput.prettyPrint(GlobalVariable[GVNAME])
-				)
+					JsonOutput.prettyPrint(json)
+					)
 		}
 		/**
 		 * @param name
@@ -344,7 +345,7 @@ public final class HighlightElement {
 			printTrace()
 		}
 
-		
+
 		// ------------------------ data models ----------------------
 		/**
 		 * @return a Map object as the initial value for 
