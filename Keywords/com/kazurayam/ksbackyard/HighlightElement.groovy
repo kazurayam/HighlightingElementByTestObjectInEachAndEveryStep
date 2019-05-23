@@ -99,10 +99,10 @@ public final class HighlightElement {
 						element)
 			}
 		} catch (Exception e) {
-			; 
-			// here we should not call 
-			//     KeywordUtil.markFailed(e.getMessage()) 
-			// because WebUI.click() is likely to fall down into here.
+			;
+			// here we should not call
+			//     KeywordUtil.markFailed(e.getMessage())
+			// because WebUI.click() is most likely to fall down into here.
 			// When you click a button by which page transition occurs, then the target element
 			// will be missing, therefore WebUiCommonHelper.findWebElements(testObject,1) will
 			// raise an Exception e. We should silently ignore it.
@@ -178,7 +178,7 @@ public final class HighlightElement {
 				}
 			} else {
 				println "*5 ${keywordName}"
-				// execute the built-in keyword's method body without tracing
+				// execute the body of a built-in keyword's method without tracing
 				result = delegate.metaClass.getMetaMethod(keywordName, args).invoke(delegate, args)
 				println "*6 ${keywordName} returned ${result}"
 			}

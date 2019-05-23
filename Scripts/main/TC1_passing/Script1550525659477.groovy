@@ -71,7 +71,7 @@ WebUI.delay(1)
 def verificationResult = WebUI.verifyElementAttributeValue(
 							findTestObject('Page_CURA Healthcare Service_summary/a_Go to Homepage'),
 							'href',
-							'https://katalon-demo-cura.herokuapp.com/',
+							'https://katalon-demo-cura.herokuapp.com/XXXXXX',
 							5,
 							FailureHandling.CONTINUE_ON_FAILURE)
 if (!verificationResult) {
