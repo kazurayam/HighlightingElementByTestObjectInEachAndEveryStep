@@ -1,6 +1,15 @@
+# emacs
+*~
 
-/bin/
+# eclipse
+.classpath
+.project
+.settings/
 
-/Reports
+# Katalon Studio
+bin/
+Libs/
+Reports/
 
-/Libs
+#
+.markdown-preview.html
