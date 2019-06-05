@@ -43,11 +43,10 @@ public class HighlightElement {
 		'setEncryptedText',
 		'setText'
 	]
-	
 	/**
 	 * change some of methods of WebUiBuiltInKeywords so that they call HighlightElement.on(testObject)
 	 * before invoking their original method body.
-	 * 
+	 *
 	 * http://docs.groovy-lang.org/latest/html/documentation/core-metaprogramming.html#metaprogramming
 	 */
 	@Keyword
