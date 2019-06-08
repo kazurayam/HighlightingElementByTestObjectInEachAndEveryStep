@@ -120,6 +120,7 @@ public class HighlightElementTest {
 	}
 
 
+	@Ignore
 	@Test
 	void test_addGlobalVariable() {
 		HighlightElement.addGlobalVariable("foo", HighlightElement.Inspector.initValue())

@@ -18,7 +18,7 @@ WebUI.delay(2)
 
 // modify WebUI.* keywords which take TestObject as arg0 
 // so that they call Highlight.on() automatically  
-CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.pandemic'()
+CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.enlightKeywords'()
 
 WebUI.click(findTestObject('Page_CURA Healthcare Service_top/a_Make Appointment'))
 WebUI.delay(1)
