@@ -7,17 +7,9 @@ import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords as WebUI
 WebUI.openBrowser('')
 WebUI.setViewPortSize(1024, 768)
 WebUI.navigateToUrl('https://katalon-demo-cura.herokuapp.com/')
-WebUI.delay(1)
 
-// highlight a specific element
-CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.on'(
-	findTestObject('Page_CURA Healthcare Service_top/h1_CURA Healthcare Service'))
-WebUI.delay(2)
-
-
-
-// modify WebUI.* keywords which take TestObject as arg0 
-// so that they call Highlight.on() automatically  
+// modify some of WebUI.* keywords so that they call Highlight.on() automatically
+// before executing their original jobs
 CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.enlightKeywords'()
 
 WebUI.click(findTestObject('Page_CURA Healthcare Service_top/a_Make Appointment'))
@@ -32,17 +24,8 @@ WebUI.delay(1)
 WebUI.click(findTestObject('Page_CURA Healthcare Service_login/button_Login'))
 WebUI.delay(1)
 
-//WebUI.selectOptionByValue(findTestObject('Page_CURA Healthcare Service_appointment/select_Facility'), 
-//    'Hongkong CURA Healthcare Center', false)
-//WebUI.delay(1)
-
-//WebUI.selectOptionByLabel(findTestObject('Page_CURA Healthcare Service_appointment/select_Facility'),
-//	'Seoul CURA Healthcare Center', false)
-//WebUI.delay(1)
-
 WebUI.selectOptionByIndex(findTestObject('Page_CURA Healthcare Service_appointment/select_Facility'), 0)
 WebUI.delay(1)
-
 
 WebUI.click(findTestObject('Page_CURA Healthcare Service_appointment/input_Apply for hospital readm'))
 WebUI.delay(1)

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <TestCaseEntity>
    <description></description>
-   <name>TC2</name>
+   <name>DEMO3_calling_enlightKeywords</name>
    <tag></tag>
    <comment></comment>
-   <testCaseGuid>db7cf54b-ae6d-4f6b-924e-1cb8667c0d91</testCaseGuid>
+   <testCaseGuid>5d9b5ab9-8a2e-44e7-a37b-3160c0ea14e2</testCaseGuid>
 </TestCaseEntity>

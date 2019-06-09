@@ -16,7 +16,7 @@ public final class HighlightElement {
 
 	// style of outline to highlight web element
 	private static final enum OutlineStyle {
-		TOUCHED('dashed aqua');
+		TOUCHED('dashed hotpink');
 		String value;
 		OutlineStyle(String value) {
 			this.value = value
@@ -33,7 +33,7 @@ public final class HighlightElement {
 	 * <p>List of names of Katalon Studio built-in keywords that can be highlighted.
 	 * Keywords are supposed to have TestObject as the first argument of the call (args[0]).</p> 
 	 */
-	private static final List<String> highlightableKeywords = [
+	private static final List<String> highlightingCapableKeywords = [
 		'click',
 		'selectOptionByIndex',
 		'selectOptionByLabel',
@@ -102,7 +102,7 @@ public final class HighlightElement {
 	 * @return
 	 */
 	private static final boolean isHighlightable(String keywordName, Object args) {
-		return (keywordName in highlightableKeywords)
+		return (keywordName in highlightingCapableKeywords)
 	}
 
 }
