@@ -22,8 +22,8 @@ public final class HighlightElement {
 			this.value = value
 		}
 	}
-	
-	
+
+
 	@Keyword
 	public static final List<WebElement> on(TestObject testObject) {
 		return examine(DriverFactory.getWebDriver(), testObject, OutlineStyle.TOUCHED)
@@ -41,7 +41,7 @@ public final class HighlightElement {
 		'setEncryptedText',
 		'setText'
 	]
-	
+
 	private final static List<WebElement> examine(WebDriver driver,
 			TestObject testObject, OutlineStyle outlineStyle) {
 		List<WebElement> elements
@@ -50,7 +50,7 @@ public final class HighlightElement {
 			for (WebElement element : elements) {
 				JavascriptExecutor js = (JavascriptExecutor) driver
 				js.executeScript(
-						"arguments[0].setAttribute('style', 'outline: " + 
+						"arguments[0].setAttribute('style', 'outline: " +
 						"${outlineStyle.value};');",
 						element);
 			}
@@ -63,7 +63,7 @@ public final class HighlightElement {
 		}
 	}
 
-			
+
 	/**
 	 * <p>Test case script should call enlightKeywords() before calling WebUI keywords 
 	 * listed in the highlightableKeywords list.
@@ -86,7 +86,7 @@ public final class HighlightElement {
 			def result
 			try {
 				result = delegate.metaClass.getMetaMethod(name, args).invoke(delegate, args)
-				
+
 			} catch(Exception e) {
 				System.out.println("Handling exception for method $name")
 			}

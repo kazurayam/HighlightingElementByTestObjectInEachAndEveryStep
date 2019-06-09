@@ -6,6 +6,10 @@
 .project
 .settings/
 
+# gradle
+.gradle
+build/
+
 # Katalon Studio
 bin/
 Libs/

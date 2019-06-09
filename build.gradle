@@ -1,0 +1,31 @@
+plugins {
+  id 'java'
+  id 'groovy'
+  id 'com.github.johnrengelman.shadow' version '5.0.0'
+  id "com.katalon.gradle-plugin" version "0.0.7"
+}
+
+jar.baseName = 'HighlightElement'
+
+repositories {
+  jcenter()
+  mavenCentral()
+}
+
+sourceSets {
+  main {
+    groovy {
+      srcDirs = [ 'Keywords', 'Include/scripts/groovy' ]
+      srcDir 'Libs'
+    }
+  }
+}
+
+shadowJar {
+  exclude 'Temp*.class'
+}
+
+katalon {
+  dependencyPrefix = "com.katalon"
+  minimize = false
+}
