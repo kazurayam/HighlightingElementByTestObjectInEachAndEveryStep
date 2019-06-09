@@ -12,6 +12,10 @@ WebUI.navigateToUrl('https://katalon-demo-cura.herokuapp.com/')
 // before executing their original jobs
 CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.enlightKeywords'()
 
+def text = WebUI.getText(findTestObject('Page_CURA Healthcare Service_top/h1_CURA Healthcare Service'))
+println "text=${text}"
+WebUI.delay(1)
+
 WebUI.click(findTestObject('Page_CURA Healthcare Service_top/a_Make Appointment'))
 WebUI.delay(1)
 

@@ -13,6 +13,7 @@ CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.on'(
 	findTestObject('Page_CURA Healthcare Service_top/h1_CURA Healthcare Service'))
 WebUI.delay(2)
 
+
 WebUI.click(findTestObject('Page_CURA Healthcare Service_top/a_Make Appointment'))
 WebUI.delay(2)
 

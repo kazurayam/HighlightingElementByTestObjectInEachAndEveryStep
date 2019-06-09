@@ -35,9 +35,11 @@ public final class HighlightElement {
 	 */
 	private static final List<String> highlightingCapableKeywords = [
 		'click',
+		'getText',
 		'selectOptionByIndex',
 		'selectOptionByLabel',
 		'selectOptionByValue',
+		'sendKeys',
 		'setEncryptedText',
 		'setText'
 	]
@@ -78,31 +80,54 @@ public final class HighlightElement {
 	 */
 	@Keyword
 	public static final void enlightKeywords() {
-		WebUiBuiltInKeywords.metaClass.'static'.invokeMethod = { String name, args ->
-			if (isHighlightable(name, args)) {
+		List<String> additionalKeywords = []
+		enlightKeywords(additionalKeywords)
+	}
+
+	@Keyword
+	public static final void enlightKeywords(List<String> additionalKeywords) {
+		highlightingCapableKeywords.add(additionalKeywords)
+		WebUiBuiltInKeywords.metaClass.'static'.invokeMethod = { String keywordName, Object args ->
+			if (isHighlightingCapable(keywordName, args)) {
 				TestObject to = (TestObject)args[0]
 				HighlightElement.on(to)
 			}
-			def result
-			try {
-				result = delegate.metaClass.getMetaMethod(name, args).invoke(delegate, args)
-
-			} catch(Exception e) {
-				System.out.println("Handling exception for method $name")
-			}
-			return result
+			return delegate.metaClass.getMetaMethod(keywordName, args).invoke(delegate, args)
 		}
 	}
 
 	/**
-	 * <p>check if the keyword can be modified to highlight target element.</p>
+	 * <p>check if the keyword call can be modified to highlight the target element.</p>
 	 * 
 	 * @param keywordName
 	 * @param args
 	 * @return
 	 */
-	private static final boolean isHighlightable(String keywordName, Object args) {
-		return (keywordName in highlightingCapableKeywords)
+	private static final boolean isHighlightingCapable(String keywordName, Object args) {
+		return (keywordName in highlightingCapableKeywords && hasTestObjectAs1stArg(args))
+	}
+
+	/**
+	 * Check if the args is an array with 1 or more elements, and 
+	 * args[0] is an instance of TestObject,
+	 * then return true, otherwise false.
+	 * 
+	 * Remember, there is some built-in keywords with ZERO arguments; e.g., WeUI.closeBrowser()
+	 *
+	 * @param name a String as name of keyword, not checked
+	 * @param args an array of arguments to the keyword call
+	 * @return true if the args[0] is instance of TestObject; otherwise false
+	 */
+	private static final boolean hasTestObjectAs1stArg(Object args) {
+		Class clazz = args.getClass()
+		if (clazz.isArray()) {
+			Object[] objects = (Object[])args
+			if (objects.length > 0) {
+				return (args[0] instanceof TestObject)
+			} else
+				return false
+		} else
+			return false
 	}
 
 }
