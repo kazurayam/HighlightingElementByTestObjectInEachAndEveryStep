@@ -8,9 +8,9 @@ WebUI.openBrowser('')
 WebUI.setViewPortSize(1024, 768)
 WebUI.navigateToUrl('https://katalon-demo-cura.herokuapp.com/')
 
-// modify some of WebUI.* keywords so that they call Highlight.on() automatically
+// modify some of WebUI builtin keywords so that they call Highlight.on() automatically
 // before executing their original jobs
-CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.enlightKeywords'()
+CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.enlightWebUiBuiltinKeywords'()
 
 def text = WebUI.getText(findTestObject('Page_CURA Healthcare Service_top/h1_CURA Healthcare Service'))
 println "text=${text}"

@@ -14,6 +14,11 @@ import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords
 
 public final class HighlightElement {
 
+	@Keyword
+	public static final List<WebElement> on(TestObject testObject) {
+		return examine(DriverFactory.getWebDriver(), testObject, OutlineStyle.TOUCHED)
+	}
+
 	// style of outline to highlight web element
 	private static final enum OutlineStyle {
 		TOUCHED('dashed hotpink');
@@ -21,12 +26,6 @@ public final class HighlightElement {
 		OutlineStyle(String value) {
 			this.value = value
 		}
-	}
-
-
-	@Keyword
-	public static final List<WebElement> on(TestObject testObject) {
-		return examine(DriverFactory.getWebDriver(), testObject, OutlineStyle.TOUCHED)
 	}
 
 	/**
@@ -79,20 +78,28 @@ public final class HighlightElement {
 	 * http://docs.groovy-lang.org/latest/html/documentation/core-metaprogramming.html#metaprogramming
 	 */
 	@Keyword
-	public static final void enlightKeywords() {
+	public static final void enlightWebUiBuiltinKeywords() {
 		List<String> additionalKeywords = []
-		enlightKeywords(additionalKeywords)
+		enlightWebUiBuiltinKeywords(additionalKeywords)
 	}
 
 	@Keyword
-	public static final void enlightKeywords(List<String> additionalKeywords) {
+	public static final void enlightWebUiBuiltinKeywords(List<String> additionalKeywords) {
 		highlightingCapableKeywords.add(additionalKeywords)
 		WebUiBuiltInKeywords.metaClass.'static'.invokeMethod = { String keywordName, Object args ->
-			if (isHighlightingCapable(keywordName, args)) {
-				TestObject to = (TestObject)args[0]
-				HighlightElement.on(to)
+			println "keywordName is ${keywordName}, args is ${args}"
+			def metaMethod = WebUiBuiltInKeywords.metaClass.getMetaMethod(keywordName, args)
+			def result
+			if (metaMethod) {
+				if (isHighlightingCapable(keywordName, args)) {
+					TestObject to = (TestObject)args[0]
+					HighlightElement.on(to)
+				}
+				result = metaMethod.invoke(delegate, args)
+			} else {
+				result = "bar"
 			}
-			return delegate.metaClass.getMetaMethod(keywordName, args).invoke(delegate, args)
+			return result
 		}
 	}
 
