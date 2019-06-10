@@ -14,7 +14,7 @@ CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.on'(
 	findTestObject('Page_CURA Healthcare Service_top/h1_CURA Healthcare Service'))
 WebUI.delay(2)
 
-
+WebUI.comment("Hello, world")
 
 // modify WebUI.* keywords which take TestObject as arg0 
 // so that they call Highlight.on() automatically  
