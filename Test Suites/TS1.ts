@@ -14,6 +14,6 @@
       <guid>b6e2f1a6-fa73-47ce-8cab-1c560747069f</guid>
       <isReuseDriver>false</isReuseDriver>
       <isRun>true</isRun>
-      <testCaseId>Test Cases/main/DEMO3_calling_enlightKeywords</testCaseId>
+      <testCaseId>Test Cases/main/DEMO3_calling_enlightWebUiBuiltInKeywords</testCaseId>
    </testCaseLink>
 </TestSuiteEntity>

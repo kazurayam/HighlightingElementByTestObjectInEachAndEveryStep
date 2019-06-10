@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <TestCaseEntity>
    <description></description>
-   <name>DEMO3_calling_enlightKeywords</name>
+   <name>DEMO3_calling_enlightWebUiBuiltInKeywords</name>
    <tag></tag>
    <comment></comment>
    <testCaseGuid>5d9b5ab9-8a2e-44e7-a37b-3160c0ea14e2</testCaseGuid>

@@ -10,7 +10,7 @@ WebUI.navigateToUrl('https://katalon-demo-cura.herokuapp.com/')
 
 // modify some of WebUI builtin keywords so that they call Highlight.on() automatically
 // before executing their original jobs
-CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.enlightWebUiBuiltinKeywords'()
+CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.enlightWebUiBuiltInKeywords'()
 
 def text = WebUI.getText(findTestObject('Page_CURA Healthcare Service_top/h1_CURA Healthcare Service'))
 println "text=${text}"

@@ -11,6 +11,7 @@ import com.kms.katalon.core.testobject.TestObject
 import com.kms.katalon.core.webui.common.WebUiCommonHelper
 import com.kms.katalon.core.webui.driver.DriverFactory
 import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords
+import com.kms.katalon.core.keyword.BuiltinKeywords
 
 public final class HighlightElement {
 
@@ -32,7 +33,7 @@ public final class HighlightElement {
 	 * <p>List of names of Katalon Studio built-in keywords that can be highlighted.
 	 * Keywords are supposed to have TestObject as the first argument of the call (args[0]).</p> 
 	 */
-	private static final List<String> highlightingCapableKeywords = [
+	private static final List<String> highlightingCapableKeywords_ = [
 		'click',
 		'getText',
 		'selectOptionByIndex',
@@ -78,28 +79,35 @@ public final class HighlightElement {
 	 * http://docs.groovy-lang.org/latest/html/documentation/core-metaprogramming.html#metaprogramming
 	 */
 	@Keyword
-	public static final void enlightWebUiBuiltinKeywords() {
+	public static final void enlightWebUiBuiltInKeywords() {
 		List<String> additionalKeywords = []
-		enlightWebUiBuiltinKeywords(additionalKeywords)
+		enlightWebUiBuiltInKeywords(additionalKeywords)
 	}
 
 	@Keyword
-	public static final void enlightWebUiBuiltinKeywords(List<String> additionalKeywords) {
-		highlightingCapableKeywords.add(additionalKeywords)
+	public static final void enlightWebUiBuiltInKeywords(List<String> additionalKeywords) {
+		highlightingCapableKeywords_.add(additionalKeywords)
 		WebUiBuiltInKeywords.metaClass.'static'.invokeMethod = { String keywordName, Object args ->
 			println "keywordName is ${keywordName}, args is ${args}"
-			def metaMethod = WebUiBuiltInKeywords.metaClass.getMetaMethod(keywordName, args)
-			def result
-			if (metaMethod) {
-				if (isHighlightingCapable(keywordName, args)) {
+			if (BuiltinKeywords.metaClass.getMetaMethod(keywordName, args)) {
+				println "${keywordName} is implemented in BuiltinKeywords class, we will leave it as is";
+				/* 
+				 * The WebUiBuiltInKeywords class extends the BuiltinKeywords class. Therefore
+				 * WebUiBuiltInKeywords.metaClass.'static' includes the method implemented in the
+				 * BuiltinKeywords class. 
+				 * We have to exclude those methods.
+				 * Otherwise we will encounter an Exception 
+				 *     "java.lang.IllegalArgumentException: argument type mismatch"
+				 * raised when you call 
+				 *     "WebUiBuiltInKeywords.metaClass.getMetaMethod(keywordName, args).invoke(delegate, args)" 
+				 */
+			} else {
+				if (isHighlightingCapable(highlightingCapableKeywords_, keywordName, args)) {
 					TestObject to = (TestObject)args[0]
 					HighlightElement.on(to)
 				}
-				result = metaMethod.invoke(delegate, args)
-			} else {
-				result = "bar"
+				return WebUiBuiltInKeywords.metaClass.getMetaMethod(keywordName, args).invoke(delegate, args)
 			}
-			return result
 		}
 	}
 
@@ -110,7 +118,7 @@ public final class HighlightElement {
 	 * @param args
 	 * @return
 	 */
-	private static final boolean isHighlightingCapable(String keywordName, Object args) {
+	private static final boolean isHighlightingCapable(List<String> highlightingCapableKeywords, String keywordName, Object args) {
 		return (keywordName in highlightingCapableKeywords && hasTestObjectAs1stArg(args))
 	}
 

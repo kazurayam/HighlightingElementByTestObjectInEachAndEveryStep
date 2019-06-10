@@ -13,7 +13,7 @@ WebUI.navigateToUrl('https://katalon-demo-cura.herokuapp.com/')
 // You can pass a list of keyword names as an argument to enlightKeywords(List<String>) call.
 // The keywords are added to the list of highlighting-capable Keywords.
 
-CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.enlightWebUiBuiltinKeywords'()
+CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.enlightWebUiBuiltInKeywords'()
 
 WebUI.click(findTestObject('Page_CURA Healthcare Service_top/a_Make Appointment'))
 WebUI.setText(findTestObject('Page_CURA Healthcare Service_login/input_Username_username'), 'John Doe')
@@ -21,6 +21,8 @@ WebUI.setEncryptedText(findTestObject('Page_CURA Healthcare Service_login/input_
 WebUI.click(findTestObject('Page_CURA Healthcare Service_login/button_Login'))
 
 WebUI.comment("Medicare is checked: ${true}")
+
+WebUI.delay(3)
 
 /*
 boolean result = WebUI.verifyElementChecked(
