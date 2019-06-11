@@ -41,7 +41,10 @@ public final class HighlightElement {
 		'selectOptionByValue',
 		'sendKeys',
 		'setEncryptedText',
-		'setText'
+		'setText',
+		'verifyElementChecked',
+		'verifyElementPresent',
+		'waitForElementPresent'
 	]
 
 	private final static List<WebElement> examine(WebDriver driver,

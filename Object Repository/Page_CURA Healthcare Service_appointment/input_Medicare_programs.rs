@@ -4,6 +4,12 @@
    <name>input_Medicare_programs</name>
    <tag></tag>
    <elementGuidId>fafde59d-e094-46d2-bdbd-c22ca176c047</elementGuidId>
+   <selectorCollection>
+      <entry>
+         <key>BASIC</key>
+         <value>//input[@type = 'radio' and @name = 'programs' and @id = 'radio_program_medicare']</value>
+      </entry>
+   </selectorCollection>
    <selectorMethod>BASIC</selectorMethod>
    <useRalativeImagePath>false</useRalativeImagePath>
    <webElementProperties>
@@ -32,21 +38,21 @@
       <matchCondition>equals</matchCondition>
       <name>id</name>
       <type>Main</type>
-      <value>radio_program_medicaid</value>
+      <value>radio_program_medicare</value>
    </webElementProperties>
    <webElementProperties>
       <isSelected>false</isSelected>
       <matchCondition>equals</matchCondition>
       <name>value</name>
       <type>Main</type>
-      <value>Medicaid</value>
+      <value>Medicare</value>
    </webElementProperties>
    <webElementProperties>
       <isSelected>false</isSelected>
       <matchCondition>equals</matchCondition>
       <name>xpath</name>
       <type>Main</type>
-      <value>id(&quot;radio_program_medicaid&quot;)</value>
+      <value>id(&quot;radio_program_medicare&quot;)</value>
    </webElementProperties>
    <webElementXpaths>
       <isSelected>true</isSelected>

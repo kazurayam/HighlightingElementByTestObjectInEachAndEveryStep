@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <TestCaseEntity>
    <description></description>
-   <name>DEMO4_calling_enlightWebUiBuiltInKeywords_with_args</name>
+   <name>DEMO4_calling_enlightWebUiBuiltInKeywords_with_arg</name>
    <tag></tag>
-   <comment></comment>
+   <comment>DEMO4 started
+Medicaid is checked: $result
+None is checked: $result</comment>
    <testCaseGuid>8713f0cd-d9c1-4573-9072-3de7d3e50cf1</testCaseGuid>
 </TestCaseEntity>
