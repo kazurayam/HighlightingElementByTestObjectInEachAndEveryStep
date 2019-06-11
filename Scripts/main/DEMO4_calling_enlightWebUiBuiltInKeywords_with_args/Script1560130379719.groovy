@@ -15,21 +15,18 @@ WebUI.navigateToUrl('https://katalon-demo-cura.herokuapp.com/')
 
 CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.enlightWebUiBuiltInKeywords'()
 
+WebUI.comment("DEMO4 started")
+
 WebUI.click(findTestObject('Page_CURA Healthcare Service_top/a_Make Appointment'))
 WebUI.setText(findTestObject('Page_CURA Healthcare Service_login/input_Username_username'), 'John Doe')
 WebUI.setEncryptedText(findTestObject('Page_CURA Healthcare Service_login/input_Password_password'), 'g3/DOGG74jC3Flrr3yH+3D/yKbOqqUNM')
 WebUI.click(findTestObject('Page_CURA Healthcare Service_login/button_Login'))
-
-WebUI.comment("Medicare is checked: ${true}")
-
-WebUI.delay(3)
 
 /*
 boolean result = WebUI.verifyElementChecked(
 	findTestObject('Page_CURA Healthcare Service_appointment/input_Medicare_programs'), 3, 
 	FailureHandling.OPTIONAL)
 WebUI.delay(3)
-
 
 result = WebUI.verifyElementChecked(
 	findTestObject('Page_CURA Healthcare Service_appointment/input_Medicaid_programs'), 3,

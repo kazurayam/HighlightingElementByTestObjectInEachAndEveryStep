@@ -88,26 +88,11 @@ public final class HighlightElement {
 	public static final void enlightWebUiBuiltInKeywords(List<String> additionalKeywords) {
 		highlightingCapableKeywords_.add(additionalKeywords)
 		WebUiBuiltInKeywords.metaClass.'static'.invokeMethod = { String keywordName, Object args ->
-			println "keywordName is ${keywordName}, args is ${args}"
-			if (BuiltinKeywords.metaClass.getMetaMethod(keywordName, args)) {
-				println "${keywordName} is implemented in BuiltinKeywords class, we will leave it as is";
-				/* 
-				 * The WebUiBuiltInKeywords class extends the BuiltinKeywords class. Therefore
-				 * WebUiBuiltInKeywords.metaClass.'static' includes the method implemented in the
-				 * BuiltinKeywords class. 
-				 * We have to exclude those methods.
-				 * Otherwise we will encounter an Exception 
-				 *     "java.lang.IllegalArgumentException: argument type mismatch"
-				 * raised when you call 
-				 *     "WebUiBuiltInKeywords.metaClass.getMetaMethod(keywordName, args).invoke(delegate, args)" 
-				 */
-			} else {
-				if (isHighlightingCapable(highlightingCapableKeywords_, keywordName, args)) {
-					TestObject to = (TestObject)args[0]
-					HighlightElement.on(to)
-				}
-				return WebUiBuiltInKeywords.metaClass.getMetaMethod(keywordName, args).invoke(delegate, args)
+			if (isHighlightingCapable(highlightingCapableKeywords_, keywordName, args)) {
+				TestObject to = (TestObject)args[0]
+				HighlightElement.on(to)
 			}
+			return delegate.metaClass.getMetaMethod(keywordName, args).invoke(delegate, args)
 		}
 	}
 

@@ -12,6 +12,8 @@ WebUI.navigateToUrl('https://katalon-demo-cura.herokuapp.com/')
 // before executing their original jobs
 CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.enlightWebUiBuiltInKeywords'()
 
+WebUI.comment("DEMO3 started")
+
 def text = WebUI.getText(findTestObject('Page_CURA Healthcare Service_top/h1_CURA Healthcare Service'))
 println "text=${text}"
 WebUI.delay(1)
