@@ -91,11 +91,14 @@ public final class HighlightElement {
 	public static final void enlightWebUiBuiltInKeywords(List<String> additionalKeywords) {
 		highlightingCapableKeywords_.add(additionalKeywords)
 		WebUiBuiltInKeywords.metaClass.'static'.invokeMethod = { String keywordName, Object args ->
+			println "### keywordName=${keywordName}, args=${args}"
 			if (isHighlightingCapable(highlightingCapableKeywords_, keywordName, args)) {
 				TestObject to = (TestObject)args[0]
 				HighlightElement.on(to)
 			}
-			return delegate.metaClass.getMetaMethod(keywordName, args).invoke(delegate, args)
+			def result
+			result = delegate.metaClass.getMetaMethod(keywordName, args).invoke(delegate, args)
+			return result
 		}
 	}
 
