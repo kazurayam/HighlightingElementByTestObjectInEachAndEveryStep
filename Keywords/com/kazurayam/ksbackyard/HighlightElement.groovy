@@ -12,6 +12,7 @@ import com.kms.katalon.core.webui.common.WebUiCommonHelper
 import com.kms.katalon.core.webui.driver.DriverFactory
 import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords
 import com.kms.katalon.core.keyword.BuiltinKeywords
+import groovy.lang.MetaMethod
 
 public final class HighlightElement {
 
@@ -97,8 +98,13 @@ public final class HighlightElement {
 				HighlightElement.on(to)
 			}
 			def result
-			result = delegate.metaClass.getMetaMethod(keywordName, args).invoke(delegate, args)
-			return result
+			MetaMethod metaMethod = delegate.metaClass.getMetaMethod(keywordName, args)
+			if (metaMethod != null) {
+				metaMethod.invoke(delegate, args)
+				return result
+			} else {
+				throw new IllegalArgumentException("failed to find delegate.metaCLass.metaMethod(${keywordName},${args}).")
+			}
 		}
 	}
 
