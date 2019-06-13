@@ -13,12 +13,12 @@ WebUI.comment("DEMO5-1 started")
 
 boolean result = WebUI.verifyElementPresent(findTestObject('Page_CURA Healthcare Service_top/a_Make Appointment'),
 	10, FailureHandling.STOP_ON_FAILURE)
-assert result == true
+println "result is ${result}"
 
 def text = WebUI.getText(findTestObject('Page_CURA Healthcare Service_top/a_Make Appointment'),
 	FailureHandling.STOP_ON_FAILURE)
 
-//WebUI.comment("text is ${text}")   // raises IllegalArgumentException
-WebUI.comment("text is ${text}".toString())     // would work
+WebUI.comment("text is ${text}")   // raises IllegalArgumentException
+//WebUI.comment("text is ${text}".toString())     // would work
 
 WebUI.closeBrowser()

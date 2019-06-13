@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<TestCaseEntity>
-   <description></description>
-   <name>DEMO5-2_enlightWebUiBuiltinKeywords_side_effect - optional arguments</name>
-   <tag></tag>
-   <comment>DEMO5-1 started
-text is $text.toString()</comment>
-   <testCaseGuid>09bf98de-91e2-498e-92ce-9594d6805a3e</testCaseGuid>
-</TestCaseEntity>

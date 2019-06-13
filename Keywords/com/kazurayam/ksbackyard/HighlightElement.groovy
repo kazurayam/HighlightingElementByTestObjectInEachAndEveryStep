@@ -92,16 +92,14 @@ public final class HighlightElement {
 	public static final void enlightWebUiBuiltInKeywords(List<String> additionalKeywords) {
 		highlightingCapableKeywords_.add(additionalKeywords)
 		WebUiBuiltInKeywords.metaClass.'static'.invokeMethod = { String keywordName, Object args ->
-			println "### keywordName=${keywordName}, args=${args}"
+			// println "### keywordName=${keywordName}, args=${args}"
 			if (isHighlightingCapable(highlightingCapableKeywords_, keywordName, args)) {
 				TestObject to = (TestObject)args[0]
 				HighlightElement.on(to)
 			}
-			def result
 			MetaMethod metaMethod = delegate.metaClass.getMetaMethod(keywordName, args)
 			if (metaMethod != null) {
-				metaMethod.invoke(delegate, args)
-				return result
+				return metaMethod.invoke(delegate, args)
 			} else {
 				throw new IllegalArgumentException("failed to find delegate.metaCLass.metaMethod(${keywordName},${args}).")
 			}
