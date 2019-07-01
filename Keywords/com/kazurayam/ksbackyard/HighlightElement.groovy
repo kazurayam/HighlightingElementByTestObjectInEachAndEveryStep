@@ -12,6 +12,7 @@ import com.kms.katalon.core.webui.common.WebUiCommonHelper
 import com.kms.katalon.core.webui.driver.DriverFactory
 import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords
 import com.kms.katalon.core.keyword.BuiltinKeywords
+import groovy.lang.MetaMethod
 
 public final class HighlightElement {
 
@@ -91,11 +92,17 @@ public final class HighlightElement {
 	public static final void enlightWebUiBuiltInKeywords(List<String> additionalKeywords) {
 		highlightingCapableKeywords_.add(additionalKeywords)
 		WebUiBuiltInKeywords.metaClass.'static'.invokeMethod = { String keywordName, Object args ->
+			// println "### keywordName=${keywordName}, args=${args}"
 			if (isHighlightingCapable(highlightingCapableKeywords_, keywordName, args)) {
 				TestObject to = (TestObject)args[0]
 				HighlightElement.on(to)
 			}
-			return delegate.metaClass.getMetaMethod(keywordName, args).invoke(delegate, args)
+			MetaMethod metaMethod = delegate.metaClass.getMetaMethod(keywordName, args)
+			if (metaMethod != null) {
+				return metaMethod.invoke(delegate, args)
+			} else {
+				throw new IllegalArgumentException("failed to find delegate.metaCLass.metaMethod(${keywordName},${args}).")
+			}
 		}
 	}
 
