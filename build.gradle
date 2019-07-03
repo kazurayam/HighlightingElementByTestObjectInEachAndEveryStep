@@ -5,6 +5,8 @@ plugins {
   id "com.katalon.gradle-plugin" version "0.0.7"
 }
 
+version = '0.4'
+
 repositories {
   jcenter()
   mavenCentral()
@@ -21,6 +23,7 @@ sourceSets {
 
 shadowJar {
   exclude 'Temp*.class'
+  classifier = null
 }
 
 katalon {
