@@ -88,3 +88,7 @@ In the version 0.3, the `pandemic()` method influences the following Katalon bui
 - [`selectOptionByValue`](https://docs.katalon.com/katalon-studio/docs/webui-select-option-by-value.html)
 - [`setEncryptedText()`](https://docs.katalon.com/katalon-studio/docs/webui-set-encrypted-text.html)
 - [`setText`](https://docs.katalon.com/katalon-studio/docs/webui-set-text.html)
+
+## Developer guide
+
+see [Developer guide](./docs/developer_guide.md)
