@@ -85,9 +85,9 @@ You are done.
 
 ### How to write your tests while
 
-Make a `Test Case/TC1` in your project, which should look like:
+Make a `Test Case/TC0` in your project. You can copy&paste the following:
 
--  [`Test Cases/TC1`](Scripts/TC1/Script1547070867765.groovy)
+-  [`Test Cases/TC0`](Scripts/TC0/Script1620092194024.groovy)
 
 In the starting section of your test case script, you want to call this:
 
@@ -108,10 +108,16 @@ Calling the `pandemic()` method, the custom keyword docorates the following Kata
 - [`verifyElementPresent`](https://docs.katalon.com/katalon-studio/docs/webui-verify-element-present.html)
 - [`verifyElementVisible`](https://docs.katalon.com/katalon-studio/docs/webui-verify-element-visible.html)
 
+### Another Test Case example
+
+- [Test Cases/TC1](Scripts/TC1/Script1547070867765.groovy)
+
+Please note that this test case depends on a set of Test Objects prepared in the `Object Reporitory` folder.
+
 ### How the custom Keyword is implemented
 
 Read the source:
 
 - [`Keywords/com.kazurayam.ksbackyard/HighlightElement.groovy`](Keywords/com/kazurayam/ksbackyard/HighlightElement.groovy)
 
-I would not talk much about the code. It uses magical Grovy [ExpandoMetaClass](http://docs.groovy-lang.org/latest/html/documentation/core-metaprogramming.html#metaprogramming_emc).
+I would not talk much about this. It uses magical [Groovy Metaprogramming](http://docs.groovy-lang.org/latest/html/documentation/core-metaprogramming.html#metaprogramming_emc) technique.
