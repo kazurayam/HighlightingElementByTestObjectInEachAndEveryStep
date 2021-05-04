@@ -15,6 +15,8 @@ import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords
 
 
 public class HighlightElement {
+	
+	private static Boolean experiencedPandemic = false
 
 	@Keyword
 	public static void on(TestObject testObject) {
@@ -45,63 +47,75 @@ public class HighlightElement {
 	 * http://docs.groovy-lang.org/latest/html/documentation/core-metaprogramming.html#metaprogramming
 	 */
 	@Keyword
-	public static void pandemic(List<String> addedKeywords = []) {
-		WebUiBuiltInKeywords.metaClass.'static'.invokeMethod = { String name, args ->
-			if (name in getInfluencedKeywords(addedKeywords)) {
-				TestObject to = (TestObject)args[0]
-				HighlightElement.on(to)
+	public static void pandemic(List<String> keywordsToAdd = []) {
+		if (!experiencedPandemic) {
+			Set<String> influencedKeywords = getInfluencedKeywords(keywordsToAdd)
+			WebUiBuiltInKeywords.metaClass.'static'.invokeMethod = { String name, args ->
+				if (name in influencedKeywords) {
+					TestObject to = (TestObject)args[0]
+					HighlightElement.on(to)
+				}
+				def result
+				try {
+					result = delegate.metaClass.getMetaMethod(name, args).invoke(delegate, args)
+				} catch(Exception e) {
+					System.out.println("Handling exception for method $name")
+				}
+				return result
 			}
-			def result
-			try {
-				result = delegate.metaClass.getMetaMethod(name, args).invoke(delegate, args)
-			} catch(Exception e) {
-				System.out.println("Handling exception for method $name")
-			}
-			return result
+			experiencedPandemic = true
+		} else {
+			throw new IllegalStateException("pandemic method can be invoked at most once per a JVM run")
 		}
 	}
-	
-	public static final Set<String> vaccinatedKeywords = new HashSet([
-			'click',
-			'selectOptionByIndex',
-			'selectOptionByLabel',
-			'selectOptionByValue',
-			'setEncryptedText',
-			'setText'
-		])
 
-	public static Set<String> getInfluencedKeywords(List<String> addedKeywords = []) {
-		Set<String> keywords = new HashSet(vaccinatedKeywords)
-		List<String> highlightables = this.highlightableWebUIKeywords()
-		addedKeywords.each { kw ->
+
+	public static Set<String> getInfluencedKeywords(List<String> keywordsToAdd = []) {
+		Objects.requireNonNull(keywordsToAdd)
+		Set<String> result = new HashSet(defaultHighlighted)
+		Set<String> highlightables = this.getHighlightableBuiltinKeywords()
+		keywordsToAdd.each { kw ->
+			// if the specified keyword is highlight-able, then accept it
 			if (highlightables.contains(kw)) {
-				keywords.add(kw)
+				result.add(kw)
+			} else {
+				println "specified keyword \"${kw}\" is not highlight-able; just ignored"
 			}
 		}
-		return keywords
+		return result
 	}
+
+
+	public static final Set<String> defaultHighlighted = new HashSet([
+		'click',
+		'selectOptionByIndex',
+		'selectOptionByLabel',
+		'selectOptionByValue',
+		'setEncryptedText',
+		'setText'
+	])
+
 
 	/**
 	 * @return list of the built-in WebUI.* keywords that can be highlighted by this.on(TestObject to)
 	 */
-	public static List<String> highlightableWebUIKeywords() {
-		Method[] declaredMethods = WebUiBuiltInKeywords.class.getDeclaredMethods()
-		//println "declaredMethods.size() is ${declaredMethods.size()}"
-		Set<String> highlightableKeywords = new ArrayList<String>()
-		for (Method method in declaredMethods) {
-			if (Modifier.isStatic(method.getModifiers()) &&
-				Modifier.isPublic(method.getModifiers())    ) {
-				Class<?>[] parameterTypes = method.getParameterTypes()
+	public static Set<String> getHighlightableBuiltinKeywords() {
+		List<MetaMethod> metaMethods = WebUiBuiltInKeywords.metaClass.getMethods()
+		//println "metaMethods.size() is ${metaMethods.size()}"
+		Set<String> highlightables = new HashSet<String>()
+		for (MetaMethod method in metaMethods) {
+			if (method.isStatic() && method.isPublic()) {
+				Class<?>[] parameterTypes = method.nativeParameterTypes
 				// select a Keyword if it requires a TestObject as the 1st argument
-				if ( parameterTypes.size() > 0 &&
-					 parameterTypes[0].is(TestObject.class)) {
-					 //println "method: ${method.getName()}(${parameterTypes[0].getName()})"
-					 highlightableKeywords.add(method.getName())
+				if ( parameterTypes.size() > 0 && parameterTypes[0].is(TestObject.class)) {
+					//println "method: ${method.getName()}(${parameterTypes[0].getName()})"
+					highlightables.add(method.getName())
 				}
 			}
 		}
-		return new ArrayList<String>(highlightableKeywords).toSorted()
+		return highlightables
 	}
+
 
 	// previous implementation of pandemic without Groovy's Metaprogramming
 	/*

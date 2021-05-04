@@ -796,9 +796,9 @@ def static "com.kazurayam.ksbackyard.HighlightElement.on"(
 	 * http://docs.groovy-lang.org/latest/html/documentation/core-metaprogramming.html#metaprogramming
 	 */
 def static "com.kazurayam.ksbackyard.HighlightElement.pandemic"(
-    	java.util.List<String> addedKeywords	) {
+    	java.util.List<String> keywordsToAdd	) {
     (new com.kazurayam.ksbackyard.HighlightElement()).pandemic(
-        	addedKeywords)
+        	keywordsToAdd)
 }
 
 
