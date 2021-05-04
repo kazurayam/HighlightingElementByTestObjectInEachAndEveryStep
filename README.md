@@ -109,7 +109,7 @@ Calling the `pandemic()` method, the following 6 WebUI built-in keywords are mar
 5. [`WebUI.setEncryptedText`](https://docs.katalon.com/katalon-studio/docs/webui-set-encrypted-text.html)
 6. [`WebUI.setText`](https://docs.katalon.com/katalon-studio/docs/webui-set-text.html)
 
-### More Keywords for "highlighting"
+### More "highlighting" keywords
 
 Any WebUI built-in keywords that take an instance of `com.kms.katalon.core.testobject.TestObject` as the 1st argument can be marked as *highlighting*. The following page shows the list of possible WebUI Builtin keywords:
 
