@@ -125,8 +125,8 @@ This script has a line:
 CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.pandemic'(['verifyElementPresent'])
 ```
 
-Here, the `pandemic()` method accepts a `List<String>` which includes the names of WebUI Builtin Keyword listed
-in the [doc](docs/highlightable_keywords.md).
+Here, the `pandemic()` method accepts a `List<String>` which includes the names of WebUI Builtin Keyword that you 
+want to turn "highlighting". See the [doc](docs/highlightable_keywords.md) which Keyword to choose.
 
 ### How the custom Keyword is implemented
 
