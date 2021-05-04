@@ -41,9 +41,11 @@ public class HighlightElement {
 		'selectOptionByLabel',
 		'selectOptionByValue',
 		'setEncryptedText',
-		'setText'
+		'setText',
+		'verifyElementPresent',
+		'verifyElementVisible'
 	]
-	
+
 	/**
 	 * change some of methods of WebUiBuiltInKeywords so that they call HighlightElement.on(testObject)
 	 * before invoking their original method body.

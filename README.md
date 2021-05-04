@@ -10,21 +10,22 @@ This is a [Katalon Studio](https://www.katalon.com/) project for demonstration p
 You can download the ZIP from [Releases](https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/releases) page,
 unzip it and open with your Katalon Studio.
 
-This project was developed with Katalon Studio version 5.10.1
+This project was originally developed using Katalon Studio version 5.10.1, was tested using 7.9.1 as well.
 
 This project proposes a solution to the issue discussed in the Katalon Forum:
 [How to highlight test object in each and every step](https://forum.katalon.com/t/how-to-highlight-test-object-in-each-and-every-step/17408)
 The originator asked:
 >I have created a keyword to highlight testobject. Please tell me how to call this keyword globally in such a way that it should highlight testobject of each step during test case execution
 
-He proposed a custom keyword implementation which give highlight to a specific HTML element on a page provided with a TestObject.
 
 ## Problem to solve
 
-The originator wrote:
+The originator of the post proposed a custom keyword implementation which give highlight to a specific HTML element on a page provided with a TestObject. He also wrote:
+
 >it should highlight testobject of each step during test case execution
 
-This implies that he do not like such code:
+I thought that he does not like such code:
+
 ```
 WebUI.openBrowser('')
 WebUI.navigateToUrl('https://katalon-demo-cura.herokuapp.com/')
@@ -47,10 +48,11 @@ CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.on'(
 WebUI.setEncryptedText(findTestObject('Object Repository/Page_CURA Healthcare Service/input_Password_password'),
 	'g3/DOGG74jC3Flrr3yH+3D/yKbOqqUNM')
 ...
-
 ```
 
-As you can see, it is boring to repeat invoking Custom Keyword for each indivisual HTML elements to put highlights. I would rather want all of the HTML elements targeted by `WebUI.click()`, `WebUI.setText()` and `WebUI.setEncryptedText()` are highlighted without repetitive calls.
+As you can see, this code repeats lines for each indivisual HTML elements to put highlights on by `HightlightElement.on(TestObject to)`. It is too verbose.
+
+I would rather want all of the HTML elements targeted by `WebUI.click()`, `WebUI.setText()` and `WebUI.setEncryptedText()` are highlighted without repetitively calling `HighlightElement.on(TestObject to)` methods.
 
 ## Solution
 
@@ -61,10 +63,8 @@ This class implements 2 methods:
 
 The `on(TestObject to)` method puts highlight on the specified HTML element.
 
-The `pandemic()` method internally overrides `WebUI.click(TestObject to)` and other methods
-so that each keywords automaticall calls `on(TestObject to)` before its method body.
-
-In the version 0.5.0 of this project, I made a small jar file which contains the class compiled and ready for your use.
+The `pandemic()` method **internally decorates** `WebUI.click(TestObject to)` and other methods
+so that each keywords automaticall calls `on(TestObject to)` before its built-in method body.
 
 ## Description
 
@@ -73,6 +73,8 @@ In the version 0.5.0 of this project, I made a small jar file which contains the
 Or click [this link to see the movie](https://kazurayam.github.io/HighlightingElementByTestObjectInEachAndEveryStep/)
 
 ### How to install the plugin into your project
+
+As of the version 0.5.0 of this project, a small jar file is provided, which contains the `com.kazurayam.ksbackyard.HighlightElement` class compiled and ready for your reuse.
 
 1. create your own Katalon Studio WebUI test project: e.g, `HighlightElement-demo` project
 2. visit the [Releases](https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/releases) page, download the latest `kazurayam-ks-highlightlement-x.x.x.jar` file.
@@ -101,8 +103,10 @@ Calling the `pandemic()` method, the custom keyword docorates the following Kata
 - [`selectOptionByIndex`](https://docs.katalon.com/katalon-studio/docs/webui-select-option-by-index.html)
 - [`selectOptionByLabel`](https://docs.katalon.com/katalon-studio/docs/webui-select-option-by-label.html)
 - [`selectOptionByValue`](https://docs.katalon.com/katalon-studio/docs/webui-select-option-by-value.html)
-- [`setEncryptedText()`](https://docs.katalon.com/katalon-studio/docs/webui-set-encrypted-text.html)
+- [`setEncryptedText`](https://docs.katalon.com/katalon-studio/docs/webui-set-encrypted-text.html)
 - [`setText`](https://docs.katalon.com/katalon-studio/docs/webui-set-text.html)
+- [`verifyElementPresent`](https://docs.katalon.com/katalon-studio/docs/webui-verify-element-present.html)
+- [`verifyElementVisible`](https://docs.katalon.com/katalon-studio/docs/webui-verify-element-visible.html)
 
 ### How the custom Keyword is implemented
 
