@@ -70,7 +70,7 @@ so that each keywords automaticall calls `on(TestObject to)` before its built-in
 
 ### Demo movie
 
-Or click [this link to see the movie](https://kazurayam.github.io/HighlightingElementByTestObjectInEachAndEveryStep/)
+I made a demo movie how this custom keyword works. Click [this link to see the movie](https://kazurayam.github.io/HighlightingElementByTestObjectInEachAndEveryStep/).
 
 ### How to install the plugin into your project
 
