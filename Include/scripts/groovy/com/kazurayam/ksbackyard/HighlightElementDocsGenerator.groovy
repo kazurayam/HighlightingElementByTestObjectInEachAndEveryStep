@@ -28,9 +28,9 @@ public class HighlightElementDocsGenerator {
 		String urlPrefix = "https://docs.katalon.com/katalon-studio/docs"
 		list.eachWithIndex { keyword, index ->
 			sb.append("| ${index + 1} ")
-			String vaccinated = (HighlightElement.defaultHighlighted.contains(keyword)) ? 'Yes' : ''
+			String byDefault = (HighlightElement.DEFAULT_HIGHLIGHTING_KW.contains(keyword)) ? 'Yes' : ''
 			sb.append("| [WebUI.${keyword}](${urlPrefix}/webui-${this.camel2chain(keyword)}.html) ")
-			sb.append("| ${vaccinated} ")
+			sb.append("| ${byDefault} ")
 			sb.append("|")
 			sb.append("\n")
 		}

@@ -1,8 +1,5 @@
 package com.kazurayam.ksbackyard
 
-import java.lang.reflect.Method
-import java.lang.reflect.Modifier
-
 import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
@@ -15,8 +12,6 @@ import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords
 
 
 public class HighlightElement {
-	
-	private static Boolean experiencedPandemic = false
 
 	@Keyword
 	public static void on(TestObject testObject) {
@@ -39,63 +34,6 @@ public class HighlightElement {
 		}
 	}
 
-
-	/**
-	 * change some of methods of WebUiBuiltInKeywords so that they call HighlightElement.on(testObject)
-	 * before invoking their original method body.
-	 * 
-	 * http://docs.groovy-lang.org/latest/html/documentation/core-metaprogramming.html#metaprogramming
-	 */
-	@Keyword
-	public static void pandemic(List<String> keywordsToAdd = []) {
-		if (!experiencedPandemic) {
-			Set<String> influencedKeywords = getInfluencedKeywords(keywordsToAdd)
-			WebUiBuiltInKeywords.metaClass.'static'.invokeMethod = { String name, args ->
-				if (name in influencedKeywords) {
-					TestObject to = (TestObject)args[0]
-					HighlightElement.on(to)
-				}
-				def result
-				try {
-					result = delegate.metaClass.getMetaMethod(name, args).invoke(delegate, args)
-				} catch(Exception e) {
-					System.out.println("Handling exception for method $name")
-				}
-				return result
-			}
-			experiencedPandemic = true
-		} else {
-			throw new IllegalStateException("pandemic method can be invoked at most once per a JVM run")
-		}
-	}
-
-
-	public static Set<String> getInfluencedKeywords(List<String> keywordsToAdd = []) {
-		Objects.requireNonNull(keywordsToAdd)
-		Set<String> result = new HashSet(defaultHighlighted)
-		Set<String> highlightables = this.getHighlightableBuiltinKeywords()
-		keywordsToAdd.each { kw ->
-			// if the specified keyword is highlight-able, then accept it
-			if (highlightables.contains(kw)) {
-				result.add(kw)
-			} else {
-				println "specified keyword \"${kw}\" is not highlight-able; just ignored"
-			}
-		}
-		return result
-	}
-
-
-	public static final Set<String> defaultHighlighted = new HashSet([
-		'click',
-		'selectOptionByIndex',
-		'selectOptionByLabel',
-		'selectOptionByValue',
-		'setEncryptedText',
-		'setText'
-	])
-
-
 	/**
 	 * @return list of the built-in WebUI.* keywords that can be highlighted by this.on(TestObject to)
 	 */
@@ -114,6 +52,77 @@ public class HighlightElement {
 			}
 		}
 		return highlightables
+	}
+
+
+	public static final Set<String> DEFAULT_HIGHLIGHTING_KW = new HashSet([
+		'click',
+		'selectOptionByIndex',
+		'selectOptionByLabel',
+		'selectOptionByValue',
+		'setEncryptedText',
+		'setText'
+	])
+
+	// instance variables
+	private final Set<String> highlightingKW
+
+	/**
+	 * constructor
+	 */
+	HighlightElement() {
+		this.highlightingKW = new HashSet(DEFAULT_HIGHLIGHTING_KW)
+	}
+
+	/**
+	 * change some of methods of WebUiBuiltInKeywords so that they call HighlightElement.on(testObject)
+	 * before invoking their original method body.
+	 *
+	 * http://docs.groovy-lang.org/latest/html/documentation/core-metaprogramming.html#metaprogramming
+	 */
+	@Keyword
+	public void pandemic(List<String> keywordsToAdd = []) {
+		this.markKeywords(keywordsToAdd)
+		Set<String> influencedKeywords = this.getHighlightingKeywords()
+		WebUiBuiltInKeywords.metaClass.'static'.invokeMethod = { String name, args ->
+			if (name in influencedKeywords) {
+				TestObject to = (TestObject)args[0]
+				HighlightElement.on(to)
+			}
+			def result
+			try {
+				result = delegate.metaClass.getMetaMethod(name, args).invoke(delegate, args)
+			} catch(Exception e) {
+				System.out.println("Handling exception for method $name")
+			}
+			return result
+		}
+	}
+
+	/**
+	 * 
+	 * @param keywordsToAdd
+	 */
+	public void markKeywords(List<String> keywordsToAdd = []) {
+		Objects.requireNonNull(keywordsToAdd)
+		Set<String> highlightables = getHighlightableBuiltinKeywords()
+		keywordsToAdd.each { kw ->
+			// if the specified keyword is highlight-able, then accept it
+			if (highlightables.contains(kw)) {
+				//println "specified keyword \"${kw}\" is marked as highlight-able"
+				this.highlightingKW.add(kw)
+			} else {
+				println "specified keyword \"${kw}\" is not highlight-able; just ignored"
+			}
+		}
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public Set<String> getHighlightingKeywords() {
+		return highlightingKW.clone()
 	}
 
 

@@ -6,41 +6,54 @@ import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords as WebUI
 
 import static org.junit.Assert.*
 
+import org.junit.Before
 import org.junit.Test
 import org.junit.Ignore
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 
-
 @RunWith(JUnit4.class)
 public class HighlightElementTest {
-
-	@Test
-	void test_getInfluencedKeywords_default() {
-		Set<String> influenced = HighlightElement.getInfluencedKeywords()
-		assertTrue("WebUI.click should be influenced by default",influenced.contains("click"))
+	
+	HighlightElement instance
+	
+	@Before
+	void setup() {
+		instance = new HighlightElement()
 	}
-
-	@Test
-	void test_getInfluencedKeywords_addOne() {
-		Set<String> influenced = HighlightElement.getInfluencedKeywords(["verifyElementPresent"])
-		assertTrue("WebUI.verifyElementPresent should be added",influenced.contains("verifyElementPresent"))
-	}
-
 	
 	@Test
-	void test_on_with_addKeyword() {
-		WebUI.openBrowser('')
-		WebUI.navigateToUrl("http://demoaut.katalon.com")
-		com.kazurayam.ksbackyard.HighlightElement.pandemic(["verifyElementPresent"])
-		TestObject tObj = createTestObject("//a[@id='menu-toggle']")
-		WebUI.verifyElementPresent(tObj, 10)
-		WebUI.closeBrowser()
+	void test_getHighlightableBuiltinKeywords() {
+		Set<String> keywords = HighlightElement.getHighlightableBuiltinKeywords()
+		assertTrue("keywords.size() should be >0; keywords is ${keywords}", keywords.size() > 0)
+		assertTrue("WebUI.click should be included", keywords.contains("click"))
+	}
+	
+	@Test
+	void test_getHighlightingKeywords() {
+		Set<String> keywords = instance.getHighlightingKeywords()
+		assertTrue("WebUI.click should be influenced by default", keywords.contains("click"))
+	}
+	
+	@Test
+	void test_markKeywords() {
+		instance.markKeywords(["verifyElementPresent", "waitForElementVisible"])
+		Set<String> keywords = instance.getHighlightingKeywords()
+		assertTrue("keywords.size() should be >0", keywords.size() > 0)
+		assertTrue("WebUI.click should be influenced by default", keywords.contains("click"))
+		assertTrue("WebUI.verifyElementPresent should be marked", keywords.contains("verifyElementPresent"))
+		assertTrue("WebUI.waitForElementVisible should be marked", keywords.contains("waitForElementVisible"))
 	}
 
-	void test_getHighlightableBuiltinKeywords() {
-		Set<String> set = HighlightElement.getHighlightableBuiltinKeywords()
-		assertTrue("set.size() should be >0; set is ${set}", set.size() > 0)
+	@Test
+	void test_on_with_verifyElementPresent() {
+		WebUI.openBrowser('')
+		WebUI.navigateToUrl("http://demoaut.katalon.com")
+		instance.pandemic(["verifyElementPresent"])
+		TestObject tObj = createTestObject("//a[@id='menu-toggle']")
+		WebUI.verifyElementPresent(tObj, 10)
+		WebUI.delay(2)
+		WebUI.closeBrowser()
 	}
 
 	/**
