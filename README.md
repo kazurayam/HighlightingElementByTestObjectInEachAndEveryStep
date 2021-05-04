@@ -92,17 +92,15 @@ Make a `Test Case/TC0` in your project. You can copy&paste the following:
 
 -  [`Test Cases/TC0`](Scripts/TC0/Script1620129794625.groovy)
 
-In the starting section of your test case script, you want to call this:
+In early section the script calls this:
 
 ```
-// modify WebUI.* keywords which take TestObject as arg0 
-// so that they call Highlight.on() automatically  
+// modify WebUI.* keywords which take TestObject as arg0
+// so that they call Highlight.on() automatically
 CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.pandemic'()
 ```
 
-Calling the `pandemic()` method, the custom keyword mark the following Katalon builtin keywords so that they can put hightlights on the target HTML elements.
-
-#### Marked Keywords as default
+Calling the `pandemic()` method, the following 6 WebUI built-in keywords are marked "highlighting". The keywords are dynamically modified to be *highlighting* so that they put hightlights on the target HTML elements.
 
 1. [`WebUI.click`](https://docs.katalon.com/katalon-studio/docs/webui-click.html)
 2. [`WebUI.selectOptionByIndex`](https://docs.katalon.com/katalon-studio/docs/webui-select-option-by-index.html)
@@ -111,14 +109,13 @@ Calling the `pandemic()` method, the custom keyword mark the following Katalon b
 5. [`WebUI.setEncryptedText`](https://docs.katalon.com/katalon-studio/docs/webui-set-encrypted-text.html)
 6. [`WebUI.setText`](https://docs.katalon.com/katalon-studio/docs/webui-set-text.html)
 
-### How to mark more Keywords "highlight-able"
+### How to mark more Keywords "highlighting"
 
-Any WebUI keywords that takes an instance of `com.kms.katalon.core.testobject.TestObject` as the 1st argument can be turned "highlighting". The following page shows the list of possible WebUI Builtin keywords:
+Any WebUI built-in keywords that take an instance of `com.kms.katalon.core.testobject.TestObject` as the 1st argument can be marked as *highlighting*. The following page shows the list of possible WebUI Builtin keywords:
 
 - [Highlight-table WebUI builtin Keywords](docs/highlightable_keywords.md)
 
-
-The following test case script shows how to.
+It is possible to add more keywords as "highlighting". The following script shows how to.
 
 - [Test Cases/TC2](Scripts/TC2/Script1620129688091.groovy)
 
@@ -128,12 +125,14 @@ This script has a line:
 CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.pandemic'(['verifyElementPresent'])
 ```
 
-Here, the `pandemic()` method acceps a `List<String>` which includes the name of WebUI Builtin Keywords.
+Here, the `pandemic()` method accepts a `List<String>` which includes the names of WebUI Builtin Keyword listed
+in the [doc](docs/highlightable_keywords.md).
 
 ### How the custom Keyword is implemented
 
-Read the source:
+Please read the source to find detail:
 
 - [`Keywords/com.kazurayam.ksbackyard/HighlightElement.groovy`](Keywords/com/kazurayam/ksbackyard/HighlightElement.groovy)
 
-I would not talk much about this. It uses magical [Groovy Metaprogramming](http://docs.groovy-lang.org/latest/html/documentation/core-metaprogramming.html#metaprogramming_emc) technique.
+It employs the [Groovy Metaprogramming](http://docs.groovy-lang.org/latest/html/documentation/core-metaprogramming.html#metaprogramming_emc) technique extensively.
+
