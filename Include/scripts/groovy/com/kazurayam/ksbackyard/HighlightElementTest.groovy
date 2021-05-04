@@ -43,18 +43,20 @@ public class HighlightElementTest {
 	void compile_highlitable_keywords_doc() {
 		StringBuilder sb = new StringBuilder()
 		sb.append("## Highlight-table WebUI Keywords\n\n")
-		sb.append("| No. | Keyword | vaccinated? |\n")
+		sb.append("| No. | Keyword (click to doc) | highlighted by default? |\n")
 		sb.append("|-----|---------|-------------|\n")
 		List<String> list = HighlightElement.highlightableWebUIKeywords()
 		String urlPrefix = "https://docs.katalon.com/katalon-studio/docs"
 		list.eachWithIndex { keyword, index ->
 			sb.append("| ${index} ")
 			String vaccinated = (HighlightElement.vaccinatedKeywords.contains(keyword)) ? 'Yes' : ''
-			sb.append("| ${vaccinated}")
-			sb.append("| [${keyword}](${urlPrefix}/webui-${this.camel2chain(keyword)}.html) |\n") 
+			sb.append("| [WebUI.${keyword}](${urlPrefix}/webui-${this.camel2chain(keyword)}.html) ")
+			sb.append("| ${vaccinated} ")
+			sb.append("|")
+			sb.append("\n") 
 		}
 		Path projectDir = Paths.get(RunConfiguration.getProjectDir())
-		Path doc = projectDir.resolve("docs/highlitable_keywords.md")
+		Path doc = projectDir.resolve("docs/highlightable_keywords.md")
 		doc.toFile().text = sb.toString()
 	}
 	
