@@ -3,18 +3,13 @@ import static com.kms.katalon.core.testobject.ObjectRepository.findTestObject
 import com.kms.katalon.core.model.FailureHandling as FailureHandling
 import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords as WebUI
 
+/**
+ * TC1
+ */
 // open browser and navigate to the AUT
 WebUI.openBrowser('')
 WebUI.setViewPortSize(1024, 768)
 WebUI.navigateToUrl('https://katalon-demo-cura.herokuapp.com/')
-WebUI.delay(1)
-
-// highlight a specific element
-CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.on'(
-	findTestObject('Page_CURA Healthcare Service_top/h1_CURA Healthcare Service'))
-WebUI.delay(2)
-
-
 
 // modify WebUI.* keywords which take TestObject as arg0 
 // so that they call Highlight.on() automatically  
@@ -42,7 +37,6 @@ WebUI.delay(1)
 
 WebUI.selectOptionByIndex(findTestObject('Page_CURA Healthcare Service_appointment/select_Facility'), 0)
 WebUI.delay(1)
-
 
 WebUI.click(findTestObject('Page_CURA Healthcare Service_appointment/input_Apply for hospital readm'))
 WebUI.delay(1)

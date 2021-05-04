@@ -2,6 +2,7 @@ Highlighting Element by TestObject in each and every step
 =============
 
 - author: kazurayam
+- originally published: Jan 2019
 - last update: May 2021
 
 ## What is this?
@@ -10,21 +11,24 @@ This is a [Katalon Studio](https://www.katalon.com/) project for demonstration p
 You can download the ZIP from [Releases](https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/releases) page,
 unzip it and open with your Katalon Studio.
 
-This project was originally developed using Katalon Studio version 5.10.1, was tested using 7.9.1 as well.
+This project was originally developed using Katalon Studio version 5.10.1, and was tested using 7.9.1 as well.
 
 This project proposes a solution to the issue discussed in the Katalon Forum:
 [How to highlight test object in each and every step](https://forum.katalon.com/t/how-to-highlight-test-object-in-each-and-every-step/17408)
 The originator asked:
+
 >I have created a keyword to highlight testobject. Please tell me how to call this keyword globally in such a way that it should highlight testobject of each step during test case execution
 
 
 ## Problem to solve
 
-The originator of the post proposed a custom keyword implementation which give highlight to a specific HTML element on a page provided with a TestObject. He also wrote:
+The originator of the post proposed a custom keyword implementation which give highlight to a specific HTML element on a page provided with a TestObject. 
+
+And He added his wish:
 
 >it should highlight testobject of each step during test case execution
 
-I thought that he does not like such code:
+I thought that he does not like a code as follows:
 
 ```
 WebUI.openBrowser('')
@@ -50,27 +54,26 @@ WebUI.setEncryptedText(findTestObject('Object Repository/Page_CURA Healthcare Se
 ...
 ```
 
-As you can see, this code repeats lines for each indivisual HTML elements to put highlights on by `HightlightElement.on(TestObject to)`. It is too verbose.
+As you can see, this code repeats highlighting each indivisual HTML elements by `HightlightElement.on(TestObject to)`. This code is too verbose.
 
-I would rather want all of the HTML elements targeted by `WebUI.click()`, `WebUI.setText()` and `WebUI.setEncryptedText()` are highlighted without repetitively calling `HighlightElement.on(TestObject to)` methods.
+I would rather want all of the HTML elements targeted by `WebUI.click()`, `WebUI.setText()` and `WebUI.setEncryptedText()` to be automatically highlighted without explicit `HighlightElement.on(TestObject to)` calls.
 
 ## Solution
 
-I have developed a custom keyword class `com.kazurayam.ksbackyard.HighlightElement`.
-This class implements 2 methods:
+I have developed a custom class `com.kazurayam.ksbackyard.HighlightElement`. This class implements 2 methods, which are available as `@Keyword`:
+
 1. `on(TestObject to)`
-2. `pandemic()`
+2. `pandemic()` and `pandemic(List<String> additionalKeywords)`
 
-The `on(TestObject to)` method puts highlight on the specified HTML element.
+The `on(TestObject to)` method puts highlight on the indivisually specified HTML element.
 
-The `pandemic()` method **internally decorates** `WebUI.click(TestObject to)` and other methods
-so that each keywords automaticall calls `on(TestObject to)` before its built-in method body.
+The `pandemic()` method dynamically decorates `WebUI.click(TestObject to)` and other WebUI keywords so that they put higlight on the target HTML elements before doing their own processing (such as "clicking the element").
 
 ## Description
 
 ### Demo movie
 
-I made a demo movie how this custom keyword works. Click [this link to see the movie](https://kazurayam.github.io/HighlightingElementByTestObjectInEachAndEveryStep/).
+I made a demo movie how this custom keyword works. Click [this link to see the movie](https://kazurayam.github.io/HighlightingElementByTestObjectInEachAndEveryStep/). This demo shows how [`Test Cases/TC1`](Scripts/TC1/Script1547070867765.groovy) works.
 
 ### How to install the plugin into your project
 
@@ -81,9 +84,9 @@ As of the version 0.5.0 of this project, a small jar file is provided, which con
 3. save the jar file into the `<projectDir>/Plugins` folder of your project
 4. stop/restart KS and reopen your project
 
-You are done.
+You are ready.
 
-### How to write your tests while
+### How to write your tests
 
 Make a `Test Case/TC0` in your project. You can copy&paste the following:
 
@@ -97,22 +100,35 @@ In the starting section of your test case script, you want to call this:
 CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.pandemic'()
 ```
 
-Calling the `pandemic()` method, the custom keyword docorates the following Katalon-built-in keywords so that the target elements are highlighted.
+Calling the `pandemic()` method, the custom keyword mark the following Katalon builtin keywords so that they can put hightlights on the target HTML elements.
 
-- [`click`](https://docs.katalon.com/katalon-studio/docs/webui-click.html)
-- [`selectOptionByIndex`](https://docs.katalon.com/katalon-studio/docs/webui-select-option-by-index.html)
-- [`selectOptionByLabel`](https://docs.katalon.com/katalon-studio/docs/webui-select-option-by-label.html)
-- [`selectOptionByValue`](https://docs.katalon.com/katalon-studio/docs/webui-select-option-by-value.html)
-- [`setEncryptedText`](https://docs.katalon.com/katalon-studio/docs/webui-set-encrypted-text.html)
-- [`setText`](https://docs.katalon.com/katalon-studio/docs/webui-set-text.html)
+#### Marked Keywords as default
+
+1. [`WebUI.click`](https://docs.katalon.com/katalon-studio/docs/webui-click.html)
+2. [`WebUI.selectOptionByIndex`](https://docs.katalon.com/katalon-studio/docs/webui-select-option-by-index.html)
+3. [`WebUI.selectOptionByLabel`](https://docs.katalon.com/katalon-studio/docs/webui-select-option-by-label.html)
+4. [`WebUI.selectOptionByValue`](https://docs.katalon.com/katalon-studio/docs/webui-select-option-by-value.html)
+5. [`WebUI.setEncryptedText`](https://docs.katalon.com/katalon-studio/docs/webui-set-encrypted-text.html)
+6. [`WebUI.setText`](https://docs.katalon.com/katalon-studio/docs/webui-set-text.html)
+
+### How to mark more Keywords "highlight-able"
+
+Any WebUI keywords that takes an instance of `com.kms.katalon.core.testobject.TestObject` as the 1st argument can be turned "highlighting". The following page shows the list of possible WebUI Builtin keywords:
 
 - [Highlight-table WebUI builtin Keywords](docs/highlightable_keywords.md)
 
-### Another Test Case example
 
-- [Test Cases/TC1](Scripts/TC1/Script1547070867765.groovy)
+The following test case script shows how to.
 
-Please note that this test case depends on a set of Test Objects prepared in the `Object Reporitory` folder.
+- [Test Cases/TC2](Scripts/TC2/Script1620129688091.groovy)
+
+This script has a line:
+
+```
+CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.pandemic'(['verifyElementPresent'])
+```
+
+Here, the `pandemic()` method acceps a `List<String>` which includes the name of WebUI Builtin Keywords.
 
 ### How the custom Keyword is implemented
 

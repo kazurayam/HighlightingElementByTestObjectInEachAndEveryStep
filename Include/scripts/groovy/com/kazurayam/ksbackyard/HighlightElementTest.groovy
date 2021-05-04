@@ -14,30 +14,33 @@ import org.junit.runners.JUnit4
 
 @RunWith(JUnit4.class)
 public class HighlightElementTest {
-	
+
 	HighlightElement instance
-	
+
 	@Before
 	void setup() {
 		instance = new HighlightElement()
 	}
-	
+
 	@Test
 	void test_getHighlightableBuiltinKeywords() {
 		Set<String> keywords = HighlightElement.getHighlightableBuiltinKeywords()
 		assertTrue("keywords.size() should be >0; keywords is ${keywords}", keywords.size() > 0)
 		assertTrue("WebUI.click should be included", keywords.contains("click"))
 	}
-	
+
 	@Test
 	void test_getHighlightingKeywords() {
 		Set<String> keywords = instance.getHighlightingKeywords()
 		assertTrue("WebUI.click should be influenced by default", keywords.contains("click"))
 	}
-	
+
 	@Test
 	void test_markKeywords() {
-		instance.markKeywords(["verifyElementPresent", "waitForElementVisible"])
+		instance.markKeywords([
+			"verifyElementPresent",
+			"waitForElementVisible"
+		])
 		Set<String> keywords = instance.getHighlightingKeywords()
 		assertTrue("keywords.size() should be >0", keywords.size() > 0)
 		assertTrue("WebUI.click should be influenced by default", keywords.contains("click"))

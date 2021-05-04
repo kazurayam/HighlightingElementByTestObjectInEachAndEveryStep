@@ -3,8 +3,10 @@ import com.kms.katalon.core.testobject.TestObject
 import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords as WebUI
 
 /**
- * helper function that creates a new TestObject with XPath
+ * TC0
  */
+
+// helper function that creates a new TestObject with XPath
 TestObject newTestObject(String xpath) {
 	TestObject to = new TestObject(xpath)
 	to.addProperty('xpath', ConditionType.EQUALS, xpath)
@@ -16,11 +18,6 @@ WebUI.openBrowser('')
 WebUI.setViewPortSize(1024, 768)
 WebUI.navigateToUrl('https://katalon-demo-cura.herokuapp.com/')
 WebUI.delay(1)
-
-// highlight a specific element
-CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.on'(
-	newTestObject("//h1[contains(.,'CURA Healthcare Service')]"))
-WebUI.delay(2)
 
 // modify WebUI.* keywords which take TestObject as arg0
 // so that they call Highlight.on() automatically
