@@ -47,6 +47,11 @@ public class HighlightElementTest {
 		assertTrue("WebUI.verifyElementPresent should be marked", keywords.contains("verifyElementPresent"))
 		assertTrue("WebUI.waitForElementVisible should be marked", keywords.contains("waitForElementVisible"))
 	}
+	
+	@Test
+	void test_pandemic_twice() {
+		
+	}
 
 	@Test
 	void test_on_with_verifyElementPresent() {

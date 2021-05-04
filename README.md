@@ -125,8 +125,23 @@ This script has a line:
 CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.pandemic'(['verifyElementPresent'])
 ```
 
-Here, the `pandemic()` method accepts a `List<String>` which includes the names of WebUI Builtin Keyword that you 
+Here, the `pandemic()` method accepts a `List<String>` which comprises with the names of WebUI Builtin Keyword that you 
 want to turn "highlighting". See the [doc](docs/highlightable_keywords.md) which Keyword to choose.
+
+If you want 2 or more keywords to mark highlighting, then you should enumerate them in a single call; for example:
+```
+CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.pandemic'(['verifyElementPresent', 'takeElementScreenshot'])
+```
+
+Spliting the candidates like this is not a good idea:
+```
+CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.pandemic'(['verifyElementPresent'])
+// 'verifyElementPresent' is marked here but
+
+CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.pandemic'(['takeElementScreenshot'])
+// 'verifyElementPresent' is unmarked here
+```
+
 
 ### How the custom Keyword is implemented
 
