@@ -1,6 +1,9 @@
 Highlighting Element by TestObject in each and every step
 =============
 
+- author: kazurayam
+- last update: May 2021
+
 ## What is this?
 
 This is a [Katalon Studio](https://www.katalon.com/) project for demonstration purpose.
@@ -46,9 +49,8 @@ WebUI.setEncryptedText(findTestObject('Object Repository/Page_CURA Healthcare Se
 ...
 
 ```
-Probablly he would not like invoking Custom Keyword which puts highlight on HTML element on the page for each indivisual HTML elements. It's boring, cumbersome, untidy.
 
-Possiblly he would want all of the HTML element targeted by `WebUI.click()`, `WebUI.setText()` and `WebUI.setEncryptedText()` are highlighted automatically, silently.
+As you can see, it is boring to repeat invoking Custom Keyword for each indivisual HTML elements to put highlights. I would rather want all of the HTML elements targeted by `WebUI.click()`, `WebUI.setText()` and `WebUI.setEncryptedText()` are highlighted without repetitive calls.
 
 ## Solution
 
@@ -62,29 +64,50 @@ The `on(TestObject to)` method puts highlight on the specified HTML element.
 The `pandemic()` method internally overrides `WebUI.click(TestObject to)` and other methods
 so that each keywords automaticall calls `on(TestObject to)` before its method body.
 
+In the version 0.5.0 of this project, I made a small jar file which contains the class compiled and ready for your use.
+
 ## Description
 
-### How to run the demo project
-
-run `Test Suites/TS1`. Then you will see the demo running.
+### Demo movie
 
 Or click [this link to see the movie](https://kazurayam.github.io/HighlightingElementByTestObjectInEachAndEveryStep/)
 
-### How the code implemented
+### How to install the plugin into your project
 
-1. [`Test Cases/TC1`](Scripts/TC1/Script1547070867765.groovy)
-2. [`Keywords/com.kazurayam.ksbackyard/HighlightElement.groovy`](Keywords/com/kazurayam/ksbackyard/HighlightElement.groovy)
+1. create your own Katalon Studio WebUI test project: e.g, `HighlightElement-demo` project
+2. visit the [Releases](https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/releases) page, download the latest `kazurayam-ks-highlightlement-x.x.x.jar` file.
+3. save the jar file into the `<projectDir>/Plugins` folder of your project
+4. stop/restart KS and reopen your project
 
-I would not talk much about the code. It uses magical Grovy [ExpandoMetaClass](http://docs.groovy-lang.org/latest/html/documentation/core-metaprogramming.html#metaprogramming_emc).
+You are done.
 
-A warning: if you read [`Keywords/com.kazurayam.ksbackyard/HighlightElement.groovy`](Keywords/com/kazurayam/ksbackyard/HighlightElement.groovy), you will see the `pandemic()` method can be very lengthy. It's is not as easy as you would expect.
+### How to write your tests while
 
-## Built-in Keywords that are influenced
+Make a `Test Case/TC1` in your project, which should look like:
 
-In the version 0.3, the `pandemic()` method influences the following Katalon built-in keywords:
+-  [`Test Cases/TC1`](Scripts/TC1/Script1547070867765.groovy)
+
+In the starting section of your test case script, you want to call this:
+
+```
+// modify WebUI.* keywords which take TestObject as arg0 
+// so that they call Highlight.on() automatically  
+CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.pandemic'()
+```
+
+Calling the `pandemic()` method, the custom keyword docorates the following Katalon-built-in keywords so that the target elements are highlighted.
+
 - [`click`](https://docs.katalon.com/katalon-studio/docs/webui-click.html)
 - [`selectOptionByIndex`](https://docs.katalon.com/katalon-studio/docs/webui-select-option-by-index.html)
 - [`selectOptionByLabel`](https://docs.katalon.com/katalon-studio/docs/webui-select-option-by-label.html)
 - [`selectOptionByValue`](https://docs.katalon.com/katalon-studio/docs/webui-select-option-by-value.html)
 - [`setEncryptedText()`](https://docs.katalon.com/katalon-studio/docs/webui-set-encrypted-text.html)
 - [`setText`](https://docs.katalon.com/katalon-studio/docs/webui-set-text.html)
+
+### How the custom Keyword is implemented
+
+Read the source:
+
+- [`Keywords/com.kazurayam.ksbackyard/HighlightElement.groovy`](Keywords/com/kazurayam/ksbackyard/HighlightElement.groovy)
+
+I would not talk much about the code. It uses magical Grovy [ExpandoMetaClass](http://docs.groovy-lang.org/latest/html/documentation/core-metaprogramming.html#metaprogramming_emc).
