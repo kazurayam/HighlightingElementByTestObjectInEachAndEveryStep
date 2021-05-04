@@ -16,10 +16,10 @@ import com.kms.katalon.core.configuration.RunConfiguration
 public class HighlightElementDocsGenerator {
 
 	@Test
-	void compile_highlitable_keywords_doc() {
+	void compile_highlightable_keywords_doc() {
 		StringBuilder sb = new StringBuilder()
-		sb.append("## Highlight-table WebUI Keywords\n\n")
-		sb.append("| No. | Keyword (click to doc) | highlighted by default? |\n")
+		sb.append("## Candidate WebUI Keywords for highlighting\n\n")
+		sb.append("| No. | Keyword (click to doc) | highlighting by default? |\n")
 		sb.append("|-----|---------|-------------|\n")
 
 		List<String> list =

@@ -113,7 +113,7 @@ Calling the `pandemic()` method, the following 6 WebUI built-in keywords are mar
 
 Any WebUI built-in keywords that take an instance of `com.kms.katalon.core.testobject.TestObject` as the 1st argument can be marked as *highlighting*. The following page shows the list of possible WebUI Builtin keywords:
 
-- [Highlight-table WebUI builtin Keywords](docs/highlightable_keywords.md)
+- [Candidate WebUI Keywords for highlighting](docs/highlightable_keywords.md)
 
 It is possible to add more keywords as "highlighting". The following script shows how to.
 

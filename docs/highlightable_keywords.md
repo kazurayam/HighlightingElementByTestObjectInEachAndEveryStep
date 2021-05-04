@@ -1,6 +1,6 @@
-## Highlight-table WebUI Keywords
+## Candidate WebUI Keywords for highlighting
 
-| No. | Keyword (click to doc) | highlighted by default? |
+| No. | Keyword (click to doc) | highlighting by default? |
 |-----|---------|-------------|
 | 1 | [WebUI.check](https://docs.katalon.com/katalon-studio/docs/webui-check.html) |  |
 | 2 | [WebUI.clearText](https://docs.katalon.com/katalon-studio/docs/webui-clear-text.html) |  |
