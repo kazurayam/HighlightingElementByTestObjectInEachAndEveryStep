@@ -28,7 +28,7 @@ And He added his wish:
 
 >it should highlight testobject of each step during test case execution
 
-I thought that he does not like a code as follows:
+I thought that he does not like a code like this:
 
 ```
 WebUI.openBrowser('')
@@ -54,7 +54,7 @@ WebUI.setEncryptedText(findTestObject('Object Repository/Page_CURA Healthcare Se
 ...
 ```
 
-As you can see, this code repeats highlighting each indivisual HTML elements by `HightlightElement.on(TestObject to)`. This code is too verbose.
+As you can see, this code repeats highlighting HTML elements by `HightlightElement.on(TestObject to)`. This code is too verbose.
 
 I would rather want all of the HTML elements targeted by `WebUI.click()`, `WebUI.setText()` and `WebUI.setEncryptedText()` to be automatically highlighted without explicit `HighlightElement.on(TestObject to)` calls.
 
@@ -67,13 +67,13 @@ I have developed a custom class `com.kazurayam.ksbackyard.HighlightElement`. Thi
 
 The `on(TestObject to)` method puts highlight on the indivisually specified HTML element.
 
-The `pandemic()` method dynamically decorates `WebUI.click(TestObject to)` and other WebUI keywords so that they put higlight on the target HTML elements before doing their own processing (such as "clicking the element").
+The `pandemic()` method dynamically decorates `WebUI.click(TestObject to)` and other WebUI keywords so that they put highlight on the target HTML elements before doing their own built-in processing (such as "clicking the element").
 
 ## Description
 
 ### Demo movie
 
-I made a demo movie how this custom keyword works. Click [this link to see the movie](https://kazurayam.github.io/HighlightingElementByTestObjectInEachAndEveryStep/). This demo shows how [`Test Cases/TC1`](Scripts/TC1/Script1547070867765.groovy) works.
+A demo movie is avaiable, which shows how the [`Test Cases/TC1`](Scripts/TC1/Script1547070867765.groovy) works. Click [this link to see the movie](https://kazurayam.github.io/HighlightingElementByTestObjectInEachAndEveryStep/).
 
 ### How to install the plugin into your project
 
@@ -90,7 +90,7 @@ You are ready.
 
 Make a `Test Case/TC0` in your project. You can copy&paste the following:
 
--  [`Test Cases/TC0`](Scripts/TC0/Script1620092194024.groovy)
+-  [`Test Cases/TC0`](Scripts/TC0/Script1620129794625.groovy)
 
 In the starting section of your test case script, you want to call this:
 
