@@ -86,7 +86,7 @@ As of the version 0.5.0 of this project, a small jar file is provided, which con
 
 You are ready.
 
-### How to write your tests
+### How to write your first "highlighting" test
 
 Make a `Test Case/TC0` in your project. You can copy&paste the following:
 
@@ -109,7 +109,7 @@ Calling the `pandemic()` method, the following 6 WebUI built-in keywords are mar
 5. [`WebUI.setEncryptedText`](https://docs.katalon.com/katalon-studio/docs/webui-set-encrypted-text.html)
 6. [`WebUI.setText`](https://docs.katalon.com/katalon-studio/docs/webui-set-text.html)
 
-### How to mark more Keywords "highlighting"
+### More Keywords for "highlighting"
 
 Any WebUI built-in keywords that take an instance of `com.kms.katalon.core.testobject.TestObject` as the 1st argument can be marked as *highlighting*. The following page shows the list of possible WebUI Builtin keywords:
 
