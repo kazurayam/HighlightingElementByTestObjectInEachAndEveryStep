@@ -10,6 +10,14 @@ import com.kms.katalon.core.webui.common.WebUiCommonHelper
 import com.kms.katalon.core.webui.driver.DriverFactory
 import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords
 
+/**
+ * This class implements 2 Keyword methods for Katalon Studio.
+ *
+ * <code>HighlightElement.on(TestObject to)</code> puts highlight on the specified HTML element.
+ *
+ * <code>HighlightElement.pandemic()</code> and <code>HighlightElement.pandemic(List<String> keywordsToAdd)</code> modifies some built-in WebUI Keywords dynamically so that they implicity invoke <code>.on(TestObject)</code> before
+ executing their own built-in processing (such as clicking the element).
+ */
 public class HighlightElement {
 
 	@Keyword
@@ -34,7 +42,7 @@ public class HighlightElement {
 	}
 
 	/**
-	 * @return list of the built-in WebUI.* keywords that can be highlighted by this.on(TestObject to)
+	 * @return list of the built-in WebUI.* keywords that have "TestObject" as the 1st argument.
 	 */
 	public static Set<String> getHighlightableBuiltinKeywords() {
 		List<MetaMethod> metaMethods = WebUiBuiltInKeywords.metaClass.getMethods()
@@ -54,6 +62,9 @@ public class HighlightElement {
 	}
 
 
+	/**
+	 * these keywords are "highlighting" as default
+	 */
 	public static final Set<String> DEFAULT_HIGHLIGHTING_KW = new HashSet([
 		'click',
 		'selectOptionByIndex',
@@ -63,7 +74,7 @@ public class HighlightElement {
 		'setText'
 	])
 
-	// instance variables
+	// instance variable
 	private final Set<String> highlightingKW
 
 	/**
@@ -76,8 +87,11 @@ public class HighlightElement {
 	/**
 	 * change some of methods of WebUiBuiltInKeywords so that they call HighlightElement.on(testObject)
 	 * before invoking their original method body.
-	 *
+	 * 
+	 * This method is implemented using Groovy Metaprogramming technique. See
 	 * http://docs.groovy-lang.org/latest/html/documentation/core-metaprogramming.html#metaprogramming
+	 *
+	 * @param keywordsToAdd you can specify additional keywords to turn "highlighting"
 	 */
 	@Keyword
 	public void pandemic(List<String> keywordsToAdd = []) {
