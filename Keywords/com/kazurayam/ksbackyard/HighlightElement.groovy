@@ -10,15 +10,14 @@ import com.kms.katalon.core.webui.common.WebUiCommonHelper
 import com.kms.katalon.core.webui.driver.DriverFactory
 import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords
 
-
 public class HighlightElement {
 
 	@Keyword
 	public static void on(TestObject testObject) {
-		influence(testObject)
+		drawOutline(testObject)
 	}
 
-	private static void influence(TestObject testObject) {
+	private static void drawOutline(TestObject testObject) {
 		try {
 			WebDriver driver = DriverFactory.getWebDriver()
 			List<WebElement> elements = WebUiCommonHelper.findWebElements(testObject, 20);

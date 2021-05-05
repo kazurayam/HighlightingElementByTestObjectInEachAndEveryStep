@@ -6,3 +6,9 @@
 /Libs
 
 *~
+
+.gradle
+
+.classpath
+
+.project
