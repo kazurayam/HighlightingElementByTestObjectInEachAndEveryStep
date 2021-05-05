@@ -5,10 +5,14 @@
 
 /Libs
 
-*~
+settings/
 
+*~
+.DS_Store
 .gradle
 
 .classpath
 
 .project
+
+.settings
