@@ -27,7 +27,7 @@ CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.pandemic'()
 TestObject makeAppo = newTestObject("//a[contains(.,'Make Appointment')]") 
 // the element will be highlighted
 WebUI.verifyElementPresent(makeAppo, 10)
-WebUI.verifyElementVisible(makeAppo, 10)
+//WebUI.verifyElementVisible(makeAppo, 10)
 WebUI.click(makeAppo)
 WebUI.delay(2)
 

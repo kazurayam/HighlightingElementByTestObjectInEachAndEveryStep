@@ -102,13 +102,7 @@ public class HighlightElement {
 				TestObject to = (TestObject)args[0]
 				HighlightElement.on(to)
 			}
-			def result
-			try {
-				result = delegate.metaClass.getMetaMethod(name, args).invoke(delegate, args)
-			} catch(Exception e) {
-				System.out.println("Handling exception for method $name")
-			}
-			return result
+			return delegate.metaClass.getMetaMethod(name, args).invoke(delegate, args)
 		}
 	}
 
