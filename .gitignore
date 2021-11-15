@@ -11,6 +11,8 @@ settings/
 .DS_Store
 .gradle
 
+.cache
+
 .classpath
 
 .project
