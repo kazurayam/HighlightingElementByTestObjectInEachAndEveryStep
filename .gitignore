@@ -4,3 +4,7 @@
 /Reports
 
 /Libs
+
+.cache/
+.gradle/
+.settings/
