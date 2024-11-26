@@ -4,13 +4,8 @@ import com.kms.katalon.core.testobject.TestObject
 import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords as WebUI
 
 /**
- * This script visits the page at https://katalon-demo-cura.herokuapp.com/ 
- * and the linked pages while highlighting elements with red border.
- * This script does the same as the TC1 but is much shorter.
- * This script calls the `pandemic` method of the
- * `com.kazurayam.ksbackyard.HighlightElement` class, 
- * which dynamically modifies the `WebUI.setText` and other built-in keywords
- * using Groovy's Metaprogramming technique.
+ * This script visits the page at https://katalon-demo-cura.herokuapp.com/ and the linked pages
+ * without highlighting elements
  */
 
 // open browser and navigate to the AUT
@@ -19,15 +14,9 @@ WebUI.setViewPortSize(1024, 768)
 WebUI.navigateToUrl('https://katalon-demo-cura.herokuapp.com/')
 WebUI.delay(1)
 
-// pandemic() will modify some WebUI.* keywords so that they call 
-//     com.kazurayam.ksbackyard.Highlight.on(testobject) 
-// automatically
-CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.pandemic'()
-
 TestObject a_MakeAppointment = findTestObject('Page_CURA Healthcare Service_top/a_Make Appointment')
 WebUI.verifyElementPresent(a_MakeAppointment, 10)
 
-// the target element for WebUI.click keyword will be highlighted
 WebUI.click(a_MakeAppointment)
 WebUI.delay(1)
 
@@ -51,7 +40,7 @@ TestObject input_hospital_readm = findTestObject('Page_CURA Healthcare Service_a
 WebUI.click(input_hospital_readm)
 WebUI.delay(1)
 
-TestObject input_Medicaid = findTestObject('Page_CURA Healthcare Service_appointment/input_Medicaid_programs')
+TestObject input_Medicaid = findTestObject('Page_CURA Healthcare Service_appointment/input_Medicaid_programs') 
 WebUI.click(input_Medicaid)
 WebUI.delay(1)
 
@@ -63,7 +52,7 @@ TestObject textarea_comment = findTestObject('Page_CURA Healthcare Service_appoi
 WebUI.setText(textarea_comment, 'This is a comment')
 WebUI.delay(1)
 
-TestObject button_Book_Appointment = findTestObject('Page_CURA Healthcare Service_appointment/button_Book Appointment')
+TestObject button_Book_Appointment = findTestObject('Page_CURA Healthcare Service_appointment/button_Book Appointment') 
 WebUI.click(button_Book_Appointment)
 WebUI.delay(1)
 
