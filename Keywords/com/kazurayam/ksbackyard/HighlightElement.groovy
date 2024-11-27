@@ -82,7 +82,7 @@ public class HighlightElement {
 	}
 
 	@Keyword
-	public static void pademic(List<String> keywords) {
-		pandemic(DEFAULT_STYLE, [])
+	public static void pandemic(List<String> keywords) {
+		pandemic(DEFAULT_STYLE, keywords)
 	}
 }

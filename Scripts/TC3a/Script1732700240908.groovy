@@ -3,6 +3,8 @@ import static com.kms.katalon.core.testobject.ObjectRepository.findTestObject
 import com.kms.katalon.core.testobject.TestObject
 import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords as WebUI
 
+// TC3a
+
 WebUI.openBrowser('')
 WebUI.setViewPortSize(1024, 1024)
 WebUI.navigateToUrl('https://katalon-demo-cura.herokuapp.com/')

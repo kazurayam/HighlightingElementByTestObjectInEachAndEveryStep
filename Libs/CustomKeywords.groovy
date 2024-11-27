@@ -39,8 +39,8 @@ def static "com.kazurayam.ksbackyard.HighlightElement.pandemic"(
 }
 
 
-def static "com.kazurayam.ksbackyard.HighlightElement.pademic"(
+def static "com.kazurayam.ksbackyard.HighlightElement.pandemic"(
     	java.util.List<String> keywords	) {
-    (new com.kazurayam.ksbackyard.HighlightElement()).pademic(
+    (new com.kazurayam.ksbackyard.HighlightElement()).pandemic(
         	keywords)
 }
