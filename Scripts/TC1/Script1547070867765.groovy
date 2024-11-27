@@ -5,29 +5,17 @@ import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords as WebUI
 
 /**
  * TC1
-<<<<<<< HEAD
- */
-=======
- * 
- * This script visits the page at https://katalon-demo-cura.herokuapp.com/ 
+ *
+ * This script visits the page at https://katalon-demo-cura.herokuapp.com/
  * and the linked pages while highlighting elements with red border.
  * This script repeats explicitly calling a custome keyword to put the highlight
  * so that this script looks tedius.
  */
 
->>>>>>> develop
 // open browser and navigate to the AUT
 WebUI.openBrowser('')
 WebUI.setViewPortSize(1024, 1024)
 WebUI.navigateToUrl('https://katalon-demo-cura.herokuapp.com/')
-<<<<<<< HEAD
-
-// modify WebUI.* keywords which take TestObject as arg0 
-// so that they call Highlight.on() automatically  
-CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.pandemic'()
-
-WebUI.click(findTestObject('Page_CURA Healthcare Service_top/a_Make Appointment'))
-=======
 WebUI.delay(1)
 
 TestObject h1_CURA = findTestObject('Page_CURA Healthcare Service_top/h1_CURA Healthcare Service')
@@ -40,7 +28,6 @@ WebUI.verifyElementPresent(a_MakeAppointment, 10)
 // highlight the element
 CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.on'(a_MakeAppointment)
 WebUI.click(a_MakeAppointment)
->>>>>>> develop
 WebUI.delay(1)
 
 TestObject input_username = findTestObject('Page_CURA Healthcare Service_login/input_Username_username')
@@ -63,13 +50,9 @@ CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.on'(select_Facility)
 WebUI.selectOptionByIndex(select_Facility, 0)
 WebUI.delay(1)
 
-<<<<<<< HEAD
-WebUI.click(findTestObject('Page_CURA Healthcare Service_appointment/input_Apply for hospital readm'))
-=======
 TestObject input_hospital_readm = findTestObject('Page_CURA Healthcare Service_appointment/input_Apply for hospital readm')
 CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.on'(input_hospital_readm)
 WebUI.click(input_hospital_readm)
->>>>>>> develop
 WebUI.delay(1)
 
 TestObject input_Medicaid = findTestObject('Page_CURA Healthcare Service_appointment/input_Medicaid_programs')
