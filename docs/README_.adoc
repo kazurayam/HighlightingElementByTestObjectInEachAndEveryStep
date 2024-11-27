@@ -103,13 +103,13 @@ The `pandemic` method influences the following Katalon built-in keywords as defa
 
 === Style of highlight
 
-Here is a button as example:
+Here is a button as example rendered by https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/blob/develop/Scripts/TC3a/Script1732700240908.groovy[Test Cases/TC3a], which has no highlight:
 
-image:https://kazurayam.github.io/HighlightingElementByTestObjectInEachAndEveryStep/images/button_default_highlight.png
+image:https://kazurayam.github.io/HighlightingElementByTestObjectInEachAndEveryStep/images/button_no_highlight.png[]
 
-The `com.kazurayam.ksbackyard.HighlightElement.on` keyword will put a highlight of RED color as default, like this:
+The following image is rendered by https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/blob/develop/Scripts/TC3b/Script1732701241909.groovy[Test Cases/TC3b]. The `com.kazurayam.ksbackyard.HighlightElement.on` keyword will apply a default style of highlight as default, like this:
 
-image:https://kazurayam.github.io/HighlightingElementByTestObjectInEachAndEveryStep/images/button_default_highlight.png
+image:https://kazurayam.github.io/HighlightingElementByTestObjectInEachAndEveryStep/images/button_default_highlight.png[]
 
 The default highlight is rendered by a CSS property of:
 
@@ -117,15 +117,15 @@ The default highlight is rendered by a CSS property of:
 outline: dashed red;
 ```
 
-Now, you may want a more strong style. Is it possbible?
+Now, you may want a more strong style. Is it possible?
 
 You can do it, like this:
 
-image:https://kazurayam.github.io/HighlightingElementByTestObjectInEachAndEveryStep/images/button_golden_highlight.png
+image:https://kazurayam.github.io/HighlightingElementByTestObjectInEachAndEveryStep/images/button_golden_outline.png[]
 
-See https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/blob/develop/Scripts/TC3c/Script1732701204510.groovy[`TC3c`]
+See https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/blob/develop/Scripts/TC3c/Script1732701204510.groovy[`Test Cases/TC3c`]
 
-This script has this line, which specifies a custom value of CSS style property for the target HTML element.
+The following statement gives a custom style:
 
 ```
 CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.pandemic'('outline: 8px ridge Gold;')
@@ -133,8 +133,28 @@ CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.pandemic'('outline: 8p
 
 
 
-=== ore WebUI keywords
+=== More WebUI keywords to highlight
 
-For example, I want to change the `WebUI.waitForElementPresent` keyword and the `WebUI.verifyElementPresent` keyword
+As default, 6 WebUI keywords are enabled of automatic highlighting. But you may want more WebUI keywords to be capable. Is it possbile to extend the list of WebUI keywords that is capable of highlighting the target HTML element? Yes, it is supported.
 
-===
+See the https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/blob/develop/Scripts/TC4/Script1732709108575.groovy[Test Cases/TC4]
+
+You can specify a list of WebUI keyword names as a parameter to the `pandemic` method.
+```
+CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.pandemic'(['verifyElementPresent', 'waitForElementPresent'])
+```
+
+What types of WebUI keyword we can specify here? --- Any WebUI keyword that takes an instance of `com.kms.katalon.core.testobject.TestObject` class will be accepted. So, `veryfyElementPresent` and `waitForElementPresent` will be accpeted. But `WebUI.delay` is not accepted.
+
+=== Mixing two cutomization
+
+See the https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/blob/develop/Scripts/TC5/Script1732709969913.groovy[Test Cases/TC5]
+
+```
+CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.pandemic'(
+	'outline: 8px ridge Gold;',
+	['verifyElementPresent', 'waitForElementPresent']
+	)
+```
+
+You can mix 2 ways of customization together.
