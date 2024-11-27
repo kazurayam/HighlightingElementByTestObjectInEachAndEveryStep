@@ -275,11 +275,11 @@ Here is a button as example rendered by [Test Cases/TC3a](https://github.com/kaz
 
 ![button no highlight](https://kazurayam.github.io/HighlightingElementByTestObjectInEachAndEveryStep/images/button_no_highlight.png)
 
-The following image is rendered by [Test Cases/TC3b](https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/blob/develop/Scripts/TC3b/Script1732701241909.groovy). The `com.kazurayam.ksbackyard.HighlightElement.on` keyword will apply a default style of highlight as default, like this:
+The following image is rendered by [Test Cases/TC3b](https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/blob/develop/Scripts/TC3b/Script1732701241909.groovy). The `com.kazurayam.ksbackyard.HighlightElement.on` keyword applies the default style of highlight like this:
 
 ![button default highlight](https://kazurayam.github.io/HighlightingElementByTestObjectInEachAndEveryStep/images/button_default_highlight.png)
 
-The default highlight is rendered by a CSS property of:
+The default highlight is implemented by a CSS property of:
 
     outline: dashed red;
 
@@ -291,7 +291,7 @@ You can do it, like this:
 
 See [`Test Cases/TC3c`](https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/blob/develop/Scripts/TC3c/Script1732701204510.groovy)
 
-The following statement gives a custom style:
+The following statement in the TC3c gives a custom style:
 
     CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.pandemic'('outline: 8px ridge Gold;')
 

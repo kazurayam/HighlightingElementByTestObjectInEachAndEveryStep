@@ -17,7 +17,12 @@ def static "com.kazurayam.ksbackyard.HighlightElement.on"(
         	testObject)
 }
 
-
+ /**
+	 * change some of methods of WebUiBuiltInKeywords so that they call HighlightElement.on(testObject)
+	 * before invoking their original method body.
+	 *
+	 * http://docs.groovy-lang.org/latest/html/documentation/core-metaprogramming.html#metaprogramming
+	 */ 
 def static "com.kazurayam.ksbackyard.HighlightElement.pandemic"(
     	String style	
      , 	java.util.List<String> keywords	) {

@@ -15,4 +15,4 @@ WebUI.delay(1)
 TestObject a_MakeAppointment = findTestObject('Page_CURA Healthcare Service_top/a_Make Appointment')
 WebUI.click(a_MakeAppointment, 10)
 
-//WebUI.closeBrowser()
+WebUI.closeBrowser()
