@@ -6,7 +6,9 @@ This is a [Katalon Studio](https://www.katalon.com/) project for demonstration p
 You can download the ZIP from [Releases](https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/releases) page,
 unzip it and open with your Katalon Studio.
 
-This project was initially developed with Katalon Studio version 5.10.1. Also I tested it using version 10.0. This project requires the Custom Keyword feature. So you can not run this using Katalon Studio v9.x Free which does not provide the Custom Keyword feature..
+This project was initially developed with Katalon Studio version 5.10.1. Also I tested it using version 10.0.
+
+This project requires the Custom Keyword feature. So you can not run this using Katalon Studio v9.x Free which does not provide the Custom Keyword feature..
 
 This project proposes a solution to the issue discussed in the Katalon Forum:
 ["How to highlight test object in each and every step"](https://forum.katalon.com/t/how-to-highlight-test-object-in-each-and-every-step/17408). I would refer to this as "the forum topic" for short.
@@ -46,8 +48,8 @@ Now I can show you how I could rewrite the "TC0" so that it gives highlight to t
 
     /**
      * TC1
-     *
-     * This script visits the page at https://katalon-demo-cura.herokuapp.com/
+     * 
+     * This script visits the page at https://katalon-demo-cura.herokuapp.com/ 
      * and the linked pages while highlighting elements with red border.
      * This script repeats explicitly calling a custome keyword to put the highlight
      * so that this script looks tedius.
@@ -137,7 +139,7 @@ I believe that the original poster would put a thumbs down 👎 to the TC1. So h
 
 ## Solution
 
-I further developed my Custom Keyword so that I could write a new Test Case script ["TC2"](https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/blob/develop/Scripts/TC1/Script1547070867765.groovy)
+I further developed my Custom Keyword so that I could write a new Test Case script ["TC2"](https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/blob/develop/Scripts/TC2/Script1547960621812.groovy)
 
     import static com.kms.katalon.core.testobject.ObjectRepository.findTestObject
 
@@ -146,12 +148,12 @@ I further developed my Custom Keyword so that I could write a new Test Case scri
 
     /**
      * TC2
-     *
-     * This script visits the page at https://katalon-demo-cura.herokuapp.com/
+     * 
+     * This script visits the page at https://katalon-demo-cura.herokuapp.com/ 
      * and the linked pages while highlighting elements with red border.
      * This script does the same as the TC1 but is much shorter.
      * This script calls the `pandemic` method of the
-     * `com.kazurayam.ksbackyard.HighlightElement` class,
+     * `com.kazurayam.ksbackyard.HighlightElement` class, 
      * which dynamically modifies the `WebUI.setText` and other built-in keywords
      * using Groovy's Metaprogramming technique.
      */
@@ -229,13 +231,11 @@ Have a look at the movie that demonstrates how the TC2 works:
 
 -   [the demo movie](https://kazurayam.github.io/HighlightingElementByTestObjectInEachAndEveryStep/)
 
-The TC1 would work just the same.
+## How to run the demonstration
 
-## How to run the demo project
+In Katalon Studio, just open the `Test Cases/TS2` and run it.
 
-Just open the `Test Cases/TS2` and run it.
-
-## Description
+## Implementation
 
 I have developed a custom keyword class [`com.kazurayam.ksbackyard.HighlightElement`](https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/blob/develop/Keywords/com/kazurayam/ksbackyard/HighlightElement.groovy).
 
@@ -305,7 +305,7 @@ You can specify a list of WebUI keyword names as a parameter to the `pandemic` m
 
     CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.pandemic'(['verifyElementPresent', 'waitForElementPresent'])
 
-What types of WebUI keyword we can specify here? --- Any WebUI keyword that takes an instance of `com.kms.katalon.core.testobject.TestObject` class will be accepted. So, `veryfyElementPresent` and `waitForElementPresent` will be accpeted. But `WebUI.delay` is not accepted.
+What types of WebUI keyword we can specify here? --- Any WebUI keyword that takes an instance of `com.kms.katalon.core.testobject.TestObject` class as the 1st parameter will be accepted. So, `veryfyElementPresent` and `waitForElementPresent` will be accpeted. If you add a keyword name like `delay` into the list as the 1st parameter, but it will have not effect.
 
 ### Mixing two cutomization
 
@@ -316,4 +316,4 @@ See the [Test Cases/TC5](https://github.com/kazurayam/HighlightingElementByTestO
         ['verifyElementPresent', 'waitForElementPresent']
         )
 
-You can mix 2 ways of customization together.
+You can apply both ways of customization.
