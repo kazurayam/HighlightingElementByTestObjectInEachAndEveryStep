@@ -25,18 +25,24 @@ public class HighlightElement {
 		drawOutline(testObject)
 	}
 
+<<<<<<< HEAD
 	private static void drawOutline(TestObject testObject) {
+=======
+	private static String DEFAULT_STYLE = 'outline: dotted red'
+	private static String highlightingStyle = DEFAULT_STYLE
+
+	private static void influence(TestObject testObject) {
+>>>>>>> develop
 		try {
 			WebDriver driver = DriverFactory.getWebDriver()
 			List<WebElement> elements = WebUiCommonHelper.findWebElements(testObject, 20);
 			for (WebElement element : elements) {
 				JavascriptExecutor js = (JavascriptExecutor) driver;
 				js.executeScript(
-						"arguments[0].setAttribute('style','outline: dashed red;');",
+						"arguments[0].setAttribute('style', '${highlightingStyle}');",
 						element);
 			}
 		} catch (Exception e) {
-			// TODO use Katalon Logging
 			e.printStackTrace()
 		}
 	}
@@ -72,6 +78,7 @@ public class HighlightElement {
 		'selectOptionByValue',
 		'setEncryptedText',
 		'setText'
+<<<<<<< HEAD
 	])
 
 	// instance variable
@@ -83,20 +90,33 @@ public class HighlightElement {
 	HighlightElement() {
 		this.highlightingKW = new HashSet(DEFAULT_HIGHLIGHTING_KW)
 	}
+=======
+	]
+>>>>>>> develop
 
 	/**
 	 * change some of methods of WebUiBuiltInKeywords so that they call HighlightElement.on(testObject)
 	 * before invoking their original method body.
+<<<<<<< HEAD
 	 * 
 	 * This method is implemented using Groovy Metaprogramming technique. See
+=======
+	 *
+>>>>>>> develop
 	 * http://docs.groovy-lang.org/latest/html/documentation/core-metaprogramming.html#metaprogramming
 	 *
 	 * @param keywordsToAdd you can specify additional keywords to turn "highlighting"
 	 */
 	@Keyword
+<<<<<<< HEAD
 	public void pandemic(List<String> keywordsToAdd = []) {
 		this.markKeywords(keywordsToAdd)
 		Set<String> influencedKeywords = this.getHighlightingKeywords()
+=======
+	public static void pandemic(String style, List<String> keywords) {
+		highlightingStyle = style
+		influencedKeywords.addAll(keywords)
+>>>>>>> develop
 		WebUiBuiltInKeywords.metaClass.'static'.invokeMethod = { String name, args ->
 			if (name in influencedKeywords) {
 				TestObject to = (TestObject)args[0]
@@ -106,6 +126,7 @@ public class HighlightElement {
 		}
 	}
 
+<<<<<<< HEAD
 	/**
 	 * 
 	 * @param keywordsToAdd
@@ -200,3 +221,20 @@ public class HighlightElement {
 	 }
 	 */
 }
+=======
+	@Keyword
+	public static void pandemic() {
+		pandemic(DEFAULT_STYLE, [])
+	}
+
+	@Keyword
+	public static void pandemic(String style) {
+		pandemic(style, [])
+	}
+
+	@Keyword
+	public static void pandemic(List<String> keywords) {
+		pandemic(DEFAULT_STYLE, keywords)
+	}
+}
+>>>>>>> develop

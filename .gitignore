@@ -1,22 +1,16 @@
+.classpath
+.project
+.settings/
+
+.cache/
+.gradle/
 
 /bin/
-
 /Reports
-
 /Libs
+/settings/
+/build/
 
-settings/
-
-*~
 .DS_Store
-.gradle
+.vscode/
 
-.cache
-
-.classpath
-
-.project
-
-.settings
-
-build/
