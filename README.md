@@ -7,18 +7,26 @@ This is a [Katalon Studio](https://www.katalon.com/) project for demonstration p
 You can download the ZIP from [Releases](https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/releases) page,
 unzip it and open with your Katalon Studio.
 
-This project was developed with Katalon Studio version 5.10.1
+This project was initially developed with Katalon Studio version 5.10.1.
+I have tested it using version 10.0.
+This project requires the Custom Keyword feature. So you can not run this using Katalon Studio v9.x Free.
 
 This project proposes a solution to the issue discussed in the Katalon Forum:
 [How to highlight test object in each and every step](https://forum.katalon.com/t/how-to-highlight-test-object-in-each-and-every-step/17408)
-The originator asked:
->I have created a keyword to highlight testobject. Please tell me how to call this keyword globally in such a way that it should highlight testobject of each step during test case execution
 
-He proposed a custom keyword implementation which give highlight to a specific HTML element on a page provided with a TestObject.
+The oringinal poster proposed a custom keyword implementation which give highlight to a specific HTML element on a page provided with a TestObject.
+
 
 ## Problem to solve
 
+
+
+The originator asked:
+
+>I have created a keyword to highlight testobject. Please tell me how to call this keyword globally in such a way that it should highlight testobject of each step during test case execution
+
 The originator wrote:
+
 >it should highlight testobject of each step during test case execution
 
 This implies that he do not like such code:

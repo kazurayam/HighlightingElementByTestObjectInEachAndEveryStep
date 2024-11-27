@@ -1,0 +1,140 @@
+= Highlighting Element by TestObject in each and every step
+
+== What is this?
+
+This is a https://www.katalon.com/[Katalon Studio] project for demonstration purpose.
+You can download the ZIP from https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/releases[Releases] page,
+unzip it and open with your Katalon Studio.
+
+This project was initially developed with Katalon Studio version 5.10.1. Also I tested it using version 10.0.
+
+This project requires the Custom Keyword feature. So you can not run this using Katalon Studio v9.x Free which does not provide the Custom Keyword feature..
+
+This project proposes a solution to the issue discussed in the Katalon Forum:
+https://forum.katalon.com/t/how-to-highlight-test-object-in-each-and-every-step/17408["How to highlight test object in each and every step"]. I would refer to this as "the forum topic" for short.
+
+Let me start with a simple Test Case script https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/blob/master/Scripts/TC0/Script1620129794625.groovy["TC0"]. The TC0 is an ordinary Katalon Test Case script. An experienced Katalon user would find nothing interesting here.
+
+In https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/blob/master/Scripts/TC0/Script1620129794625.groovy[the forum topic], the original poster presented a Custom Keyword implementation that can give highlight to the HTML element selected. I learned his code and created my implementation at https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/blob/master/Keywords/com/kazurayam/ksbackyard/HighlightElement.groovy[com.kazurayam.ksbackyard.HighlightElement.on()]
+
+[source,groovy]
+----
+include::../Keywords/com/kazurayam/ksbackyard/HighlightElement.groovy[lines=15..35]
+----
+
+Now I can show you how I could rewrite the "TC0" so that it gives highlight to the HTML elements which the script selected. Please see the Test Case https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/blob/develop/Scripts/TC1/Script1547070867765.groovy["TC1"]
+
+[source,groovy]
+----
+include::../Scripts/TC1/Script1547070867765.groovy[]
+----
+
+How do you find the source code of "TC1"?
+
+== Problem to solve
+
+I find the source of TC1 is too long and tedius. It contains a lot of repetitions. I don't like "TC1".
+
+In https://forum.katalon.com/t/how-to-highlight-test-object-in-each-and-every-step/17408[the forum topic], the originl poster asked:
+
+[quote]
+____
+I have created a keyword to highlight testobject. Please tell me how to call this keyword globally in such a way that it should highlight testobject of each step during test case execution
+____
+
+I believe that the original poster would put a thumbs down 👎 to the TC1. So how can I improve it?
+
+== Solution
+
+I further developed my Custom Keyword so that I could write a new Test Case script https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/blob/develop/Scripts/TC1/Script1547070867765.groovy["TC2"]
+
+[source,groovy]
+----
+include::../Scripts/TC2/Script1547960621812.groovy[]
+----
+
+The TC2 behaves just the same as the TC1. But the source code of TC2 is much shorter than TC1. TC2 contains minimum repetitions. The magic spell of the TC2 is the following single line:
+
+```
+CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.pandemic'()
+```
+
+This call to `pandemic` method of the `com.kazurayam.ksbackyard.HighlightElement` class dynamically modifies the implementation of `WebUI.setText` keyword and others so that an invokation to `WebUI.setText` gives highlight to the target HTML element.
+
+== Demonstration movie
+
+Have a look at the movie that demonstrates how the TC2 works:
+
+- https://kazurayam.github.io/HighlightingElementByTestObjectInEachAndEveryStep/[the demo movie]
+
+The TC1 would work just the same.
+
+== How to run the demo project
+
+Just open the `Test Cases/TS2` and run it.
+
+== Description
+
+I have developed a custom keyword class https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/blob/develop/Keywords/com/kazurayam/ksbackyard/HighlightElement.groovy[`com.kazurayam.ksbackyard.HighlightElement`].
+
+This class implements 2 methods:
+
+1. `on(TestObject to)`
+2. `pandemic()`
+
+The `on(TestObject to)` method puts highlight on the specified HTML element.
+
+The `pandemic()` method internally overrides `WebUI.click(TestObject to)` and other methods so that each keywords automaticall calls `on(TestObject to)` before its original method body.
+
+Please read the Groovy source to find out how these methods are implemented.
+
+== Built-in Keywords that are influenced
+
+The `pandemic` method influences the following Katalon built-in keywords as default:
+
+- https://docs.katalon.com/katalon-studio/docs/webui-click.html[`WebUI.click`]
+- https://docs.katalon.com/katalon-studio/docs/webui-select-option-by-index.html[`WebUI.selectOptionByIndex`]
+- https://docs.katalon.com/katalon-studio/docs/webui-select-option-by-label.html[`selectOptionByLabel`]
+- https://docs.katalon.com/katalon-studio/docs/webui-select-option-by-value.html[`selectOptionByValue`]
+- https://docs.katalon.com/katalon-studio/docs/webui-set-encrypted-text.html[`setEncryptedText`]
+- https://docs.katalon.com/katalon-studio/docs/webui-set-text.html[`setText`]
+
+== Customization
+
+=== Style of highlight
+
+Here is a button as example:
+
+image:https://kazurayam.github.io/HighlightingElementByTestObjectInEachAndEveryStep/images/button_default_highlight.png
+
+The `com.kazurayam.ksbackyard.HighlightElement.on` keyword will put a highlight of RED color as default, like this:
+
+image:https://kazurayam.github.io/HighlightingElementByTestObjectInEachAndEveryStep/images/button_default_highlight.png
+
+The default highlight is rendered by a CSS property of:
+
+```
+outline: dashed red;
+```
+
+Now, you may want a more strong style. Is it possbible?
+
+You can do it, like this:
+
+image:https://kazurayam.github.io/HighlightingElementByTestObjectInEachAndEveryStep/images/button_golden_highlight.png
+
+See https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/blob/develop/Scripts/TC3c/Script1732701204510.groovy[`TC3c`]
+
+This script has this line, which specifies a custom value of CSS style property for the target HTML element.
+
+```
+CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.pandemic'('outline: 8px ridge Gold;')
+```
+
+
+
+=== ore WebUI keywords
+
+For example, I want to change the `WebUI.waitForElementPresent` keyword and the `WebUI.verifyElementPresent` keyword
+
+===

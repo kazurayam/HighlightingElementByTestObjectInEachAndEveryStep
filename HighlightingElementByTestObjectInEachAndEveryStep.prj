@@ -4,8 +4,12 @@
    <name>HighlightingElementByTestObjectInEachAndEveryStep</name>
    <tag></tag>
    <UUID>4bb1f1ad-0da4-41fa-883f-cb455e0689d9</UUID>
+   <freeLicense>true</freeLicense>
    <migratedVersion>5.9.0</migratedVersion>
+   <modifiedEdition>FREE</modifiedEdition>
+   <modifiedVersion>10.0.0</modifiedVersion>
    <pageLoadTimeout>0</pageLoadTimeout>
+   <projectFileLocation>/Users/kazuakiurayama/katalon-workspace/HighlightingElementByTestObjectInEachAndEveryStep/HighlightingElementByTestObjectInEachAndEveryStep.prj</projectFileLocation>
    <sourceContent>
       <sourceFolderList>
          <sourceFolderConfiguration>
@@ -24,5 +28,6 @@
          </systemFolderConfiguration>
       </systemFolderList>
    </sourceContent>
+   <timeStampInProperties>true</timeStampInProperties>
    <type>GENERIC</type>
 </Project>
