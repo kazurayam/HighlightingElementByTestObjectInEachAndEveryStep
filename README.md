@@ -312,7 +312,7 @@ What types of WebUI keyword we can specify here? --- Any WebUI keyword that take
 
 You shouldn’t give those keywords that do not take a TestObject as the 1st argument. For example, `WebUI.delay(timeout)`. Those will be just ignored.
 
-### Mixing two cutomization
+### Mixing two cutomizations together
 
 See the [Test Cases/TC5](https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/blob/develop/Scripts/TC5/Script1732709969913.groovy)
 
@@ -321,4 +321,4 @@ See the [Test Cases/TC5](https://github.com/kazurayam/HighlightingElementByTestO
         ['verifyElementPresent', 'waitForElementPresent']
         )
 
-You can apply both ways of customization.
+As this, you can apply both ways of customization.
