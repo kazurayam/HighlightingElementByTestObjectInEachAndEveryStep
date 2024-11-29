@@ -48,7 +48,7 @@ In [the forum topic](https://github.com/kazurayam/HighlightingElementByTestObjec
             }
         }
 
-Now I can show you how I could rewrite the "TC0" so that it gives highlight to the HTML elements which the script selected. Please see the Test Case ["TC1"](https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/blob/develop/Scripts/TC1/Script1547070867765.groovy)
+Now I can show you how I could rewrite the "TC0" so that it repeats highlighting a lot of HTML elements. Please see the Test Case ["TC1"](https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/blob/develop/Scripts/TC1/Script1547070867765.groovy)
 
     import static com.kms.katalon.core.testobject.ObjectRepository.findTestObject
 
@@ -134,11 +134,11 @@ Now I can show you how I could rewrite the "TC0" so that it gives highlight to t
 
     WebUI.closeBrowser()
 
-How do you find the source code of "TC1"?
+How do you find the source code of TC1?
 
 ## Problem to solve
 
-I find the source of TC1 is too long and tedius. It contains a lot of repetitions. I don’t like "TC1".
+I find the source of TC1 is too long and tedius. I don’t like TC1.
 
 In [the forum topic](https://forum.katalon.com/t/how-to-highlight-test-object-in-each-and-every-step/17408), the originl poster asked:
 
