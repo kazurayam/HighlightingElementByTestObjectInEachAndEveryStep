@@ -240,7 +240,7 @@ Have a look at the movie that demonstrates how the TC2 works:
 
 ## How to run the demonstration
 
-In Katalon Studio, just open the `Test Cases/TS2` and run it.
+In Katalon Studio, just open the `Test Cases/TC2` and run it.
 
 ## Implementation
 
