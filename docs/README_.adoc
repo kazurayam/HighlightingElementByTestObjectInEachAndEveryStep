@@ -1,5 +1,9 @@
 = Highlighting Element by TestObject in each and every step
 
+- author: kazurayam
+- originally published: Jan 2019
+- last update: Nov 2024
+
 == What is this?
 
 This is a https://www.katalon.com/[Katalon Studio] project for demonstration purpose.
@@ -8,7 +12,7 @@ unzip it and open with your Katalon Studio.
 
 This project was initially developed with Katalon Studio version 5.10.1. Also I tested it using version 10.0.
 
-This project requires the Custom Keyword feature. So you can not run this using Katalon Studio v9.x Free which does not provide the Custom Keyword feature..
+This project requires the Custom Keyword feature to be avaiable to you. So you can not run this using Katalon Studio v9.x Free which does not provide the Custom Keyword feature.
 
 This project proposes a solution to the issue discussed in the Katalon Forum:
 https://forum.katalon.com/t/how-to-highlight-test-object-in-each-and-every-step/17408["How to highlight test object in each and every step"]. I would refer to this as "the forum topic" for short.

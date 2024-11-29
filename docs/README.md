@@ -1,4 +1,13 @@
+- Table of contents
+{:toc}
+
 # Highlighting Element by TestObject in each and every step
+
+-   author: kazurayam
+
+-   originally published: Jan 2019
+
+-   last update: Nov 2024
 
 ## What is this?
 
@@ -8,7 +17,7 @@ unzip it and open with your Katalon Studio.
 
 This project was initially developed with Katalon Studio version 5.10.1. Also I tested it using version 10.0.
 
-This project requires the Custom Keyword feature. So you can not run this using Katalon Studio v9.x Free which does not provide the Custom Keyword feature..
+This project requires the Custom Keyword feature to be avaiable to you. So you can not run this using Katalon Studio v9.x Free which does not provide the Custom Keyword feature.
 
 This project proposes a solution to the issue discussed in the Katalon Forum:
 ["How to highlight test object in each and every step"](https://forum.katalon.com/t/how-to-highlight-test-object-in-each-and-every-step/17408). I would refer to this as "the forum topic" for short.
@@ -48,8 +57,8 @@ Now I can show you how I could rewrite the "TC0" so that it gives highlight to t
 
     /**
      * TC1
-     * 
-     * This script visits the page at https://katalon-demo-cura.herokuapp.com/ 
+     *
+     * This script visits the page at https://katalon-demo-cura.herokuapp.com/
      * and the linked pages while highlighting elements with red border.
      * This script repeats explicitly calling a custome keyword to put the highlight
      * so that this script looks tedius.
