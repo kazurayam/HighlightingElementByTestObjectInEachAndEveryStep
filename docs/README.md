@@ -244,9 +244,7 @@ In Katalon Studio, just open the `Test Cases/TC2` and run it.
 
 ## Implementation
 
-I have developed a custom keyword class [`com.kazurayam.ksbackyard.HighlightElement`](https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/blob/develop/Keywords/com/kazurayam/ksbackyard/HighlightElement.groovy).
-
-This class implements 2 methods:
+I have developed a custom keyword class [`com.kazurayam.ksbackyard.HighlightElement`](https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/blob/develop/Keywords/com/kazurayam/ksbackyard/HighlightElement.groovy). Please read the Groovy source to find out how it is implemented. This class implements 2 public methods:
 
 1.  `on(TestObject to)`
 
@@ -254,9 +252,7 @@ This class implements 2 methods:
 
 The `on(TestObject to)` method puts highlight on the specified HTML element.
 
-The `pandemic()` method internally overrides `WebUI.click(TestObject to)` and other methods so that each keywords automaticall calls `on(TestObject to)` before its original method body.
-
-Please read the Groovy source to find out how these methods are implemented.
+The `pandemic()` method internally overrides `WebUI.click(TestObject to)` and other methods so that each keywords automaticall calls `on(TestObject to)` before executing the original method body.
 
 ## Built-in Keywords that are influenced
 
@@ -312,7 +308,9 @@ You can specify a list of WebUI keyword names as a parameter to the `pandemic` m
 
     CustomKeywords.'com.kazurayam.ksbackyard.HighlightElement.pandemic'(['verifyElementPresent', 'waitForElementPresent'])
 
-What types of WebUI keyword we can specify here? --- Any WebUI keyword that takes an instance of `com.kms.katalon.core.testobject.TestObject` class as the 1st parameter will be accepted. So, `veryfyElementPresent` and `waitForElementPresent` will be accpeted. If you add a keyword name like `delay` into the list as the 1st parameter, but it will have not effect.
+What types of WebUI keyword we can specify here? --- Any WebUI keyword that takes an instance of `com.kms.katalon.core.testobject.TestObject` class as the 1st parameter will be accepted. So, `veryfyElementPresent` and `waitForElementPresent` will be accpeted.
+
+You shouldn’t give those keywords that do not take a TestObject as the 1st argument. For example, `WebUI.delay(timeout)`. Those will be just ignored.
 
 ### Mixing two cutomization
 
