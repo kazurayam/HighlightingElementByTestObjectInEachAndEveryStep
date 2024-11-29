@@ -134,11 +134,9 @@ Now I can show you how I could rewrite the "TC0" so that it repeats highlighting
 
     WebUI.closeBrowser()
 
-How do you find the source code of TC1?
+How do you find the source code of TC1? I personally find the source of TC1 is too long and tedius. I don’t like TC1.
 
 ## Problem to solve
-
-I find the source of TC1 is too long and tedius. I don’t like TC1.
 
 In [the forum topic](https://forum.katalon.com/t/how-to-highlight-test-object-in-each-and-every-step/17408), the originl poster asked:
 
