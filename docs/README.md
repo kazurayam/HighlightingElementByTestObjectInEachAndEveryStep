@@ -44,6 +44,9 @@ In [the forum topic](https://github.com/kazurayam/HighlightingElementByTestObjec
                             element);
                 }
             } catch (Exception e) {
+                e.printStackTrace()
+            }
+        }
 
 Now I can show you how I could rewrite the "TC0" so that it gives highlight to the HTML elements which the script selected. Please see the Test Case ["TC1"](https://github.com/kazurayam/HighlightingElementByTestObjectInEachAndEveryStep/blob/develop/Scripts/TC1/Script1547070867765.groovy)
 
